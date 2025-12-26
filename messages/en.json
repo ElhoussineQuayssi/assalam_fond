@@ -1,0 +1,477 @@
+{
+  "navbar": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "blogs": "Blogs",
+    "contact": "Contact",
+    "donate": "Donate"
+  },
+  "Home": {
+    "hero": {
+      "title": "Supporting Communities Through Action",
+      "subtitle": "We work to create lasting impact in communities around the world through dedicated programs and partnerships.",
+      "cta_support": "Support the Action",
+      "cta_discover": "Discover"
+    },
+    "impact": {
+      "title": "Our Numbers Speak",
+      "sections": "National Sections",
+      "beneficiaries": "Beneficiaries",
+      "transparency": "Transparency"
+    },
+    "about": {
+      "essential": "The Essentials",
+      "engagement": "Commitment & Vision",
+      "general_desc": "Assalam Foundation is a non-profit organization dedicated to promoting sustainable development and empowerment in local communities.",
+      "mission": "Our Mission",
+      "mission_desc": "Our mission is to provide comprehensive support to individuals and families in need through education, health, and economic development programs.",
+      "vision": "Vision",
+      "vision_desc": "We envision a world where every community has the tools and support needed to thrive and grow.",
+      "values": "Values",
+      "values_desc": "We believe in human dignity, solidarity, and sustainability as the foundation of our work.",
+      "values_text": "Human dignity above all.",
+      "history": "Founded in 1992, Assalam Foundation has been working for over 30 years in the field of national solidarity.",
+      "values_list": "Solidarity, Empowerment, Dignity, Education, Compassion, Sustainability"
+    },
+    "blogs": {
+      "title": "Blog",
+      "blog1": {
+        "title": "Opening of a new center in Marrakech",
+        "desc": "The new center has been opened to provide social services...",
+        "date": "22 Dec 2025",
+        "image": "placeholder"
+      },
+      "blog2": {
+        "title": "New education program",
+        "desc": "We offer a comprehensive educational program for children...",
+        "date": "15 Nov 2025",
+        "image": "placeholder"
+      },
+      "blog3": {
+        "title": "Annual donation campaign",
+        "desc": "Join us in our annual fundraising campaign...",
+        "date": "10 Oct 2025",
+        "image": "placeholder"
+      },
+      "blog4": {
+        "title": "Success Story: From the Street to University",
+        "desc": "An inspiring journey of a child benefiting from our educational programs...",
+        "date": "5 Sep 2025",
+        "image": "placeholder"
+      },
+      "blog5": {
+        "title": "New Collaboration with World Health Organization",
+        "desc": "Strategic partnership to improve healthcare in rural areas...",
+        "date": "20 Aug 2025",
+        "image": "placeholder"
+      },
+      "blog6": {
+        "title": "Graduation of New Batch of Professional Trainees",
+        "desc": "More than 200 young people get job opportunities after training...",
+        "date": "15 Jul 2025",
+        "image": "placeholder"
+      },
+      "show_more": "Show More"
+    },
+    "projects": {
+      "title": "Our Main Projects",
+      "rayhana": "Rayhana Assalam: Educational program for children",
+      "himaya": "Himaya Center: Support for women and families in difficulty",
+      "fataer": "Fataer Al Baraka: Women's empowerment center",
+      "imtiaz": "Imtiaz Program: Sponsorship for brilliant students",
+      "kafala": "Kafala Program: Complete support for children and orphans",
+      "nadi": "Nadi Assalam: Economic autonomy center"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know",
+      "q1": "How can I contribute to your mission?",
+      "a1": "You can contribute in several ways: make a donation, become a volunteer, or share our mission with your network.",
+      "q2": "What are your main programs?",
+      "a2": "We run education, community health, and sustainable economic development programs across various regions.",
+      "q3": "How do you ensure transparency in your actions?",
+      "a3": "We regularly publish impact reports and work with independent auditors to ensure transparency.",
+      "q4": "Can I visit your projects on the ground?",
+      "a4": "Yes, we organize guided visits for interested donors. Contact us for more information."
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "subtitle": "What they say about us",
+      "list": [
+        {
+          "name": "Ahmed Bennani",
+          "role": "Beneficiary",
+          "content": "Assalam has transformed my life. Thanks to their educational programs, I was able to continue my studies and achieve my dreams.",
+          "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Fatima Alaoui",
+          "role": "Volunteer",
+          "content": "Contributing to Assalam is a rewarding experience. Seeing the positive impact on the community motivates me every day.",
+          "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Youssef Tazi",
+          "role": "Partner",
+          "content": "The transparency and efficiency of Assalam are remarkable. Their innovative approach really makes a difference.",
+          "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Amina Rachid",
+          "role": "Beneficiary",
+          "content": "Assalam's health programs saved my family's life. Thank you for your unwavering dedication.",
+          "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Karim El Fassi",
+          "role": "Volunteer",
+          "content": "Working with Assalam taught me the importance of solidarity and sharing in our society.",
+          "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face"
+        }
+      ]
+    },
+    "timeline": {
+      "title": "Our History",
+      "subtitle": "The evolution of Assalam",
+      "events": [
+        {
+          "year": "2010",
+          "title": "Foundation of Assalam",
+          "description": "Creation of the association with a vision of solidarity and community mutual aid."
+        },
+        {
+          "year": "2015",
+          "title": "National Expansion",
+          "description": "Opening of 10 regional sections to reach more communities."
+        },
+        {
+          "year": "2020",
+          "title": "Excellence Program",
+          "description": "Launch of educational programs and professional training."
+        },
+        {
+          "year": "2024",
+          "title": "Community Impact",
+          "description": "More than 6000 beneficiaries and national recognition for our efforts."
+        }
+      ]
+    },
+    "footer": {
+      "description": "Working to create lasting impact in communities through dedicated programs and partnerships.",
+      "quick_links": "Quick Links",
+      "contact": "Contact",
+      "location": "Morocco",
+      "rights": "All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "About": {
+    "hero": {
+      "title": "About Assalam Foundation",
+      "description": "A Moroccan charitable organization dedicated to improving the living conditions of vulnerable individuals and families through education and solidarity"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "Assalam Social Development Foundation is a Moroccan charitable organization dedicated to improving the living conditions of vulnerable individuals and families. Since its establishment in 1992, the foundation has worked to strengthen social cohesion and support the most needy categories through comprehensive programs in education, health, and sustainable development.",
+      "additional": "We believe that every individual deserves a chance for a dignified life, and we strive to achieve this through effective partnerships and direct field work."
+    },
+    "impact": {
+      "title": "Our Impact",
+      "sections": "National Section",
+      "beneficiaries": "Beneficiary",
+      "transparency": "Customer Satisfaction"
+    },
+    "values": {
+      "title": "Our Core Values",
+      "solidarity": {
+        "title": "Solidarity",
+        "desc": "A deep spirit of help to support the most needy categories."
+      },
+      "dignity": {
+        "title": "Dignity",
+        "desc": "Providing assistance that preserves the individual's honor and self-esteem."
+      },
+      "education": {
+        "title": "Education",
+        "desc": "The key to liberation from childhood to professional integration."
+      },
+      "empowerment": {
+        "title": "Empowerment",
+        "desc": "Giving means to young people and women to become active."
+      },
+      "sustainability": {
+        "title": "Sustainability",
+        "desc": "Projects designed for long-term positive impact."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "desc": "Complete integrity in resource management and reporting."
+      }
+    },
+    "partners": {
+      "title": "Our Partners",
+      "indh": "INDH",
+      "entraide": "Entraide",
+      "unicef": "UNICEF",
+      "who": "WHO"
+    },
+    "team": {
+      "title": "Our Team",
+      "fatima": {
+        "name": "Fatima Zahra",
+        "role": "Executive Director"
+      },
+      "youssef": {
+        "name": "Youssef",
+        "role": "Project Manager"
+      },
+      "ahmed": {
+        "name": "Ahmed",
+        "role": "Communication Officer"
+      }
+    },
+    "cta": {
+      "title": "Join us as a volunteer",
+      "description": "Contribute to building a better society and be part of our journey in sustainable giving.",
+      "button": "Join Now"
+    },
+    "timeline": {
+      "title": "Our History",
+      "subtitle": "A 30-year journey of sustainable giving",
+      "events": [
+        {
+          "year": 1992,
+          "title": "Foundation of the Association",
+          "description": "Beginning work in the field of social development and humanitarian aid."
+        },
+        {
+          "year": 2010,
+          "title": "Program Expansion",
+          "description": "Launch of education and solidarity programs for vulnerable categories."
+        },
+        {
+          "year": 2018,
+          "title": "Women's Empowerment",
+          "description": "Focus on empowering women and children in local communities."
+        },
+        {
+          "year": 2025,
+          "title": "Sustainable Future",
+          "description": "Continuing sustainable giving to achieve the dignity of the Moroccan citizen."
+        }
+      ]
+    }
+  },
+  "Projects": {
+    "hero": {
+      "title": "Our Projects: A Tangible Impact on Community Life",
+      "description": "From education to economic empowerment, we launch initiatives aimed at building a sustainable future for every Moroccan citizen."
+    },
+    "filters": {
+      "all": "All",
+      "education": "Education",
+      "economic": "Economic Empowerment",
+      "social": "Social Care"
+    },
+    "projects": {
+      "rayhana": {
+        "title": "Rayhana Assalam",
+        "category": "Education",
+        "description": "A comprehensive educational program for children and youth in local communities.",
+        "status": "Active",
+        "detailed_description": "Rayhana Assalam is a comprehensive educational program aimed at providing high-quality education to children and youth in deprived areas. The program includes lessons in reading, writing, and mathematics, in addition to cultural and recreational activities.",
+        "impact": "More than 500 children beneficiaries, 95% success rate in school exams.",
+        "gallery": ["/images/rayhana1.jpg", "/images/rayhana2.jpg", "/images/rayhana3.jpg"]
+      },
+      "himaya": {
+        "title": "Himaya Center",
+        "category": "Social",
+        "description": "Support for women and families in difficulties through comprehensive social services.",
+        "status": "Active",
+        "detailed_description": "Himaya Center provides psychological and social support to women and families facing difficulties. The program includes individual and group counseling, and assistance in obtaining legal and social rights.",
+        "impact": "More than 200 families beneficiaries, 98% satisfaction rate from beneficiaries.",
+        "gallery": ["/images/himaya1.jpg", "/images/himaya2.jpg", "/images/himaya3.jpg"]
+      },
+      "fataer": {
+        "title": "Fataer Al Baraka",
+        "category": "Economic",
+        "description": "Women's economic empowerment center through training and financial support.",
+        "status": "New",
+        "detailed_description": "Fataer Al Baraka program aims to economically empower women through training them in traditional and modern crafts, and providing small loans to start their own businesses.",
+        "impact": "More than 150 women economically empowered, creation of 50 small businesses.",
+        "gallery": ["/images/fataer1.jpg", "/images/fataer2.jpg", "/images/fataer3.jpg"]
+      },
+      "imtiaz": {
+        "title": "Imtiaz Program",
+        "category": "Education",
+        "description": "Sponsorship for brilliant students and provision of advanced educational opportunities.",
+        "status": "Active",
+        "detailed_description": "Imtiaz Program supports academically brilliant students through scholarships, advanced training courses, and cultural exchange opportunities with international universities.",
+        "impact": "More than 100 brilliant students beneficiaries, 80% of them succeeded in joining prestigious universities.",
+        "gallery": ["/images/imtiaz1.jpg", "/images/imtiaz2.jpg", "/images/imtiaz3.jpg"]
+      },
+      "kafala": {
+        "title": "Kafala Program",
+        "category": "Social",
+        "description": "Complete support for children and orphans through sponsorship and care.",
+        "status": "Active",
+        "detailed_description": "Kafala Program provides comprehensive care for children and orphans, including education, health care, and psychological and social support.",
+        "impact": "More than 300 children beneficiaries, noticeable improvement in health and education.",
+        "gallery": ["/images/kafala1.jpg", "/images/kafala2.jpg", "/images/kafala3.jpg"]
+      },
+      "nadi": {
+        "title": "Nadi Assalam",
+        "category": "Economic",
+        "description": "Economic autonomy center for youth and adults.",
+        "status": "New",
+        "detailed_description": "Nadi Assalam provides vocational training and support for youth and adults to achieve economic independence through workshops and specialized training programs.",
+        "impact": "More than 250 youth beneficiaries, 75% employment rate after training.",
+        "gallery": ["/images/nadi1.jpg", "/images/nadi2.jpg", "/images/nadi3.jpg"]
+      }
+    },
+    "cta": "Read More",
+    "contribute": "Contribute to this project",
+    "back_to_projects": "Back to Projects",
+    "impact_title": "Impact and Achievements",
+    "gallery_title": "Photo Gallery",
+    "contribute_title": "Contribute to this Project",
+    "contribute_desc": "Your support helps us expand this project and help more beneficiaries.",
+    "view_gallery": "View Full Gallery"
+  },
+  "Blogs": {
+    "all_categories": "All",
+    "hero": {
+      "title": "Blog",
+      "subtitle": "Discover the latest news and stories from our community",
+      "featured_title": "Opening of the New Protection Center in Casablanca",
+      "featured_excerpt": "As part of expanding our social services, a new center has been opened to support vulnerable families...",
+      "featured_date": "22 Dec 2025",
+      "featured_read_time": "5 min read"
+    },
+    "categories": {
+      "all": "All",
+      "events": "Events",
+      "reports": "Reports",
+      "success_stories": "Success Stories"
+    },
+    "sidebar": {
+      "categories_title": "Categories",
+      "search_placeholder": "Search the blog...",
+      "newsletter_title": "Newsletter",
+      "newsletter_desc": "Subscribe to get the latest news and updates",
+      "newsletter_button": "Subscribe",
+      "recent_posts_title": "Recent Posts",
+      "author_bio": "About the Author",
+      "share_article": "Share This Article",
+      "stay_updated": "Stay Updated",
+      "newsletter_desc_individual": "Get the latest articles delivered to your inbox.",
+      "related_articles": "Related Articles",
+      "your_email": "Your email",
+      "written_by": "Written by",
+      "passionate_about": "Passionate about sharing insights in"
+    },
+    "load_more": "Load More",
+    "read_more": "Read More",
+    "share": "Share",
+    "related_posts": "Related Posts",
+    "back_to_blog": "Back to Blog",
+    "posts": {
+      "opening-new-protection-center-casablanca": {
+        "title": "Opening of the New Protection Center in Casablanca",
+        "excerpt": "As part of expanding our social services, a new center has been opened to support vulnerable families...",
+        "content": "<p>In an important step towards expanding our social services, the new Protection Center in Casablanca was inaugurated last Saturday. The new center aims to provide comprehensive support to vulnerable families and children in difficult situations.</p><h2>Center Objectives</h2><p>The center includes several basic services:</p><ul><li>Psychological and social counseling</li><li>Educational support for children</li><li>Assistance in obtaining legal rights</li><li>Vocational training programs for parents</li></ul><h2>Expected Impact</h2><p>We expect more than 500 families to benefit from the center's services in the first year of its launch. This project comes as part of the association's plan to expand its geographical reach and enhance its positive impact on society.</p><blockquote><p>\"This center is not just a building, but a new hope for families who need support and help.\"</p><cite>- Association Director</cite></blockquote><p>We thank all partners and donors who contributed to the success of this project. Their continued support enables us to achieve our goals in serving the community.</p>",
+        "date": "22 Dec 2025",
+        "readTime": "5 min read",
+        "category": "Events",
+        "author": "Communication Team"
+      },
+      "new-education-program-success": {
+        "title": "New Education Program Achieves Great Success",
+        "excerpt": "We offer a comprehensive educational program for children in remote areas...",
+        "content": "<p>Our new educational program continues to achieve remarkable results in remote areas. The program, which was launched six months ago, now covers more than 20 villages in various regions.</p><h2>Program Components</h2><p>The program combines basic education with recreational activities:</p><ul><li>Lessons in reading, writing, and mathematics</li><li>Sports and artistic activities</li><li>Psychological support for children</li><li>Distribution of books and stationery</li></ul><h2>Initial Results</h2><p>The program recorded a success rate of up to 95% in school exams. Also, 85% of participating children have become more confident in themselves and integrated into the school community.</p><p>This success reflects our commitment to improving educational opportunities for children in remote areas, and confirms the importance of investing in education as a basis for a better future.</p>",
+        "date": "15 Nov 2025",
+        "readTime": "4 min read",
+        "category": "Reports",
+        "author": "Education Department"
+      },
+      "success-story-from-street-to-university": {
+        "title": "Success Story: From the Street to University",
+        "excerpt": "An inspiring journey of a child benefiting from our educational programs...",
+        "content": "<p>Ahmed's story, the child who started his journey from the street and reached university seats, inspires thousands and confirms the power of education in changing destinies.</p><h2>The Difficult Beginning</h2><p>Ahmed was living on the street with his family five years ago. The difficult circumstances made him lose hope for the future. But his meeting with our volunteer team changed the course of his life.</p><h2>Joining the Program</h2><p>Ahmed joined our educational program at the age of 12. He started learning basic reading and writing, then developed to become one of the best students in his class.</p><h2>The Great Achievement</h2><p>Today, Ahmed studies at the Faculty of Medicine at Mohammed V University. His dream has become a reality, and he plans to become a doctor to serve his community.</p><blockquote><p>\"Education is the key that opened the doors of the future for me. Thank you to the association that believed in me.\"</p><cite>- Ahmed</cite></blockquote><p>Ahmed's story is a living example of how educational support can change the lives of individuals and communities. We are proud that he is part of our success story.</p>",
+        "date": "10 Oct 2025",
+        "readTime": "6 min read",
+        "category": "Success Stories",
+        "author": "Stories Department"
+      },
+      "annual-donation-campaign-results": {
+        "title": "Annual Donation Campaign Collects Over One Million Dirhams",
+        "excerpt": "The results of our annual fundraising campaign exceed expectations...",
+        "content": "<p>Assalam Association announced the results of its annual donation campaign, where the campaign goal was successfully exceeded by a large margin.</p>",
+        "date": "5 Sep 2025",
+        "readTime": "3 min read",
+        "category": "Events",
+        "author": "Donations Department"
+      },
+      "new-collaboration-who": {
+        "title": "New Collaboration with World Health Organization",
+        "excerpt": "Strategic partnership to improve healthcare in rural areas...",
+        "content": "<p>Assalam Association signed a cooperation agreement with the World Health Organization to improve healthcare in rural areas.</p>",
+        "date": "20 Aug 2025",
+        "readTime": "4 min read",
+        "category": "Reports",
+        "author": "Partnerships Department"
+      },
+      "graduation-new-professional-trainees": {
+        "title": "Graduation of New Batch of Professional Trainees",
+        "excerpt": "More than 200 young people get job opportunities after training...",
+        "content": "<p>Assalam Association celebrated the graduation of a new batch of trainees in professional programs.</p>",
+        "date": "15 Jul 2025",
+        "readTime": "5 min read",
+        "category": "Success Stories",
+        "author": "Training Department"
+      }
+    }
+  },
+  "Contact": {
+    "hero": {
+      "title": "Contact Us",
+      "description": "Get in touch with us. We're here to help and answer any questions you may have."
+    },
+    "form": {
+      "title": "Get In Touch",
+      "full_name": "Full Name",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "message": "Your Message...",
+      "select_project": "Select a Project",
+      "project_message": "How can we collaborate on this project?",
+      "city": "City",
+      "skills": "Skills/Expertise (e.g., Education, Medical, Photography...)",
+      "send": "Send Message",
+      "send_request": "Send Request",
+      "join_us": "Join Us"
+    },
+    "tabs": {
+      "general": "General",
+      "project": "Project",
+      "volunteer": "Volunteer"
+    },
+    "projects": {
+      "rayhana": "Rayhana Assalam",
+      "kafala": "Kafala Program",
+      "imtiaz": "Imtiaz Program",
+      "himaya": "Himaya Center"
+    },
+    "info": {
+      "title": "Contact Information",
+      "description": "We're here to answer your questions. Don't hesitate to contact us.",
+      "address": "152 bd yacoub al mansour, Casablanca",
+      "phone": "05229-93699",
+      "email": "bn.assalam@gmail.com"
+    }
+  }
+}

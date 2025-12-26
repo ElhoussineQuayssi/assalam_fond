@@ -1,0 +1,94 @@
+"use client";
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { ImageIcon } from "lucide-react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// --- Project Gallery Renderer ---
+const ProjectGalleryRenderer = ({ galleryImages, title = "Project Gallery" }) => {
+  // Ensure galleryImages is an array
+  const safeGalleryImages = Array.isArray(galleryImages) ? galleryImages : [];
+  
+  // Don't render if no images
+  if (safeGalleryImages.length === 0) {
+    return null;
+  }
+
+  // Filter for published images only
+  const publishedImages = safeGalleryImages.filter(img => img.status !== 'deleted');
+
+  // Don't render if no published images
+  if (publishedImages.length === 0) {
+    return null;
+  }
+  
+  return (
+    <section className="py-10 max-w-6xl mx-auto px-6">
+      {/* Gallery Title */}
+      {title && (
+        <div className="text-center mb-8">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2 flex items-center justify-center gap-2">
+            <ImageIcon className="h-5 w-5" />
+            {title}
+          </h2>
+          <div className="w-16 h-1 bg-blue-500 mx-auto rounded-full"></div>
+        </div>
+      )}
+      
+      {/* Images Grid */}
+      <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+        {publishedImages.map((img, i) => {
+          // Handle different image URL formats
+          const src = (img.url || img.image_url || img).toString().replace(/^"|"$/g, '');
+          if (!src || typeof src !== 'string' || src.trim() === "") return null;
+          
+          return (
+            <div key={img.id || i} className="break-inside-avoid rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300 group">
+              <div className="relative">
+                <img 
+                  src={src} 
+                  alt={img.caption || `Gallery image ${i + 1}`} 
+                  className="w-full h-auto hover:scale-105 transition-transform duration-500" 
+                  onError={(e) => {
+                    e.target.src = '/placeholder-image.jpg';
+                  }}
+                />
+                {/* Image Caption Overlay */}
+                {img.caption && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-4">
+                    <p className="text-sm font-medium">{img.caption}</p>
+                  </div>
+                )}
+                
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <ImageIcon className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      
+      {/* Gallery Stats */}
+      <div className="mt-8 text-center">
+        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm ${
+          publishedImages.length > 0 
+            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' 
+            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+        }`}>
+          <ImageIcon className="h-4 w-4" />
+          <span>{publishedImages.length} {publishedImages.length === 1 ? 'image' : 'images'}</span>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ProjectGalleryRenderer;

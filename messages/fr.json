@@ -1,0 +1,477 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "about": "À propos",
+    "projects": "Projets",
+    "blogs": "Blogs",
+    "contact": "Contact",
+    "donate": "Faire un Don"
+  },
+  "Home": {
+    "hero": {
+      "title": "Soutenir les communautés par l'action",
+      "subtitle": "Nous travaillons pour créer un impact durable dans les communautés du monde entier grâce à des programmes dédiés et des partenariats.",
+      "cta_support": "Soutenir l'action",
+      "cta_discover": "Découvrir"
+    },
+    "impact": {
+      "title": "Nos Chiffres Parlent",
+      "sections": "Sections Nationales",
+      "beneficiaries": "Bénéficiaires",
+      "transparency": "Transparence"
+    },
+    "about": {
+      "essential": "L'Essentiel",
+      "engagement": "Engagement & Vision",
+      "general_desc": "La Fondation Assalam est une organisation à but non lucratif dédiée à la promotion du développement durable et de l'autonomisation dans les communautés locales.",
+      "mission": "Notre Mission",
+      "mission_desc": "Notre mission est de fournir un soutien complet aux individus et familles dans le besoin grâce à des programmes d'éducation, de santé et de développement économique.",
+      "vision": "Vision",
+      "vision_desc": "Nous envisageons un monde où chaque communauté dispose des outils et du soutien nécessaires pour prospérer et se développer.",
+      "values": "Valeurs",
+      "values_desc": "Nous croyons en la dignité humaine, la solidarité et la durabilité comme base de notre travail.",
+      "values_text": "La dignité humaine avant tout.",
+      "history": "Fondée en 1992, la Fondation Assalam œuvre depuis plus de 30 ans dans le domaine de la solidarité nationale.",
+      "values_list": "Solidarité, Autonomisation, Dignité, Éducation, Compassion, Durabilité"
+    },
+    "blogs": {
+      "title": "Blog",
+      "blog1": {
+        "title": "Inauguration d'un nouveau centre à Marrakech",
+        "desc": "Le nouveau centre a été inauguré pour fournir des services sociaux...",
+        "date": "22 Dec 2025",
+        "image": "placeholder"
+      },
+      "blog2": {
+        "title": "Nouveau programme éducatif",
+        "desc": "Nous proposons un programme éducatif complet pour les enfants...",
+        "date": "15 Nov 2025",
+        "image": "placeholder"
+      },
+      "blog3": {
+        "title": "Campagne de dons annuelle",
+        "desc": "Rejoignez-nous dans notre campagne annuelle de collecte de fonds...",
+        "date": "10 Oct 2025",
+        "image": "placeholder"
+      },
+      "blog4": {
+        "title": "Histoire de Réussite : De la Rue à l'Université",
+        "desc": "Un voyage inspirant d'un enfant bénéficiant de nos programmes éducatifs...",
+        "date": "5 Sep 2025",
+        "image": "placeholder"
+      },
+      "blog5": {
+        "title": "Nouvelle Collaboration avec l'Organisation Mondiale de la Santé",
+        "desc": "Partenariat stratégique pour améliorer les soins de santé dans les zones rurales...",
+        "date": "20 Aoû 2025",
+        "image": "placeholder"
+      },
+      "blog6": {
+        "title": "Diplômation d'une Nouvelle Promotion de Stagiaires Professionnels",
+        "desc": "Plus de 200 jeunes obtiennent des opportunités d'emploi après formation...",
+        "date": "15 Jul 2025",
+        "image": "placeholder"
+      },
+      "show_more": "Afficher Plus"
+    },
+    "projects": {
+      "title": "Nos Projets Principaux",
+      "rayhana": "Rayhana Assalam : Programme éducatif pour enfants",
+      "himaya": "Centre Himaya : Accompagnement des femmes et familles en difficulté",
+      "fataer": "Fataer Al Baraka : Centre d'autonomisation des femmes",
+      "imtiaz": "Programme Imtiaz : Parrainage pour étudiants brillants",
+      "kafala": "Programme Kafala : Soutien complet pour enfants et orphelins",
+      "nadi": "Nadi Assalam : Centre d'autonomie économique"
+    },
+    "faq": {
+      "title": "Questions Fréquentes",
+      "subtitle": "Tout ce que vous devez savoir",
+      "q1": "Comment puis-je contribuer à votre mission ?",
+      "a1": "Vous pouvez contribuer de plusieurs façons : faire un don, devenir bénévole, ou partager notre mission avec votre réseau.",
+      "q2": "Quels sont vos programmes principaux ?",
+      "a2": "Nous menons des programmes d'éducation, de santé communautaire et de développement économique durable dans diverses régions.",
+      "q3": "Comment assurer la transparence de nos actions ?",
+      "a3": "Nous publions régulièrement des rapports d'impact et travaillons avec des auditeurs indépendants pour garantir la transparence.",
+      "q4": "Puis-je visiter vos projets sur le terrain ?",
+      "a4": "Oui, nous organisons des visites guidées pour les donateurs intéressés. Contactez-nous pour plus d'informations."
+    },
+    "testimonials": {
+      "title": "Témoignages",
+      "subtitle": "Ce qu'ils disent de nous",
+      "list": [
+        {
+          "name": "Ahmed Bennani",
+          "role": "Bénéficiaire",
+          "content": "Assalam a transformé ma vie. Grâce à leurs programmes éducatifs, j'ai pu poursuivre mes études et réaliser mes rêves.",
+          "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Fatima Alaoui",
+          "role": "Volontaire",
+          "content": "Contribuer à Assalam est une expérience enrichissante. Voir l'impact positif sur la communauté me motive chaque jour.",
+          "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Youssef Tazi",
+          "role": "Partenaire",
+          "content": "La transparence et l'efficacité d'Assalam sont remarquables. Leur approche innovante fait vraiment la différence.",
+          "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Amina Rachid",
+          "role": "Bénéficiaire",
+          "content": "Les programmes de santé d'Assalam ont sauvé la vie de ma famille. Merci pour votre dévouement sans faille.",
+          "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+        },
+        {
+          "name": "Karim El Fassi",
+          "role": "Volontaire",
+          "content": "Travailler avec Assalam m'a appris l'importance de la solidarité et du partage dans notre société.",
+          "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face"
+        }
+      ]
+    },
+    "timeline": {
+      "title": "Notre Histoire",
+      "subtitle": "L'évolution d'Assalam",
+      "events": [
+        {
+          "year": "2010",
+          "title": "Fondation d'Assalam",
+          "description": "Création de l'association avec une vision de solidarité et d'entraide communautaire."
+        },
+        {
+          "year": "2015",
+          "title": "Expansion Nationale",
+          "description": "Ouverture de 10 sections régionales pour toucher plus de communautés."
+        },
+        {
+          "year": "2020",
+          "title": "Programme d'Excellence",
+          "description": "Lancement des programmes éducatifs et de formation professionnelle."
+        },
+        {
+          "year": "2024",
+          "title": "Impact Communautaire",
+          "description": "Plus de 6000 bénéficiaires et reconnaissance nationale pour nos efforts."
+        }
+      ]
+    },
+    "footer": {
+      "description": "Travailler pour créer un impact durable dans les communautés grâce à des programmes dédiés et des partenariats.",
+      "quick_links": "Liens Rapides",
+      "contact": "Contact",
+      "location": "Maroc",
+      "rights": "Tous droits réservés.",
+      "privacy": "Politique de Confidentialité",
+      "terms": "Conditions d'Utilisation"
+    }
+  },
+  "About": {
+    "hero": {
+      "title": "À propos de la Fondation Assalam",
+      "description": "Une organisation caritative marocaine dédiée à l'amélioration des conditions de vie des individus et familles vulnérables grâce à l'éducation et la solidarité"
+    },
+    "overview": {
+      "title": "Aperçu",
+      "description": "La Fondation Assalam pour le Développement Social est une organisation caritative marocaine dédiée à l'amélioration des conditions de vie des individus et familles vulnérables. Depuis sa création en 1992, la fondation travaille à renforcer la cohésion sociale et à soutenir les catégories les plus nécessiteuses grâce à des programmes complets en éducation, santé et développement durable.",
+      "additional": "Nous croyons que chaque individu mérite une chance d'avoir une vie digne, et nous nous efforçons d'y parvenir grâce à des partenariats efficaces et un travail de terrain direct."
+    },
+    "impact": {
+      "title": "Notre Impact",
+      "sections": "Section Nationale",
+      "beneficiaries": "Bénéficiaire",
+      "transparency": "Satisfaction Client"
+    },
+    "values": {
+      "title": "Nos Valeurs Fondamentales",
+      "solidarity": {
+        "title": "Solidarité",
+        "desc": "Un esprit profond d'aide pour soutenir les catégories les plus nécessiteuses."
+      },
+      "dignity": {
+        "title": "Dignité",
+        "desc": "Fournir une assistance qui préserve l'honneur de l'individu et son estime de soi."
+      },
+      "education": {
+        "title": "Éducation",
+        "desc": "La clé de la libération de l'enfance à l'intégration professionnelle."
+      },
+      "empowerment": {
+        "title": "Autonomisation",
+        "desc": "Donner les moyens aux jeunes et aux femmes de devenir actifs."
+      },
+      "sustainability": {
+        "title": "Durabilité",
+        "desc": "Des projets conçus pour un impact positif à long terme."
+      },
+      "transparency": {
+        "title": "Transparence",
+        "desc": "Une intégrité complète dans la gestion des ressources et les rapports."
+      }
+    },
+    "partners": {
+      "title": "Nos Partenaires",
+      "indh": "INDH",
+      "entraide": "Entraide",
+      "unicef": "UNICEF",
+      "who": "WHO"
+    },
+    "team": {
+      "title": "Notre Équipe",
+      "fatima": {
+        "name": "Fatima Zahra",
+        "role": "Directrice Exécutive"
+      },
+      "youssef": {
+        "name": "Youssef",
+        "role": "Chef de Projet"
+      },
+      "ahmed": {
+        "name": "Ahmed",
+        "role": "Responsable Communication"
+      }
+    },
+    "cta": {
+      "title": "Rejoignez-nous en tant que bénévole",
+      "description": "Contribuez à construire une société meilleure et faites partie de notre voyage dans le don durable.",
+      "button": "Rejoignez Maintenant"
+    },
+    "timeline": {
+      "title": "Notre Histoire",
+      "subtitle": "Un voyage de 30 ans de don durable",
+      "events": [
+        {
+          "year": 1992,
+          "title": "Fondation de l'Association",
+          "description": "Début du travail dans le domaine du développement social et de l'aide humanitaire."
+        },
+        {
+          "year": 2010,
+          "title": "Expansion des Programmes",
+          "description": "Lancement des programmes d'éducation et de solidarité pour les catégories vulnérables."
+        },
+        {
+          "year": 2018,
+          "title": "Autonomisation Féminine",
+          "description": "Concentration sur l'autonomisation des femmes et des enfants dans les communautés locales."
+        },
+        {
+          "year": 2025,
+          "title": "Avenir Durable",
+          "description": "Continuer le don durable pour atteindre la dignité du citoyen marocain."
+        }
+      ]
+    }
+  },
+  "Projects": {
+    "hero": {
+      "title": "Nos Projets : Un Impact Tangible sur la Vie Communautaire",
+      "description": "De l'éducation à l'autonomisation économique, nous lançons des initiatives visant à construire un avenir durable pour chaque citoyen marocain."
+    },
+    "filters": {
+      "all": "Tous",
+      "education": "Éducation",
+      "economic": "Autonomisation Économique",
+      "social": "Soins Sociaux"
+    },
+    "projects": {
+      "rayhana": {
+        "title": "Rayhana Assalam",
+        "category": "Education",
+        "description": "Un programme éducatif complet pour les enfants et les jeunes dans les communautés locales.",
+        "status": "Actif",
+        "detailed_description": "Rayhana Assalam est un programme éducatif complet visant à fournir une éducation de haute qualité aux enfants et jeunes des zones défavorisées. Le programme comprend des leçons de lecture, d'écriture et de mathématiques, en plus d'activités culturelles et récréatives.",
+        "impact": "Plus de 500 enfants bénéficiaires, taux de réussite de 95% aux examens scolaires.",
+        "gallery": ["/images/rayhana1.jpg", "/images/rayhana2.jpg", "/images/rayhana3.jpg"]
+      },
+      "himaya": {
+        "title": "Centre Himaya",
+        "category": "Social",
+        "description": "Accompagnement des femmes et familles en difficulté grâce à des services sociaux complets.",
+        "status": "Actif",
+        "detailed_description": "Le Centre Himaya fournit un soutien psychologique et social aux femmes et familles confrontées à des difficultés. Le programme comprend des consultations individuelles et collectives, et une assistance pour obtenir des droits légaux et sociaux.",
+        "impact": "Plus de 200 familles bénéficiaires, taux de satisfaction de 98% des bénéficiaires.",
+        "gallery": ["/images/himaya1.jpg", "/images/himaya2.jpg", "/images/himaya3.jpg"]
+      },
+      "fataer": {
+        "title": "Fataer Al Baraka",
+        "category": "Economic",
+        "description": "Centre d'autonomisation économique des femmes par la formation et le soutien financier.",
+        "status": "Nouveau",
+        "detailed_description": "Le programme Fataer Al Baraka vise à autonomiser économiquement les femmes en les formant aux métiers traditionnels et modernes, et en fournissant des petits prêts pour démarrer leurs propres entreprises.",
+        "impact": "Plus de 150 femmes autonomisées économiquement, création de 50 petites entreprises.",
+        "gallery": ["/images/fataer1.jpg", "/images/fataer2.jpg", "/images/fataer3.jpg"]
+      },
+      "imtiaz": {
+        "title": "Programme Imtiaz",
+        "category": "Education",
+        "description": "Parrainage pour étudiants brillants et fourniture d'opportunités éducatives avancées.",
+        "status": "Actif",
+        "detailed_description": "Le Programme Imtiaz soutient les étudiants brillants sur le plan académique grâce à des bourses, des cours de formation avancés, et des opportunités d'échange culturel avec des universités internationales.",
+        "impact": "Plus de 100 étudiants brillants bénéficiaires, 80% d'entre eux ont réussi à intégrer des universités prestigieuses.",
+        "gallery": ["/images/imtiaz1.jpg", "/images/imtiaz2.jpg", "/images/imtiaz3.jpg"]
+      },
+      "kafala": {
+        "title": "Programme Kafala",
+        "category": "Social",
+        "description": "Soutien complet pour les enfants et orphelins par le parrainage et les soins.",
+        "status": "Actif",
+        "detailed_description": "Le Programme Kafala fournit des soins complets aux enfants et orphelins, y compris l'éducation, les soins de santé, et le soutien psychologique et social.",
+        "impact": "Plus de 300 enfants bénéficiaires, amélioration notable de la santé et de l'éducation.",
+        "gallery": ["/images/kafala1.jpg", "/images/kafala2.jpg", "/images/kafala3.jpg"]
+      },
+      "nadi": {
+        "title": "Nadi Assalam",
+        "category": "Economic",
+        "description": "Centre d'autonomie économique pour les jeunes et adultes.",
+        "status": "Nouveau",
+        "detailed_description": "Nadi Assalam fournit une formation professionnelle et un soutien aux jeunes et adultes pour atteindre l'indépendance économique grâce à des ateliers et des programmes de formation spécialisés.",
+        "impact": "Plus de 250 jeunes bénéficiaires, taux d'emploi de 75% après la formation.",
+        "gallery": ["/images/nadi1.jpg", "/images/nadi2.jpg", "/images/nadi3.jpg"]
+      }
+    },
+    "cta": "Lire Plus",
+    "contribute": "Contribuer à ce projet",
+    "back_to_projects": "Retour aux Projets",
+    "impact_title": "Impact et Réalisations",
+    "gallery_title": "Galerie Photo",
+    "contribute_title": "Contribuer à ce Projet",
+    "contribute_desc": "Votre soutien nous aide à étendre ce projet et à aider plus de bénéficiaires.",
+    "view_gallery": "Voir la Galerie Complète"
+  },
+  "Blogs": {
+    "all_categories": "Tous",
+    "hero": {
+      "title": "Blog",
+      "subtitle": "Découvrez les dernières nouvelles et histoires de notre communauté",
+      "featured_title": "Inauguration du Nouveau Centre de Protection à Casablanca",
+      "featured_excerpt": "Dans le cadre de l'expansion de nos services sociaux, un nouveau centre a été ouvert pour soutenir les familles vulnérables...",
+      "featured_date": "22 Déc 2025",
+      "featured_read_time": "5 min de lecture"
+    },
+    "categories": {
+      "all": "Tous",
+      "events": "Événements",
+      "reports": "Rapports",
+      "success_stories": "Histoires de Réussite"
+    },
+    "sidebar": {
+      "categories_title": "Catégories",
+      "search_placeholder": "Rechercher dans le blog...",
+      "newsletter_title": "Newsletter",
+      "newsletter_desc": "Abonnez-vous pour recevoir les dernières nouvelles et mises à jour",
+      "newsletter_button": "S'abonner",
+      "recent_posts_title": "Articles Récents",
+      "author_bio": "À propos de l'auteur",
+      "share_article": "Partager cet article",
+      "stay_updated": "Restez informé",
+      "newsletter_desc_individual": "Recevez les derniers articles directement dans votre boîte mail.",
+      "related_articles": "Articles connexes",
+      "your_email": "Votre email",
+      "written_by": "Écrit par",
+      "passionate_about": "Passionné par le partage d'insights dans"
+    },
+    "load_more": "Charger Plus",
+    "read_more": "Lire Plus",
+    "share": "Partager",
+    "related_posts": "Articles Connexes",
+    "back_to_blog": "Retour au Blog",
+    "posts": {
+      "opening-new-protection-center-casablanca": {
+        "title": "Inauguration du Nouveau Centre de Protection à Casablanca",
+        "excerpt": "Dans le cadre de l'expansion de nos services sociaux, un nouveau centre a été ouvert pour soutenir les familles vulnérables...",
+        "content": "<p>Dans une étape importante vers l'expansion de nos services sociaux, le nouveau Centre de Protection à Casablanca a été inauguré samedi dernier. Le nouveau centre vise à fournir un soutien complet aux familles vulnérables et aux enfants en situation difficile.</p><h2>Objectifs du Centre</h2><p>Le centre comprend plusieurs services de base :</p><ul><li>Conseils psychologiques et sociaux</li><li>Soutien éducatif pour les enfants</li><li>Aide pour obtenir des droits légaux</li><li>Programmes de formation professionnelle pour les parents</li></ul><h2>Impact Attendu</h2><p>Nous nous attendons à ce que plus de 500 familles bénéficient des services du centre dans la première année de son lancement. Ce projet s'inscrit dans le plan de l'association pour étendre sa portée géographique et renforcer son impact positif sur la société.</p><blockquote><p>\"Ce centre n'est pas seulement un bâtiment, mais un nouvel espoir pour les familles qui ont besoin de soutien et d'aide.\"</p><cite>- Directeur de l'Association</cite></blockquote><p>Nous remercions tous les partenaires et donateurs qui ont contribué au succès de ce projet. Leur soutien continu nous permet d'atteindre nos objectifs de service à la communauté.</p>",
+        "date": "22 Déc 2025",
+        "readTime": "5 min de lecture",
+        "category": "Événements",
+        "author": "Équipe de Communication"
+      },
+      "new-education-program-success": {
+        "title": "Nouveau Programme Éducatif Réussit Grandement",
+        "excerpt": "Nous proposons un programme éducatif complet pour les enfants dans les zones reculées...",
+        "content": "<p>Notre nouveau programme éducatif continue d'obtenir des résultats remarquables dans les zones reculées. Le programme, lancé il y a six mois, couvre désormais plus de 20 villages dans diverses régions.</p><h2>Composantes du Programme</h2><p>Le programme combine l'éducation de base avec des activités récréatives :</p><ul><li>Cours de lecture, d'écriture et de mathématiques</li><li>Activités sportives et artistiques</li><li>Soutien psychologique pour les enfants</li><li>Distribution de livres et de fournitures scolaires</li></ul><h2>Résultats Initiaux</h2><p>Le programme a enregistré un taux de réussite pouvant atteindre 95% aux examens scolaires. De plus, 85% des enfants participants sont devenus plus confiants en eux-mêmes et intégrés dans la communauté scolaire.</p><p>Ce succès reflète notre engagement à améliorer les opportunités éducatives pour les enfants dans les zones reculées, et confirme l'importance d'investir dans l'éducation comme base d'un avenir meilleur.</p>",
+        "date": "15 Nov 2025",
+        "readTime": "4 min de lecture",
+        "category": "Rapports",
+        "author": "Département Éducation"
+      },
+      "success-story-from-street-to-university": {
+        "title": "Histoire de Réussite : De la Rue à l'Université",
+        "excerpt": "Un voyage inspirant d'un enfant bénéficiant de nos programmes éducatifs...",
+        "content": "<p>L'histoire d'Ahmed, l'enfant qui a commencé son voyage depuis la rue et atteint les bancs de l'université, inspire des milliers de personnes et confirme la puissance de l'éducation à changer les destins.</p><h2>Le Début Difficile</h2><p>Ahmed vivait dans la rue avec sa famille il y a cinq ans. Les circonstances difficiles lui avaient fait perdre espoir pour l'avenir. Mais sa rencontre avec notre équipe de bénévoles a changé le cours de sa vie.</p><h2>Adhésion au Programme</h2><p>Ahmed a rejoint notre programme éducatif à l'âge de 12 ans. Il a commencé par apprendre la lecture et l'écriture de base, puis s'est développé pour devenir l'un des meilleurs élèves de sa classe.</p><h2>La Grande Réalisation</h2><p>Aujourd'hui, Ahmed étudie à la Faculté de Médecine de l'Université Mohammed V. Son rêve est devenu réalité, et il prévoit de devenir médecin pour servir sa communauté.</p><blockquote><p>\"L'éducation est la clé qui m'a ouvert les portes de l'avenir. Merci à l'association qui a cru en moi.\"</p><cite>- Ahmed</cite></blockquote><p>L'histoire d'Ahmed est un exemple vivant de comment le soutien éducatif peut changer la vie des individus et des communautés. Nous sommes fiers qu'il fasse partie de notre histoire de succès.</p>",
+        "date": "10 Oct 2025",
+        "readTime": "6 min de lecture",
+        "category": "Histoires de Réussite",
+        "author": "Département Histoires"
+      },
+      "annual-donation-campaign-results": {
+        "title": "Campagne de Dons Annuelle Recueille Plus d'Un Million de Dirhams",
+        "excerpt": "Les résultats de notre campagne annuelle de collecte de fonds dépassent les attentes...",
+        "content": "<p>L'Association Assalam a annoncé les résultats de sa campagne annuelle de dons, où l'objectif de la campagne a été dépassé avec succès par une large marge.</p>",
+        "date": "5 Sep 2025",
+        "readTime": "3 min de lecture",
+        "category": "Événements",
+        "author": "Département Dons"
+      },
+      "new-collaboration-who": {
+        "title": "Nouvelle Collaboration avec l'Organisation Mondiale de la Santé",
+        "excerpt": "Partenariat stratégique pour améliorer les soins de santé dans les zones rurales...",
+        "content": "<p>L'Association Assalam a signé un accord de coopération avec l'Organisation Mondiale de la Santé pour améliorer les soins de santé dans les zones rurales.</p>",
+        "date": "20 Aoû 2025",
+        "readTime": "4 min de lecture",
+        "category": "Rapports",
+        "author": "Département Partenariats"
+      },
+      "graduation-new-professional-trainees": {
+        "title": "Diplômation d'une Nouvelle Promotion de Stagiaires Professionnels",
+        "excerpt": "Plus de 200 jeunes obtiennent des opportunités d'emploi après formation...",
+        "content": "<p>L'Association Assalam a célébré la diplomation d'une nouvelle promotion de stagiaires dans les programmes professionnels.</p>",
+        "date": "15 Jul 2025",
+        "readTime": "5 min de lecture",
+        "category": "Histoires de Réussite",
+        "author": "Département Formation"
+      }
+    }
+  },
+  "Contact": {
+    "hero": {
+      "title": "Contactez-nous",
+      "description": "Entrez en contact avec nous. Nous sommes là pour vous aider et répondre à toutes vos questions."
+    },
+    "form": {
+      "title": "Entrer en Contact",
+      "full_name": "Nom Complet",
+      "first_name": "Prénom",
+      "last_name": "Nom de Famille",
+      "email": "Adresse Email",
+      "phone": "Numéro de Téléphone",
+      "message": "Votre Message...",
+      "select_project": "Sélectionner un Projet",
+      "project_message": "Comment pouvons-nous collaborer sur ce projet ?",
+      "city": "Ville",
+      "skills": "Compétences/Expertise (ex: Éducation, Médical, Photographie...)",
+      "send": "Envoyer",
+      "send_request": "Envoyer la Demande",
+      "join_us": "Rejoignez-nous"
+    },
+    "tabs": {
+      "general": "Général",
+      "project": "Projet",
+      "volunteer": "Bénévole"
+    },
+    "projects": {
+      "rayhana": "Rayhana Assalam",
+      "kafala": "Programme Kafala",
+      "imtiaz": "Programme Imtiaz",
+      "himaya": "Centre Himaya"
+    },
+    "info": {
+      "title": "Informations de Contact",
+      "description": "Nous sommes là pour répondre à vos questions. N'hésitez pas à nous contacter.",
+      "address": "152 bd yacoub al mansour, Casablanca",
+      "phone": "05229-93699",
+      "email": "bn.assalam@gmail.com"
+    }
+  }
+}
