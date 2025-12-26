@@ -1,18 +1,18 @@
-import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutTimeline() {
-  const t = useTranslations('About.timeline');
+  const t = useTranslations("About.timeline");
   const timelineRef = useRef();
   const lineRef = useRef();
 
   useEffect(() => {
     const line = lineRef.current;
-    const events = gsap.utils.toArray('.timeline-event');
+    const events = gsap.utils.toArray(".timeline-event");
 
     gsap.set(line, { scaleY: 0, transformOrigin: "top" });
 
@@ -27,9 +27,9 @@ export default function AboutTimeline() {
         gsap.to(line, {
           scaleY: self.progress,
           duration: 0.1,
-          ease: "none"
+          ease: "none",
         });
-      }
+      },
     });
 
     events.forEach((event, index) => {
@@ -39,19 +39,24 @@ export default function AboutTimeline() {
         end: "bottom 20%",
         scrub: true,
         onEnter: () => {
-          gsap.fromTo(event,
+          gsap.fromTo(
+            event,
             { opacity: 0, x: index % 2 === 0 ? -50 : 50 },
-            { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }
+            { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
           );
         },
         onLeaveBack: () => {
-          gsap.to(event, { opacity: 0, x: index % 2 === 0 ? -50 : 50, duration: 0.5 });
-        }
+          gsap.to(event, {
+            opacity: 0,
+            x: index % 2 === 0 ? -50 : 50,
+            duration: 0.5,
+          });
+        },
       });
     });
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
@@ -59,8 +64,10 @@ export default function AboutTimeline() {
     <section ref={timelineRef} className="py-24 bg-slate-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-black text-slate-900 mb-4">{t('title')}</h2>
-          <p className="text-lg text-slate-600">{t('subtitle')}</p>
+          <h2 className="text-3xl font-black text-slate-900 mb-4">
+            {t("title")}
+          </h2>
+          <p className="text-lg text-slate-600">{t("subtitle")}</p>
         </div>
 
         <div className="relative max-w-4xl mx-auto">
@@ -71,15 +78,24 @@ export default function AboutTimeline() {
 
           {/* Timeline Events */}
           <div className="space-y-16">
-            {t.raw('events').map((event, index) => {
+            {t.raw("events").map((event, index) => {
               const isLeft = index % 2 === 0;
 
               return (
-                <div key={index} className={`timeline-event flex items-center ${isLeft ? 'flex-row' : 'flex-row-reverse'} relative`}>
-                  <div className={`w-1/2 ${isLeft ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
+                <div
+                  key={index}
+                  className={`timeline-event flex items-center ${isLeft ? "flex-row" : "flex-row-reverse"} relative`}
+                >
+                  <div
+                    className={`w-1/2 ${isLeft ? "pr-8 text-right" : "pl-8 text-left"}`}
+                  >
                     <div className="bg-white rounded-[2rem] p-6 shadow-lg">
-                      <span className="text-sm font-bold text-blue-600 mb-2 block">{event.year}</span>
-                      <h3 className="text-xl font-black text-slate-900 mb-2">{event.title}</h3>
+                      <span className="text-sm font-bold text-blue-600 mb-2 block">
+                        {event.year}
+                      </span>
+                      <h3 className="text-xl font-black text-slate-900 mb-2">
+                        {event.title}
+                      </h3>
                       <p className="text-slate-600">{event.description}</p>
                     </div>
                   </div>

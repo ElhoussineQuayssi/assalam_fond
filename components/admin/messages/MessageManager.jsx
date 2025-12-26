@@ -22,7 +22,7 @@ export default function MessageManager({ isDarkMode = false }) {
     isEditingMessage,
     currentMessage,
     messageFormData,
-    
+
     // Filters and pagination
     messageSearch,
     messageStatusFilter,
@@ -31,21 +31,21 @@ export default function MessageManager({ isDarkMode = false }) {
     messagePage,
     messagePageSize,
     messageTotal,
-    
+
     // Actions
     fetchMessages,
     openMessageForm,
     closeMessageForm,
     handleMessageSubmit,
     handleDeleteMessage,
-    
+
     // Filter handlers
     handleSearchChange,
     handleStatusFilterChange,
     handleSortChange,
     handlePageChange,
     handlePageSizeChange,
-    
+
     // Form data handler
     setMessageFormData,
   } = useMessagesData();
@@ -62,15 +62,19 @@ export default function MessageManager({ isDarkMode = false }) {
   useGSAP(() => {
     if (!isEditingMessage && tableRef.current) {
       // Table entrance animation
-      gsap.fromTo(tableRef.current, {
-        y: 50,
-        opacity: 0
-      }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out"
-      });
+      gsap.fromTo(
+        tableRef.current,
+        {
+          y: 50,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+      );
     }
   }, [isEditingMessage]);
 
@@ -85,17 +89,21 @@ export default function MessageManager({ isDarkMode = false }) {
         onComplete: () => {
           openMessageForm(message);
           if (formRef.current) {
-            gsap.fromTo(formRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              formRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       openMessageForm(message);
@@ -113,17 +121,21 @@ export default function MessageManager({ isDarkMode = false }) {
         onComplete: () => {
           closeMessageForm();
           if (tableRef.current) {
-            gsap.fromTo(tableRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              tableRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       closeMessageForm();

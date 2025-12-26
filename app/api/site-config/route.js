@@ -1,5 +1,8 @@
-import { getSiteConfig, updateSiteConfig } from '@/controllers/siteConfigController';
-import { NextResponse } from 'next/server';
+import {
+  getSiteConfig,
+  updateSiteConfig,
+} from "@/controllers/siteConfigController";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -16,7 +19,7 @@ export async function PUT(request) {
     const data = await updateSiteConfig(body);
     return NextResponse.json(data);
   } catch (error) {
-    const status = error.message === 'Site config not found' ? 404 : 500;
+    const status = error.message === "Site config not found" ? 404 : 500;
     return NextResponse.json({ error: error.message }, { status });
   }
 }

@@ -284,7 +284,11 @@
         "status": "Active",
         "detailed_description": "Rayhana Assalam is a comprehensive educational program aimed at providing high-quality education to children and youth in deprived areas. The program includes lessons in reading, writing, and mathematics, in addition to cultural and recreational activities.",
         "impact": "More than 500 children beneficiaries, 95% success rate in school exams.",
-        "gallery": ["/images/rayhana1.jpg", "/images/rayhana2.jpg", "/images/rayhana3.jpg"]
+        "gallery": [
+          "/images/rayhana1.jpg",
+          "/images/rayhana2.jpg",
+          "/images/rayhana3.jpg"
+        ]
       },
       "himaya": {
         "title": "Himaya Center",
@@ -293,7 +297,11 @@
         "status": "Active",
         "detailed_description": "Himaya Center provides psychological and social support to women and families facing difficulties. The program includes individual and group counseling, and assistance in obtaining legal and social rights.",
         "impact": "More than 200 families beneficiaries, 98% satisfaction rate from beneficiaries.",
-        "gallery": ["/images/himaya1.jpg", "/images/himaya2.jpg", "/images/himaya3.jpg"]
+        "gallery": [
+          "/images/himaya1.jpg",
+          "/images/himaya2.jpg",
+          "/images/himaya3.jpg"
+        ]
       },
       "fataer": {
         "title": "Fataer Al Baraka",
@@ -302,7 +310,11 @@
         "status": "New",
         "detailed_description": "Fataer Al Baraka program aims to economically empower women through training them in traditional and modern crafts, and providing small loans to start their own businesses.",
         "impact": "More than 150 women economically empowered, creation of 50 small businesses.",
-        "gallery": ["/images/fataer1.jpg", "/images/fataer2.jpg", "/images/fataer3.jpg"]
+        "gallery": [
+          "/images/fataer1.jpg",
+          "/images/fataer2.jpg",
+          "/images/fataer3.jpg"
+        ]
       },
       "imtiaz": {
         "title": "Imtiaz Program",
@@ -311,7 +323,11 @@
         "status": "Active",
         "detailed_description": "Imtiaz Program supports academically brilliant students through scholarships, advanced training courses, and cultural exchange opportunities with international universities.",
         "impact": "More than 100 brilliant students beneficiaries, 80% of them succeeded in joining prestigious universities.",
-        "gallery": ["/images/imtiaz1.jpg", "/images/imtiaz2.jpg", "/images/imtiaz3.jpg"]
+        "gallery": [
+          "/images/imtiaz1.jpg",
+          "/images/imtiaz2.jpg",
+          "/images/imtiaz3.jpg"
+        ]
       },
       "kafala": {
         "title": "Kafala Program",
@@ -320,7 +336,11 @@
         "status": "Active",
         "detailed_description": "Kafala Program provides comprehensive care for children and orphans, including education, health care, and psychological and social support.",
         "impact": "More than 300 children beneficiaries, noticeable improvement in health and education.",
-        "gallery": ["/images/kafala1.jpg", "/images/kafala2.jpg", "/images/kafala3.jpg"]
+        "gallery": [
+          "/images/kafala1.jpg",
+          "/images/kafala2.jpg",
+          "/images/kafala3.jpg"
+        ]
       },
       "nadi": {
         "title": "Nadi Assalam",
@@ -329,7 +349,11 @@
         "status": "New",
         "detailed_description": "Nadi Assalam provides vocational training and support for youth and adults to achieve economic independence through workshops and specialized training programs.",
         "impact": "More than 250 youth beneficiaries, 75% employment rate after training.",
-        "gallery": ["/images/nadi1.jpg", "/images/nadi2.jpg", "/images/nadi3.jpg"]
+        "gallery": [
+          "/images/nadi1.jpg",
+          "/images/nadi2.jpg",
+          "/images/nadi3.jpg"
+        ]
       }
     },
     "cta": "Read More",

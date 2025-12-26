@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
 export default function AdminSignupPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const token = searchParams.get('secret');
+  const token = searchParams.get("secret");
 
   const [isValid, setIsValid] = useState(null);
   const [invitation, setInvitation] = useState(null);
   const [formData, setFormData] = useState({
-    email: '',
-    name: '',
-    password: '',
-    confirmPassword: ''
+    email: "",
+    name: "",
+    password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!token) {
@@ -30,60 +30,68 @@ export default function AdminSignupPage() {
 
     // Validate token
     fetch(`/api/admin-signup?token=${token}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.error) {
           setIsValid(false);
           setError(data.error);
         } else {
           setIsValid(true);
           setInvitation(data);
-          setFormData(prev => ({ ...prev, name: data.name || '', email: data.email || '' }));
+          setFormData((prev) => ({
+            ...prev,
+            name: data.name || "",
+            email: data.email || "",
+          }));
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setIsValid(false);
-        setError('Invalid invitation');
+        setError("Invalid invitation");
       });
   }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('/api/admin-signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           token,
-          ...formData
-        })
+          ...formData,
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         // Redirect to login or panel
-        router.push('/login?message=Account created successfully');
+        router.push("/login?message=Account created successfully");
       } else {
         setError(data.error);
       }
     } catch (err) {
-      setError('An error occurred');
+      setError("An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   if (isValid === null) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (!isValid) {
@@ -110,7 +118,10 @@ export default function AdminSignupPage() {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -119,12 +130,17 @@ export default function AdminSignupPage() {
               type="email"
               required
               value={formData.email}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, email: e.target.value }))
+              }
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Full Name
             </label>
             <input
@@ -133,12 +149,17 @@ export default function AdminSignupPage() {
               type="text"
               required
               value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, name: e.target.value }))
+              }
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -147,12 +168,17 @@ export default function AdminSignupPage() {
               type="password"
               required
               value={formData.password}
-              onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, password: e.target.value }))
+              }
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
               Confirm Password
             </label>
             <input
@@ -161,20 +187,23 @@ export default function AdminSignupPage() {
               type="password"
               required
               value={formData.confirmPassword}
-              onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  confirmPassword: e.target.value,
+                }))
+              }
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          {error && (
-            <div className="text-red-600 text-sm">{error}</div>
-          )}
+          {error && <div className="text-red-600 text-sm">{error}</div>}
           <div>
             <button
               type="submit"
               disabled={loading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </div>
         </form>

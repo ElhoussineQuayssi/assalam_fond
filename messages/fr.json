@@ -284,7 +284,11 @@
         "status": "Actif",
         "detailed_description": "Rayhana Assalam est un programme éducatif complet visant à fournir une éducation de haute qualité aux enfants et jeunes des zones défavorisées. Le programme comprend des leçons de lecture, d'écriture et de mathématiques, en plus d'activités culturelles et récréatives.",
         "impact": "Plus de 500 enfants bénéficiaires, taux de réussite de 95% aux examens scolaires.",
-        "gallery": ["/images/rayhana1.jpg", "/images/rayhana2.jpg", "/images/rayhana3.jpg"]
+        "gallery": [
+          "/images/rayhana1.jpg",
+          "/images/rayhana2.jpg",
+          "/images/rayhana3.jpg"
+        ]
       },
       "himaya": {
         "title": "Centre Himaya",
@@ -293,7 +297,11 @@
         "status": "Actif",
         "detailed_description": "Le Centre Himaya fournit un soutien psychologique et social aux femmes et familles confrontées à des difficultés. Le programme comprend des consultations individuelles et collectives, et une assistance pour obtenir des droits légaux et sociaux.",
         "impact": "Plus de 200 familles bénéficiaires, taux de satisfaction de 98% des bénéficiaires.",
-        "gallery": ["/images/himaya1.jpg", "/images/himaya2.jpg", "/images/himaya3.jpg"]
+        "gallery": [
+          "/images/himaya1.jpg",
+          "/images/himaya2.jpg",
+          "/images/himaya3.jpg"
+        ]
       },
       "fataer": {
         "title": "Fataer Al Baraka",
@@ -302,7 +310,11 @@
         "status": "Nouveau",
         "detailed_description": "Le programme Fataer Al Baraka vise à autonomiser économiquement les femmes en les formant aux métiers traditionnels et modernes, et en fournissant des petits prêts pour démarrer leurs propres entreprises.",
         "impact": "Plus de 150 femmes autonomisées économiquement, création de 50 petites entreprises.",
-        "gallery": ["/images/fataer1.jpg", "/images/fataer2.jpg", "/images/fataer3.jpg"]
+        "gallery": [
+          "/images/fataer1.jpg",
+          "/images/fataer2.jpg",
+          "/images/fataer3.jpg"
+        ]
       },
       "imtiaz": {
         "title": "Programme Imtiaz",
@@ -311,7 +323,11 @@
         "status": "Actif",
         "detailed_description": "Le Programme Imtiaz soutient les étudiants brillants sur le plan académique grâce à des bourses, des cours de formation avancés, et des opportunités d'échange culturel avec des universités internationales.",
         "impact": "Plus de 100 étudiants brillants bénéficiaires, 80% d'entre eux ont réussi à intégrer des universités prestigieuses.",
-        "gallery": ["/images/imtiaz1.jpg", "/images/imtiaz2.jpg", "/images/imtiaz3.jpg"]
+        "gallery": [
+          "/images/imtiaz1.jpg",
+          "/images/imtiaz2.jpg",
+          "/images/imtiaz3.jpg"
+        ]
       },
       "kafala": {
         "title": "Programme Kafala",
@@ -320,7 +336,11 @@
         "status": "Actif",
         "detailed_description": "Le Programme Kafala fournit des soins complets aux enfants et orphelins, y compris l'éducation, les soins de santé, et le soutien psychologique et social.",
         "impact": "Plus de 300 enfants bénéficiaires, amélioration notable de la santé et de l'éducation.",
-        "gallery": ["/images/kafala1.jpg", "/images/kafala2.jpg", "/images/kafala3.jpg"]
+        "gallery": [
+          "/images/kafala1.jpg",
+          "/images/kafala2.jpg",
+          "/images/kafala3.jpg"
+        ]
       },
       "nadi": {
         "title": "Nadi Assalam",
@@ -329,7 +349,11 @@
         "status": "Nouveau",
         "detailed_description": "Nadi Assalam fournit une formation professionnelle et un soutien aux jeunes et adultes pour atteindre l'indépendance économique grâce à des ateliers et des programmes de formation spécialisés.",
         "impact": "Plus de 250 jeunes bénéficiaires, taux d'emploi de 75% après la formation.",
-        "gallery": ["/images/nadi1.jpg", "/images/nadi2.jpg", "/images/nadi3.jpg"]
+        "gallery": [
+          "/images/nadi1.jpg",
+          "/images/nadi2.jpg",
+          "/images/nadi3.jpg"
+        ]
       }
     },
     "cta": "Lire Plus",

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
@@ -12,11 +12,11 @@ const formatTimeAgo = (dateString) => {
   const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
   if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+    return `${diffInMinutes} minute${diffInMinutes !== 1 ? "s" : ""} ago`;
   } else if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
+    return `${diffInHours} hour${diffInHours !== 1 ? "s" : ""} ago`;
   } else {
-    return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+    return `${diffInDays} day${diffInDays !== 1 ? "s" : ""} ago`;
   }
 };
 
@@ -24,52 +24,73 @@ const formatTimeAgo = (dateString) => {
 const getDateRange = (period) => {
   const now = new Date();
   const ranges = {
-    '7d': { days: 7, label: '7 Days' },
-    '30d': { days: 30, label: '30 Days' },
-    '3m': { days: 90, label: '3 Months' },
-    '1y': { days: 365, label: '1 Year' }
+    "7d": { days: 7, label: "7 Days" },
+    "30d": { days: 30, label: "30 Days" },
+    "3m": { days: 90, label: "3 Months" },
+    "1y": { days: 365, label: "1 Year" },
   };
-  
-  const range = ranges[period] || ranges['30d'];
+
+  const range = ranges[period] || ranges["30d"];
   const endDate = new Date(now);
   const startDate = new Date(now);
   startDate.setDate(startDate.getDate() - range.days);
-  
+
   return { startDate, endDate, label: range.label };
 };
 
 // Analytics overview with comprehensive metrics
-export const getAnalyticsOverview = async (period = '30d') => {
+export const getAnalyticsOverview = async (period = "30d") => {
   try {
     const { startDate, endDate, label } = getDateRange(period);
-    
+
     // Get total counts and recent activity
-    const [projectsResult, blogPostsResult, commentsResult, messagesResult, adminsResult] = await Promise.all([
-      supabase.from('projects').select('*', { count: 'exact', head: true }),
-      supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
-      supabase.from('comments').select('*', { count: 'exact', head: true }),
-      supabase.from('messages').select('*', { count: 'exact', head: true }),
-      supabase.from('admins').select('*', { count: 'exact', head: true })
+    const [
+      projectsResult,
+      blogPostsResult,
+      commentsResult,
+      messagesResult,
+      adminsResult,
+    ] = await Promise.all([
+      supabase.from("projects").select("*", { count: "exact", head: true }),
+      supabase.from("blog_posts").select("*", { count: "exact", head: true }),
+      supabase.from("comments").select("*", { count: "exact", head: true }),
+      supabase.from("messages").select("*", { count: "exact", head: true }),
+      supabase.from("admins").select("*", { count: "exact", head: true }),
     ]);
 
     // Get previous period counts for comparison
     const prevStartDate = new Date(startDate);
-    prevStartDate.setDate(prevStartDate.getDate() - (endDate - startDate) / (1000 * 60 * 60 * 24));
+    prevStartDate.setDate(
+      prevStartDate.getDate() - (endDate - startDate) / (1000 * 60 * 60 * 24),
+    );
     const prevEndDate = new Date(startDate);
 
-    const [prevProjectsResult, prevBlogPostsResult, prevCommentsResult, prevMessagesResult] = await Promise.all([
-      supabase.from('projects').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString()),
-      supabase.from('blog_posts').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString()),
-      supabase.from('comments').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString()),
-      supabase.from('messages').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString())
+    const [
+      prevProjectsResult,
+      prevBlogPostsResult,
+      prevCommentsResult,
+      prevMessagesResult,
+    ] = await Promise.all([
+      supabase
+        .from("projects")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", prevStartDate.toISOString())
+        .lte("created_at", prevEndDate.toISOString()),
+      supabase
+        .from("blog_posts")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", prevStartDate.toISOString())
+        .lte("created_at", prevEndDate.toISOString()),
+      supabase
+        .from("comments")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", prevStartDate.toISOString())
+        .lte("created_at", prevEndDate.toISOString()),
+      supabase
+        .from("messages")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", prevStartDate.toISOString())
+        .lte("created_at", prevEndDate.toISOString()),
     ]);
 
     // Calculate growth rates
@@ -84,39 +105,59 @@ export const getAnalyticsOverview = async (period = '30d') => {
     const totalMessages = messagesResult.count || 0;
     const totalAdmins = adminsResult.count || 0;
 
-    const currentPeriodProjects = await supabase.from('projects').select('*', { count: 'exact', head: true })
-      .gte('created_at', startDate.toISOString()).lte('created_at', endDate.toISOString());
-    const currentPeriodBlogPosts = await supabase.from('blog_posts').select('*', { count: 'exact', head: true })
-      .gte('created_at', startDate.toISOString()).lte('created_at', endDate.toISOString());
-    const currentPeriodComments = await supabase.from('comments').select('*', { count: 'exact', head: true })
-      .gte('created_at', startDate.toISOString()).lte('created_at', endDate.toISOString());
-    const currentPeriodMessages = await supabase.from('messages').select('*', { count: 'exact', head: true })
-      .gte('created_at', startDate.toISOString()).lte('created_at', endDate.toISOString());
+    const currentPeriodProjects = await supabase
+      .from("projects")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", startDate.toISOString())
+      .lte("created_at", endDate.toISOString());
+    const currentPeriodBlogPosts = await supabase
+      .from("blog_posts")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", startDate.toISOString())
+      .lte("created_at", endDate.toISOString());
+    const currentPeriodComments = await supabase
+      .from("comments")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", startDate.toISOString())
+      .lte("created_at", endDate.toISOString());
+    const currentPeriodMessages = await supabase
+      .from("messages")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", startDate.toISOString())
+      .lte("created_at", endDate.toISOString());
 
     return {
       period: label,
       dateRange: {
-        start: startDate.toISOString().split('T')[0],
-        end: endDate.toISOString().split('T')[0]
+        start: startDate.toISOString().split("T")[0],
+        end: endDate.toISOString().split("T")[0],
       },
       metrics: {
         totalContent: {
           value: totalProjects + totalBlogPosts,
-          currentPeriod: (currentPeriodProjects.count || 0) + (currentPeriodBlogPosts.count || 0),
-          previousPeriod: (prevProjectsResult.count || 0) + (prevBlogPostsResult.count || 0),
+          currentPeriod:
+            (currentPeriodProjects.count || 0) +
+            (currentPeriodBlogPosts.count || 0),
+          previousPeriod:
+            (prevProjectsResult.count || 0) + (prevBlogPostsResult.count || 0),
           growthRate: calculateGrowthRate(
-            (currentPeriodProjects.count || 0) + (currentPeriodBlogPosts.count || 0),
-            (prevProjectsResult.count || 0) + (prevBlogPostsResult.count || 0)
-          )
+            (currentPeriodProjects.count || 0) +
+              (currentPeriodBlogPosts.count || 0),
+            (prevProjectsResult.count || 0) + (prevBlogPostsResult.count || 0),
+          ),
         },
         totalEngagement: {
           value: totalComments + totalMessages,
-          currentPeriod: (currentPeriodComments.count || 0) + (currentPeriodMessages.count || 0),
-          previousPeriod: (prevCommentsResult.count || 0) + (prevMessagesResult.count || 0),
+          currentPeriod:
+            (currentPeriodComments.count || 0) +
+            (currentPeriodMessages.count || 0),
+          previousPeriod:
+            (prevCommentsResult.count || 0) + (prevMessagesResult.count || 0),
           growthRate: calculateGrowthRate(
-            (currentPeriodComments.count || 0) + (currentPeriodMessages.count || 0),
-            (prevCommentsResult.count || 0) + (prevMessagesResult.count || 0)
-          )
+            (currentPeriodComments.count || 0) +
+              (currentPeriodMessages.count || 0),
+            (prevCommentsResult.count || 0) + (prevMessagesResult.count || 0),
+          ),
         },
         totalProjects: {
           value: totalProjects,
@@ -124,8 +165,8 @@ export const getAnalyticsOverview = async (period = '30d') => {
           previousPeriod: prevProjectsResult.count || 0,
           growthRate: calculateGrowthRate(
             currentPeriodProjects.count || 0,
-            prevProjectsResult.count || 0
-          )
+            prevProjectsResult.count || 0,
+          ),
         },
         totalBlogPosts: {
           value: totalBlogPosts,
@@ -133,22 +174,22 @@ export const getAnalyticsOverview = async (period = '30d') => {
           previousPeriod: prevBlogPostsResult.count || 0,
           growthRate: calculateGrowthRate(
             currentPeriodBlogPosts.count || 0,
-            prevBlogPostsResult.count || 0
-          )
-        }
-      }
+            prevBlogPostsResult.count || 0,
+          ),
+        },
+      },
     };
   } catch (error) {
-    console.error('Error fetching analytics overview:', error);
+    console.error("Error fetching analytics overview:", error);
     throw error;
   }
 };
 
 // Get chart data for visualizations
-export const getAnalyticsCharts = async (period = '30d', chartType = 'all') => {
+export const getAnalyticsCharts = async (period = "30d", chartType = "all") => {
   try {
     const { startDate, endDate, label } = getDateRange(period);
-    
+
     // Time-based data for line/bar charts
     const timeBasedData = [];
     const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -160,157 +201,195 @@ export const getAnalyticsCharts = async (period = '30d', chartType = 'all') => {
       const nextDate = new Date(date);
       nextDate.setDate(nextDate.getDate() + interval);
 
-      const [projectsCount, blogPostsCount, commentsCount, messagesCount] = await Promise.all([
-        supabase.from('projects').select('*', { count: 'exact', head: true })
-          .gte('created_at', date.toISOString())
-          .lt('created_at', nextDate.toISOString()),
-        supabase.from('blog_posts').select('*', { count: 'exact', head: true })
-          .gte('created_at', date.toISOString())
-          .lt('created_at', nextDate.toISOString()),
-        supabase.from('comments').select('*', { count: 'exact', head: true })
-          .gte('created_at', date.toISOString())
-          .lt('created_at', nextDate.toISOString()),
-        supabase.from('messages').select('*', { count: 'exact', head: true })
-          .gte('created_at', date.toISOString())
-          .lt('created_at', nextDate.toISOString())
-      ]);
+      const [projectsCount, blogPostsCount, commentsCount, messagesCount] =
+        await Promise.all([
+          supabase
+            .from("projects")
+            .select("*", { count: "exact", head: true })
+            .gte("created_at", date.toISOString())
+            .lt("created_at", nextDate.toISOString()),
+          supabase
+            .from("blog_posts")
+            .select("*", { count: "exact", head: true })
+            .gte("created_at", date.toISOString())
+            .lt("created_at", nextDate.toISOString()),
+          supabase
+            .from("comments")
+            .select("*", { count: "exact", head: true })
+            .gte("created_at", date.toISOString())
+            .lt("created_at", nextDate.toISOString()),
+          supabase
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .gte("created_at", date.toISOString())
+            .lt("created_at", nextDate.toISOString()),
+        ]);
 
       timeBasedData.push({
-        date: date.toISOString().split('T')[0],
-        label: interval > 1 ? `Week of ${date.toLocaleDateString()}` : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        date: date.toISOString().split("T")[0],
+        label:
+          interval > 1
+            ? `Week of ${date.toLocaleDateString()}`
+            : date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              }),
         projects: projectsCount.count || 0,
         blogPosts: blogPostsCount.count || 0,
         comments: commentsCount.count || 0,
         messages: messagesCount.count || 0,
-        total: (projectsCount.count || 0) + (blogPostsCount.count || 0) + (commentsCount.count || 0) + (messagesCount.count || 0)
+        total:
+          (projectsCount.count || 0) +
+          (blogPostsCount.count || 0) +
+          (commentsCount.count || 0) +
+          (messagesCount.count || 0),
       });
     }
 
     // Category distribution for pie/doughnut charts
     const projectsByCategory = await supabase
-      .from('projects')
-      .select('category, created_at')
-      .gte('created_at', startDate.toISOString())
-      .lte('created_at', endDate.toISOString());
+      .from("projects")
+      .select("category, created_at")
+      .gte("created_at", startDate.toISOString())
+      .lte("created_at", endDate.toISOString());
 
     const categoryStats = {};
-    (projectsByCategory.data || []).forEach(project => {
-      const category = project.category || 'Uncategorized';
+    (projectsByCategory.data || []).forEach((project) => {
+      const category = project.category || "Uncategorized";
       categoryStats[category] = (categoryStats[category] || 0) + 1;
     });
 
-    const categoryData = Object.entries(categoryStats).map(([category, count]) => ({
-      category,
-      count,
-      percentage: ((count / (projectsByCategory.data?.length || 1)) * 100).toFixed(1)
-    }));
+    const categoryData = Object.entries(categoryStats).map(
+      ([category, count]) => ({
+        category,
+        count,
+        percentage: (
+          (count / (projectsByCategory.data?.length || 1)) *
+          100
+        ).toFixed(1),
+      }),
+    );
 
     // Content performance (most popular items)
     const popularProjects = await supabase
-      .from('projects')
-      .select('id, title, created_at, updated_at')
-      .order('created_at', { ascending: false })
+      .from("projects")
+      .select("id, title, created_at, updated_at")
+      .order("created_at", { ascending: false })
       .limit(5);
 
     const popularBlogPosts = await supabase
-      .from('blog_posts')
-      .select('id, title, created_at, updated_at')
-      .order('created_at', { ascending: false })
+      .from("blog_posts")
+      .select("id, title, created_at, updated_at")
+      .order("created_at", { ascending: false })
       .limit(5);
 
     return {
       period: label,
       timeSeries: {
         data: timeBasedData,
-        labels: timeBasedData.map(d => d.label),
+        labels: timeBasedData.map((d) => d.label),
         datasets: {
-          projects: timeBasedData.map(d => d.projects),
-          blogPosts: timeBasedData.map(d => d.blogPosts),
-          comments: timeBasedData.map(d => d.comments),
-          messages: timeBasedData.map(d => d.messages),
-          total: timeBasedData.map(d => d.total)
-        }
+          projects: timeBasedData.map((d) => d.projects),
+          blogPosts: timeBasedData.map((d) => d.blogPosts),
+          comments: timeBasedData.map((d) => d.comments),
+          messages: timeBasedData.map((d) => d.messages),
+          total: timeBasedData.map((d) => d.total),
+        },
       },
       categories: {
         data: categoryData,
-        labels: categoryData.map(d => d.category),
-        values: categoryData.map(d => d.count)
+        labels: categoryData.map((d) => d.category),
+        values: categoryData.map((d) => d.count),
       },
       contentPerformance: {
-        popularProjects: (popularProjects.data || []).map(project => ({
+        popularProjects: (popularProjects.data || []).map((project) => ({
           id: project.id,
           title: project.title,
           createdAt: project.created_at,
-          timeAgo: formatTimeAgo(project.created_at)
+          timeAgo: formatTimeAgo(project.created_at),
         })),
-        popularBlogPosts: (popularBlogPosts.data || []).map(post => ({
+        popularBlogPosts: (popularBlogPosts.data || []).map((post) => ({
           id: post.id,
           title: post.title,
           createdAt: post.created_at,
-          timeAgo: formatTimeAgo(post.created_at)
-        }))
-      }
+          timeAgo: formatTimeAgo(post.created_at),
+        })),
+      },
     };
   } catch (error) {
-    console.error('Error fetching analytics charts data:', error);
+    console.error("Error fetching analytics charts data:", error);
     throw error;
   }
 };
 
 // Get detailed metrics
-export const getAnalyticsMetrics = async (period = '30d') => {
+export const getAnalyticsMetrics = async (period = "30d") => {
   try {
     const { startDate, endDate, label } = getDateRange(period);
-    
+
     // Detailed breakdown by content type and time
-    const [projectsMetrics, blogMetrics, engagementMetrics] = await Promise.all([
-      // Projects metrics
-      supabase.from('projects')
-        .select('created_at, updated_at, status')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString()),
-      
-      // Blog posts metrics
-      supabase.from('blog_posts')
-        .select('created_at, updated_at, published')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString()),
-      
-      // Engagement metrics
-      supabase.from('comments')
-        .select('created_at, blog_post_id')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-    ]);
+    const [projectsMetrics, blogMetrics, engagementMetrics] = await Promise.all(
+      [
+        // Projects metrics
+        supabase
+          .from("projects")
+          .select("created_at, updated_at, status")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString()),
+
+        // Blog posts metrics
+        supabase
+          .from("blog_posts")
+          .select("created_at, updated_at, published")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString()),
+
+        // Engagement metrics
+        supabase
+          .from("comments")
+          .select("created_at, blog_post_id")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString()),
+      ],
+    );
 
     // Process hourly activity patterns
     const hourlyActivity = new Array(24).fill(0);
     const dailyActivity = new Array(7).fill(0); // 0 = Sunday, 6 = Saturday
-    
+
     const allActivities = [
       ...(projectsMetrics.data || []),
       ...(blogMetrics.data || []),
-      ...(engagementMetrics.data || [])
+      ...(engagementMetrics.data || []),
     ];
 
-    allActivities.forEach(activity => {
+    allActivities.forEach((activity) => {
       const date = new Date(activity.created_at);
       const hour = date.getHours();
       const day = date.getDay();
-      
+
       hourlyActivity[hour]++;
       dailyActivity[day]++;
     });
 
     // Calculate averages and trends
     const totalItems = allActivities.length;
-    const avgDailyActivity = totalItems / Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-    
+    const avgDailyActivity =
+      totalItems / Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
     // Peak activity times
     const peakHour = hourlyActivity.indexOf(Math.max(...hourlyActivity));
     const peakDay = dailyActivity.indexOf(Math.max(...dailyActivity));
-    
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const dayNames = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
 
     return {
       period: label,
@@ -322,82 +401,98 @@ export const getAnalyticsMetrics = async (period = '30d') => {
         contentBreakdown: {
           projects: (projectsMetrics.data || []).length,
           blogPosts: (blogMetrics.data || []).length,
-          comments: (engagementMetrics.data || []).length
-        }
+          comments: (engagementMetrics.data || []).length,
+        },
       },
       activityPatterns: {
         hourly: hourlyActivity.map((count, hour) => ({
           hour: `${hour}:00`,
-          count
+          count,
         })),
         daily: dailyActivity.map((count, day) => ({
           day: dayNames[day],
-          count
-        }))
+          count,
+        })),
       },
       trends: {
         hourlyActivity,
-        dailyActivity
-      }
+        dailyActivity,
+      },
     };
   } catch (error) {
-    console.error('Error fetching analytics metrics:', error);
+    console.error("Error fetching analytics metrics:", error);
     throw error;
   }
 };
 
 // Get analytics summary statistics
-export const getAnalyticsSummary = async (period = '30d') => {
+export const getAnalyticsSummary = async (period = "30d") => {
   try {
     const { startDate, endDate, label } = getDateRange(period);
-    
+
     // Recent activity summary
-    const [recentProjects, recentBlogPosts, recentComments, recentMessages] = await Promise.all([
-      supabase.from('projects')
-        .select('id, title, created_at')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-        .order('created_at', { ascending: false })
-        .limit(10),
-      supabase.from('blog_posts')
-        .select('id, title, created_at')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-        .order('created_at', { ascending: false })
-        .limit(10),
-      supabase.from('comments')
-        .select('id, author_name, created_at')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-        .order('created_at', { ascending: false })
-        .limit(10),
-      supabase.from('messages')
-        .select('id, name, created_at')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-        .order('created_at', { ascending: false })
-        .limit(10)
-    ]);
+    const [recentProjects, recentBlogPosts, recentComments, recentMessages] =
+      await Promise.all([
+        supabase
+          .from("projects")
+          .select("id, title, created_at")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString())
+          .order("created_at", { ascending: false })
+          .limit(10),
+        supabase
+          .from("blog_posts")
+          .select("id, title, created_at")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString())
+          .order("created_at", { ascending: false })
+          .limit(10),
+        supabase
+          .from("comments")
+          .select("id, author_name, created_at")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString())
+          .order("created_at", { ascending: false })
+          .limit(10),
+        supabase
+          .from("messages")
+          .select("id, name, created_at")
+          .gte("created_at", startDate.toISOString())
+          .lte("created_at", endDate.toISOString())
+          .order("created_at", { ascending: false })
+          .limit(10),
+      ]);
 
     // Calculate growth compared to previous period
     const prevStartDate = new Date(startDate);
-    prevStartDate.setDate(prevStartDate.getDate() - (endDate - startDate) / (1000 * 60 * 60 * 24));
+    prevStartDate.setDate(
+      prevStartDate.getDate() - (endDate - startDate) / (1000 * 60 * 60 * 24),
+    );
     const prevEndDate = new Date(startDate);
 
-    const [prevProjects, prevBlogPosts, prevComments, prevMessages] = await Promise.all([
-      supabase.from('projects').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString()),
-      supabase.from('blog_posts').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString()),
-      supabase.from('comments').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString()),
-      supabase.from('messages').select('*', { count: 'exact', head: true })
-        .gte('created_at', prevStartDate.toISOString())
-        .lte('created_at', prevEndDate.toISOString())
-    ]);
+    const [prevProjects, prevBlogPosts, prevComments, prevMessages] =
+      await Promise.all([
+        supabase
+          .from("projects")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", prevStartDate.toISOString())
+          .lte("created_at", prevEndDate.toISOString()),
+        supabase
+          .from("blog_posts")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", prevStartDate.toISOString())
+          .lte("created_at", prevEndDate.toISOString()),
+        supabase
+          .from("comments")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", prevStartDate.toISOString())
+          .lte("created_at", prevEndDate.toISOString()),
+        supabase
+          .from("messages")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", prevStartDate.toISOString())
+          .lte("created_at", prevEndDate.toISOString()),
+      ]);
 
     const calculateGrowth = (current, previous) => {
       if (previous === 0) return current > 0 ? 100 : 0;
@@ -407,68 +502,68 @@ export const getAnalyticsSummary = async (period = '30d') => {
     return {
       period: label,
       dateRange: {
-        start: startDate.toISOString().split('T')[0],
-        end: endDate.toISOString().split('T')[0]
+        start: startDate.toISOString().split("T")[0],
+        end: endDate.toISOString().split("T")[0],
       },
       summary: {
         newProjects: {
           value: (recentProjects.data || []).length,
           growth: calculateGrowth(
             (recentProjects.data || []).length,
-            prevProjects.count || 0
-          )
+            prevProjects.count || 0,
+          ),
         },
         newBlogPosts: {
           value: (recentBlogPosts.data || []).length,
           growth: calculateGrowth(
             (recentBlogPosts.data || []).length,
-            prevBlogPosts.count || 0
-          )
+            prevBlogPosts.count || 0,
+          ),
         },
         newComments: {
           value: (recentComments.data || []).length,
           growth: calculateGrowth(
             (recentComments.data || []).length,
-            prevComments.count || 0
-          )
+            prevComments.count || 0,
+          ),
         },
         newMessages: {
           value: (recentMessages.data || []).length,
           growth: calculateGrowth(
             (recentMessages.data || []).length,
-            prevMessages.count || 0
-          )
-        }
+            prevMessages.count || 0,
+          ),
+        },
       },
       recentActivity: {
-        projects: (recentProjects.data || []).map(project => ({
+        projects: (recentProjects.data || []).map((project) => ({
           id: project.id,
           title: project.title,
           timeAgo: formatTimeAgo(project.created_at),
-          type: 'project'
+          type: "project",
         })),
-        blogPosts: (recentBlogPosts.data || []).map(post => ({
+        blogPosts: (recentBlogPosts.data || []).map((post) => ({
           id: post.id,
           title: post.title,
           timeAgo: formatTimeAgo(post.created_at),
-          type: 'blog'
+          type: "blog",
         })),
-        comments: (recentComments.data || []).map(comment => ({
+        comments: (recentComments.data || []).map((comment) => ({
           id: comment.id,
           author: comment.author_name,
           timeAgo: formatTimeAgo(comment.created_at),
-          type: 'comment'
+          type: "comment",
         })),
-        messages: (recentMessages.data || []).map(message => ({
+        messages: (recentMessages.data || []).map((message) => ({
           id: message.id,
           author: message.name,
           timeAgo: formatTimeAgo(message.created_at),
-          type: 'message'
-        }))
-      }
+          type: "message",
+        })),
+      },
     };
   } catch (error) {
-    console.error('Error fetching analytics summary:', error);
+    console.error("Error fetching analytics summary:", error);
     throw error;
   }
 };

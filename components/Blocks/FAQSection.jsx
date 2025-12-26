@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 import {
   Accordion,
   AccordionContent,
@@ -7,16 +7,16 @@ import {
 } from "@/components/ui/accordion";
 
 export default function FAQSection() {
-  const t = useTranslations('Home.faq');
+  const t = useTranslations("Home.faq");
   return (
     <section className="py-24 bg-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#6495ED] mb-4 block">
-            {t('title')}
+            {t("title")}
           </span>
           <h2 className="text-3xl font-black text-slate-900">
-            {t('subtitle')}
+            {t("subtitle")}
           </h2>
         </div>
 

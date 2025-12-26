@@ -14,7 +14,9 @@ export default function SettingsOverview({ isDarkMode = false }) {
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Settings</h2>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className={`grid w-full grid-cols-4 ${isDarkMode ? 'bg-slate-800 border-slate-600' : ''}`}>
+        <TabsList
+          className={`grid w-full grid-cols-4 ${isDarkMode ? "bg-slate-800 border-slate-600" : ""}`}
+        >
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="email">Email</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>

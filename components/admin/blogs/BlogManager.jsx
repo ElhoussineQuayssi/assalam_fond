@@ -22,7 +22,7 @@ export default function BlogManager({ isDarkMode = false }) {
     isEditingBlog,
     currentBlog,
     blogFormData,
-    
+
     // Filters and pagination
     blogSearch,
     blogStatusFilter,
@@ -32,14 +32,14 @@ export default function BlogManager({ isDarkMode = false }) {
     blogPage,
     blogPageSize,
     blogTotal,
-    
+
     // Actions
     fetchBlogs,
     openBlogForm,
     closeBlogForm,
     handleBlogSubmit,
     handleDeleteBlog,
-    
+
     // Filter handlers
     handleSearchChange,
     handleStatusFilterChange,
@@ -47,7 +47,7 @@ export default function BlogManager({ isDarkMode = false }) {
     handleSortChange,
     handlePageChange,
     handlePageSizeChange,
-    
+
     // Form data handler
     setBlogFormData,
   } = useBlogData();
@@ -64,15 +64,19 @@ export default function BlogManager({ isDarkMode = false }) {
   useGSAP(() => {
     if (!isEditingBlog && tableRef.current) {
       // Table entrance animation
-      gsap.fromTo(tableRef.current, {
-        y: 50,
-        opacity: 0
-      }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out"
-      });
+      gsap.fromTo(
+        tableRef.current,
+        {
+          y: 50,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+      );
     }
   }, [isEditingBlog]);
 
@@ -87,17 +91,21 @@ export default function BlogManager({ isDarkMode = false }) {
         onComplete: () => {
           openBlogForm(blog);
           if (formRef.current) {
-            gsap.fromTo(formRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              formRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       openBlogForm(blog);
@@ -115,17 +123,21 @@ export default function BlogManager({ isDarkMode = false }) {
         onComplete: () => {
           closeBlogForm();
           if (tableRef.current) {
-            gsap.fromTo(tableRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              tableRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       closeBlogForm();

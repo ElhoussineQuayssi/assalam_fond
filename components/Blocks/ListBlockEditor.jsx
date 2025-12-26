@@ -1,14 +1,16 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Plus, Trash2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Plus,
+  Trash2,
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
-export const ListBlockEditor = ({ 
-  heading, 
-  items = [], 
-  onChange 
-}) => {
+export const ListBlockEditor = ({ heading, items = [], onChange }) => {
   // Ensure items is always an array
   const safeItems = Array.isArray(items) ? items : [];
 
@@ -18,12 +20,12 @@ export const ListBlockEditor = ({
 
   const handleAddItem = () => {
     const newItem = {
-      title: '',
-      description: ''
+      title: "",
+      description: "",
     };
-    onChange({ 
-      heading, 
-      items: [...safeItems, newItem] 
+    onChange({
+      heading,
+      items: [...safeItems, newItem],
     });
   };
 
@@ -33,18 +35,21 @@ export const ListBlockEditor = ({
   };
 
   const handleItemChange = (index, field, value) => {
-    const updatedItems = safeItems.map((item, i) => 
-      i === index ? { ...item, [field]: value } : item
+    const updatedItems = safeItems.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item,
     );
     onChange({ heading, items: updatedItems });
   };
 
   const handleMoveItem = (index, direction) => {
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex < 0 || newIndex >= safeItems.length) return;
-    
+
     const updatedItems = [...safeItems];
-    [updatedItems[index], updatedItems[newIndex]] = [updatedItems[newIndex], updatedItems[index]];
+    [updatedItems[index], updatedItems[newIndex]] = [
+      updatedItems[newIndex],
+      updatedItems[index],
+    ];
     onChange({ heading, items: updatedItems });
   };
 
@@ -56,7 +61,7 @@ export const ListBlockEditor = ({
           List Heading
         </label>
         <Input
-          value={heading || ''}
+          value={heading || ""}
           onChange={(e) => handleHeadingChange(e.target.value)}
           placeholder="Enter list heading..."
           className="w-full"
@@ -87,8 +92,8 @@ export const ListBlockEditor = ({
         ) : (
           <div className="space-y-3">
             {safeItems.map((item, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800"
               >
                 {/* Item Header */}
@@ -99,7 +104,7 @@ export const ListBlockEditor = ({
                   <div className="flex items-center gap-1">
                     <Button
                       type="button"
-                      onClick={() => handleMoveItem(index, 'up')}
+                      onClick={() => handleMoveItem(index, "up")}
                       size="sm"
                       variant="outline"
                       disabled={index === 0}
@@ -108,7 +113,7 @@ export const ListBlockEditor = ({
                     </Button>
                     <Button
                       type="button"
-                      onClick={() => handleMoveItem(index, 'down')}
+                      onClick={() => handleMoveItem(index, "down")}
                       size="sm"
                       variant="outline"
                       disabled={index === safeItems.length - 1}
@@ -134,8 +139,10 @@ export const ListBlockEditor = ({
                       Item Title
                     </label>
                     <Input
-                      value={item.title || ''}
-                      onChange={(e) => handleItemChange(index, 'title', e.target.value)}
+                      value={item.title || ""}
+                      onChange={(e) =>
+                        handleItemChange(index, "title", e.target.value)
+                      }
                       placeholder="Enter item title..."
                       className="w-full"
                     />
@@ -145,8 +152,10 @@ export const ListBlockEditor = ({
                       Description
                     </label>
                     <Textarea
-                      value={item.description || ''}
-                      onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                      value={item.description || ""}
+                      onChange={(e) =>
+                        handleItemChange(index, "description", e.target.value)
+                      }
                       placeholder="Enter item description..."
                       className="w-full"
                       rows={2}

@@ -2,7 +2,7 @@ export default function SoftInfoBlock({ title, description, color = "blue" }) {
   const accents = {
     blue: "bg-[#6495ED]",
     green: "bg-emerald-500",
-    red: "bg-rose-500"
+    red: "bg-rose-500",
   };
 
   return (

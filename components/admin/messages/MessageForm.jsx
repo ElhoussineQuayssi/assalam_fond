@@ -5,28 +5,34 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 if (typeof window !== "undefined") {
   import("gsap");
 }
 
-export default function MessageForm({ 
-  message = null, 
+export default function MessageForm({
+  message = null,
   formData = {},
   onSubmit,
   onCancel,
-  isDarkMode = false 
+  isDarkMode = false,
 }) {
   const [localFormData, setLocalFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    message: '',
-    type: 'inquiry',
-    status: 'unread',
-    ...formData
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    message: "",
+    type: "inquiry",
+    status: "unread",
+    ...formData,
   });
 
   const formRef = useRef();
@@ -37,19 +43,24 @@ export default function MessageForm({
   };
 
   const handleInputChange = (field, value) => {
-    setLocalFormData(prev => ({ ...prev, [field]: value }));
+    setLocalFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-          {message ? 'View Message' : 'Message Details'}
+          {message ? "View Message" : "Message Details"}
         </h2>
-        <Button variant="outline" onClick={onCancel}>Close</Button>
+        <Button variant="outline" onClick={onCancel}>
+          Close
+        </Button>
       </div>
 
-      <Card ref={formRef} className="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-slate-800 dark:border-slate-600">
+      <Card
+        ref={formRef}
+        className="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-slate-800 dark:border-slate-600"
+      >
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Contact Information (Read-only) */}
@@ -75,7 +86,7 @@ export default function MessageForm({
                 />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
@@ -124,13 +135,23 @@ export default function MessageForm({
 
             {/* Status Update Section */}
             <div className="border-t pt-6 dark:border-slate-600">
-              <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-4">Message Status</h3>
+              <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-4">
+                Message Status
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="message-status" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  <label
+                    htmlFor="message-status"
+                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
+                  >
                     Update Status
                   </label>
-                  <Select value={localFormData.status} onValueChange={(value) => handleInputChange('status', value)}>
+                  <Select
+                    value={localFormData.status}
+                    onValueChange={(value) =>
+                      handleInputChange("status", value)
+                    }
+                  >
                     <SelectTrigger className="dark:bg-slate-700 dark:border-slate-600 dark:text-white">
                       <SelectValue />
                     </SelectTrigger>
@@ -142,10 +163,16 @@ export default function MessageForm({
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor="message-type" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  <label
+                    htmlFor="message-type"
+                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
+                  >
                     Message Type
                   </label>
-                  <Select value={localFormData.type} onValueChange={(value) => handleInputChange('type', value)}>
+                  <Select
+                    value={localFormData.type}
+                    onValueChange={(value) => handleInputChange("type", value)}
+                  >
                     <SelectTrigger className="dark:bg-slate-700 dark:border-slate-600 dark:text-white">
                       <SelectValue />
                     </SelectTrigger>

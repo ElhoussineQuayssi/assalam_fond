@@ -1,5 +1,5 @@
 "use client";
-import { ProjectContentRenderer } from '@/components/ProjectContentRenderer';
+import { ProjectContentRenderer } from "@/components/ProjectContentRenderer";
 
 const demoContent = [
   {
@@ -7,8 +7,8 @@ const demoContent = [
     type: "text",
     content: {
       heading: "Our Mission",
-      text: "At our foundation, we are committed to creating sustainable change in communities across Morocco. Through targeted programs and partnerships, we work to address the root causes of poverty and inequality, ensuring that every child has access to education, healthcare, and opportunities for a brighter future."
-    }
+      text: "At our foundation, we are committed to creating sustainable change in communities across Morocco. Through targeted programs and partnerships, we work to address the root causes of poverty and inequality, ensuring that every child has access to education, healthcare, and opportunities for a brighter future.",
+    },
   },
   {
     id: "stats",
@@ -19,9 +19,9 @@ const demoContent = [
         { value: "500", label: "Children Supported" },
         { value: "25", label: "Communities Served" },
         { value: "98%", label: "Program Success Rate" },
-        { value: "15", label: "Years of Service" }
-      ]
-    }
+        { value: "15", label: "Years of Service" },
+      ],
+    },
   },
   {
     id: "features",
@@ -34,9 +34,9 @@ const demoContent = [
         "Nutritional programs and food security initiatives",
         "Vocational training and skill development",
         "Community development and infrastructure projects",
-        "Emergency relief and crisis response"
-      ]
-    }
+        "Emergency relief and crisis response",
+      ],
+    },
   },
   {
     id: "programme",
@@ -47,22 +47,25 @@ const demoContent = [
       modules: [
         {
           name: "Foundation Skills",
-          description: "Basic cooking techniques, kitchen safety, and food handling"
+          description:
+            "Basic cooking techniques, kitchen safety, and food handling",
         },
         {
           name: "Traditional Moroccan Cuisine",
-          description: "Authentic recipes, spice blending, and cultural cooking methods"
+          description:
+            "Authentic recipes, spice blending, and cultural cooking methods",
         },
         {
           name: "Modern Techniques",
-          description: "Contemporary cooking methods and presentation skills"
+          description: "Contemporary cooking methods and presentation skills",
         },
         {
           name: "Business Management",
-          description: "Restaurant operations, cost control, and entrepreneurship"
-        }
-      ]
-    }
+          description:
+            "Restaurant operations, cost control, and entrepreneurship",
+        },
+      ],
+    },
   },
   {
     id: "impact",
@@ -73,20 +76,22 @@ const demoContent = [
         {
           icon: "family",
           title: "Family Stability",
-          description: "Supporting 200 families with stable income and housing security"
+          description:
+            "Supporting 200 families with stable income and housing security",
         },
         {
           icon: "education",
           title: "Education Access",
-          description: "100% of supported children enrolled in quality education programs"
+          description:
+            "100% of supported children enrolled in quality education programs",
         },
         {
           icon: "money",
           title: "Economic Growth",
-          description: "Created 50 sustainable jobs and micro-enterprises"
-        }
-      ]
-    }
+          description: "Created 50 sustainable jobs and micro-enterprises",
+        },
+      ],
+    },
   },
   {
     id: "sponsorship",
@@ -101,8 +106,8 @@ const demoContent = [
             "Monthly food assistance",
             "School supplies and uniforms",
             "Basic healthcare coverage",
-            "Educational monitoring"
-          ]
+            "Educational monitoring",
+          ],
         },
         {
           amount: "500",
@@ -112,8 +117,8 @@ const demoContent = [
             "Extra-curricular activities",
             "Psychological support",
             "Clothing and personal items",
-            "Transportation assistance"
-          ]
+            "Transportation assistance",
+          ],
         },
         {
           amount: "1000",
@@ -123,11 +128,11 @@ const demoContent = [
             "Higher education support",
             "Skill development programs",
             "Emergency medical coverage",
-            "Family counseling services"
-          ]
-        }
-      ]
-    }
+            "Family counseling services",
+          ],
+        },
+      ],
+    },
   },
   {
     id: "timeline",
@@ -138,30 +143,33 @@ const demoContent = [
         {
           date: "January 2020",
           title: "Foundation Established",
-          description: "Official launch of our organization with initial community assessment"
+          description:
+            "Official launch of our organization with initial community assessment",
         },
         {
           date: "March 2021",
           title: "First Major Program",
-          description: "Launched educational support program serving 50 children"
+          description:
+            "Launched educational support program serving 50 children",
         },
         {
           date: "June 2022",
           title: "Expansion Phase",
-          description: "Extended services to 5 additional communities"
+          description: "Extended services to 5 additional communities",
         },
         {
           date: "December 2023",
           title: "Impact Recognition",
-          description: "Received national award for community development excellence"
+          description:
+            "Received national award for community development excellence",
         },
         {
           date: "March 2024",
           title: "Sustainable Growth",
-          description: "Achieved self-sustaining programs in 3 communities"
-        }
-      ]
-    }
+          description: "Achieved self-sustaining programs in 3 communities",
+        },
+      ],
+    },
   },
   {
     id: "services",
@@ -172,21 +180,24 @@ const demoContent = [
         {
           icon: "material",
           title: "Material Support",
-          description: "School supplies, clothing, household items, and educational materials"
+          description:
+            "School supplies, clothing, household items, and educational materials",
         },
         {
           icon: "financial",
           title: "Financial Assistance",
-          description: "Direct financial aid, micro-loans, and economic empowerment programs"
+          description:
+            "Direct financial aid, micro-loans, and economic empowerment programs",
         },
         {
           icon: "medical",
           title: "Medical Care",
-          description: "Healthcare access, medical treatments, and wellness programs"
-        }
-      ]
-    }
-  }
+          description:
+            "Healthcare access, medical treatments, and wellness programs",
+        },
+      ],
+    },
+  },
 ];
 
 export default function DemoPage() {
@@ -198,8 +209,9 @@ export default function DemoPage() {
             Project Content Renderer Demo
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            This page showcases all available block types in the dynamic content renderer.
-            Each block demonstrates different content structures and layouts.
+            This page showcases all available block types in the dynamic content
+            renderer. Each block demonstrates different content structures and
+            layouts.
           </p>
         </div>
 

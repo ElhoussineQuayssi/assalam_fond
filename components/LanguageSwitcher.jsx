@@ -1,8 +1,8 @@
 "use client";
-import { useLocale, useTranslations } from 'next-intl';
-import { Link, usePathname } from '@/app/i18n';
-import { useState } from 'react';
-import { Globe } from 'lucide-react';
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/app/i18n";
+import { useState } from "react";
+import { Globe } from "lucide-react";
 
 export default function LanguageSwitcher() {
   const locale = useLocale();
@@ -10,9 +10,9 @@ export default function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'ar', name: 'العربية', flag: '🇲🇦' }
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "ar", name: "العربية", flag: "🇲🇦" },
   ];
 
   return (
@@ -36,7 +36,9 @@ export default function LanguageSwitcher() {
                 href={pathname}
                 locale={lang.code}
                 className={`flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
-                  locale === lang.code ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700'
+                  locale === lang.code
+                    ? "bg-blue-50 text-blue-600 font-medium"
+                    : "text-gray-700"
                 }`}
                 onClick={() => setIsOpen(false)}
               >

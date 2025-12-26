@@ -7,11 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2, TrendingUp, DollarSign } from "lucide-react";
 import { toast } from "sonner";
 
-const ImpactBlockEditor = ({ 
-  content = { heading: "", impacts: [], formulas: [] }, 
-  onChange, 
+const ImpactBlockEditor = ({
+  content = { heading: "", impacts: [], formulas: [] },
+  onChange,
   isDarkMode = false,
-  blockType = "impact" // "impact" or "sponsorship"
+  blockType = "impact", // "impact" or "sponsorship"
 }) => {
   // Ensure arrays are properly handled
   const safeImpacts = Array.isArray(content.impacts) ? content.impacts : [];
@@ -29,10 +29,13 @@ const ImpactBlockEditor = ({
   };
 
   const addImpact = () => {
-    const newImpacts = [...safeImpacts, {
-      description: "",
-      value: ""
-    }];
+    const newImpacts = [
+      ...safeImpacts,
+      {
+        description: "",
+        value: "",
+      },
+    ];
     updateContent({ ...localContent, impacts: newImpacts });
     toast.success("Impact added successfully!");
   };
@@ -50,10 +53,13 @@ const ImpactBlockEditor = ({
   };
 
   const addFormula = () => {
-    const newFormulas = [...safeFormulas, {
-      name: "",
-      amount: ""
-    }];
+    const newFormulas = [
+      ...safeFormulas,
+      {
+        name: "",
+        amount: "",
+      },
+    ];
     updateContent({ ...localContent, formulas: newFormulas });
     toast.success("Formula added successfully!");
   };
@@ -75,15 +81,21 @@ const ImpactBlockEditor = ({
   };
 
   const getTitle = () => {
-    return blockType === "sponsorship" ? "Sponsorship Block Editor" : "Impact Block Editor";
+    return blockType === "sponsorship"
+      ? "Sponsorship Block Editor"
+      : "Impact Block Editor";
   };
 
   const Icon = getIcon();
 
   return (
-    <Card className={`${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-gray-200'}`}>
+    <Card
+      className={`${isDarkMode ? "bg-slate-800 border-slate-600" : "bg-white border-gray-200"}`}
+    >
       <CardHeader>
-        <CardTitle className={`${isDarkMode ? 'text-white' : 'text-gray-800'} flex items-center gap-2`}>
+        <CardTitle
+          className={`${isDarkMode ? "text-white" : "text-gray-800"} flex items-center gap-2`}
+        >
           <Icon className="h-5 w-5" />
           {getTitle()}
         </CardTitle>
@@ -91,21 +103,33 @@ const ImpactBlockEditor = ({
       <CardContent className="space-y-6">
         {/* Block Heading */}
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? "text-slate-300" : "text-gray-700"}`}
+          >
             {blockType === "sponsorship" ? "Sponsorship Title" : "Impact Title"}
           </label>
           <Input
             value={localContent.heading || ""}
             onChange={(e) => handleHeadingChange(e.target.value)}
-            placeholder={blockType === "sponsorship" ? "Enter sponsorship title..." : "Enter impact title..."}
-            className={isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'}
+            placeholder={
+              blockType === "sponsorship"
+                ? "Enter sponsorship title..."
+                : "Enter impact title..."
+            }
+            className={
+              isDarkMode
+                ? "bg-slate-700 border-slate-600 text-white"
+                : "bg-white border-gray-300"
+            }
           />
         </div>
 
         {/* Impacts Section */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
+            <label
+              className={`block text-sm font-medium ${isDarkMode ? "text-slate-300" : "text-gray-700"}`}
+            >
               Impacts & Results
             </label>
             <Button
@@ -120,10 +144,15 @@ const ImpactBlockEditor = ({
 
           <div className="space-y-4">
             {safeImpacts.map((impact, index) => (
-              <Card key={index} className={`${isDarkMode ? 'bg-slate-700 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
+              <Card
+                key={index}
+                className={`${isDarkMode ? "bg-slate-700 border-slate-600" : "bg-gray-50 border-gray-200"}`}
+              >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    <CardTitle
+                      className={`text-sm ${isDarkMode ? "text-white" : "text-gray-800"}`}
+                    >
                       Impact {index + 1}
                     </CardTitle>
                     <Button
@@ -138,33 +167,43 @@ const ImpactBlockEditor = ({
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                    <label
+                      className={`block text-xs font-medium mb-1 ${isDarkMode ? "text-slate-300" : "text-gray-600"}`}
+                    >
                       Description
                     </label>
                     <Input
                       value={impact.description || ""}
-                      onChange={(e) => updateImpact(index, "description", e.target.value)}
+                      onChange={(e) =>
+                        updateImpact(index, "description", e.target.value)
+                      }
                       placeholder="e.g., People helped, Projects completed..."
-                      className={`text-sm ${isDarkMode ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-300'}`}
+                      className={`text-sm ${isDarkMode ? "bg-slate-600 border-slate-500 text-white" : "bg-white border-gray-300"}`}
                     />
                   </div>
                   <div>
-                    <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                    <label
+                      className={`block text-xs font-medium mb-1 ${isDarkMode ? "text-slate-300" : "text-gray-600"}`}
+                    >
                       Value
                     </label>
                     <Input
                       value={impact.value || ""}
-                      onChange={(e) => updateImpact(index, "value", e.target.value)}
+                      onChange={(e) =>
+                        updateImpact(index, "value", e.target.value)
+                      }
                       placeholder="e.g., 500, $10,000..."
-                      className={`text-sm ${isDarkMode ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-300'}`}
+                      className={`text-sm ${isDarkMode ? "bg-slate-600 border-slate-500 text-white" : "bg-white border-gray-300"}`}
                     />
                   </div>
                 </CardContent>
               </Card>
             ))}
 
-            {(safeImpacts.length === 0) && (
-              <div className={`text-center py-6 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+            {safeImpacts.length === 0 && (
+              <div
+                className={`text-center py-6 ${isDarkMode ? "text-slate-400" : "text-gray-500"}`}
+              >
                 <TrendingUp className="h-6 w-6 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No impacts added yet</p>
                 <p className="text-xs">Click "Add Impact" to get started</p>
@@ -177,7 +216,9 @@ const ImpactBlockEditor = ({
         {blockType === "sponsorship" && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
+              <label
+                className={`block text-sm font-medium ${isDarkMode ? "text-slate-300" : "text-gray-700"}`}
+              >
                 Sponsorship Formulas
               </label>
               <Button
@@ -192,10 +233,15 @@ const ImpactBlockEditor = ({
 
             <div className="space-y-4">
               {safeFormulas.map((formula, index) => (
-                <Card key={index} className={`${isDarkMode ? 'bg-slate-700 border-slate-600' : 'bg-gray-50 border-gray-200'}`}>
+                <Card
+                  key={index}
+                  className={`${isDarkMode ? "bg-slate-700 border-slate-600" : "bg-gray-50 border-gray-200"}`}
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                      <CardTitle
+                        className={`text-sm ${isDarkMode ? "text-white" : "text-gray-800"}`}
+                      >
                         Formula {index + 1}
                       </CardTitle>
                       <Button
@@ -210,33 +256,43 @@ const ImpactBlockEditor = ({
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                      <label
+                        className={`block text-xs font-medium mb-1 ${isDarkMode ? "text-slate-300" : "text-gray-600"}`}
+                      >
                         Formula Name
                       </label>
                       <Input
                         value={formula.name || ""}
-                        onChange={(e) => updateFormula(index, "name", e.target.value)}
+                        onChange={(e) =>
+                          updateFormula(index, "name", e.target.value)
+                        }
                         placeholder="e.g., Sponsorship impact..."
-                        className={`text-sm ${isDarkMode ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-300'}`}
+                        className={`text-sm ${isDarkMode ? "bg-slate-600 border-slate-500 text-white" : "bg-white border-gray-300"}`}
                       />
                     </div>
                     <div>
-                      <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                      <label
+                        className={`block text-xs font-medium mb-1 ${isDarkMode ? "text-slate-300" : "text-gray-600"}`}
+                      >
                         Amount
                       </label>
                       <Input
                         value={formula.amount || ""}
-                        onChange={(e) => updateFormula(index, "amount", e.target.value)}
+                        onChange={(e) =>
+                          updateFormula(index, "amount", e.target.value)
+                        }
                         placeholder="e.g., $10,000, €5,000..."
-                        className={`text-sm ${isDarkMode ? 'bg-slate-600 border-slate-500 text-white' : 'bg-white border-gray-300'}`}
+                        className={`text-sm ${isDarkMode ? "bg-slate-600 border-slate-500 text-white" : "bg-white border-gray-300"}`}
                       />
                     </div>
                   </CardContent>
                 </Card>
               ))}
 
-              {(safeFormulas.length === 0) && (
-                <div className={`text-center py-6 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+              {safeFormulas.length === 0 && (
+                <div
+                  className={`text-center py-6 ${isDarkMode ? "text-slate-400" : "text-gray-500"}`}
+                >
                   <DollarSign className="h-6 w-6 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No formulas added yet</p>
                   <p className="text-xs">Click "Add Formula" to get started</p>

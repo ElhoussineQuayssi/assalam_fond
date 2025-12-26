@@ -14,15 +14,15 @@ export function AdminProvider({ children }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role: "admin"
+    role: "admin",
   });
 
   // Fetch admins function
   const fetchAdmins = async () => {
     setAdminsLoading(true);
     try {
-      const response = await fetch('/api/admins');
-      if (!response.ok) throw new Error('Failed to fetch admins');
+      const response = await fetch("/api/admins");
+      if (!response.ok) throw new Error("Failed to fetch admins");
       const data = await response.json();
       setAdmins(data);
       setAdminsError(null);
@@ -42,23 +42,27 @@ export function AdminProvider({ children }) {
   const handleSubmit = async (e, data) => {
     e.preventDefault();
     try {
-      const url = editingAdmin ? `/api/admins/${editingAdmin.id}` : '/api/admins';
-      const method = editingAdmin ? 'PUT' : 'POST';
-      
+      const url = editingAdmin
+        ? `/api/admins/${editingAdmin.id}`
+        : "/api/admins";
+      const method = editingAdmin ? "PUT" : "POST";
+
       const response = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-      
-      if (!response.ok) throw new Error('Failed to save admin');
-      
+
+      if (!response.ok) throw new Error("Failed to save admin");
+
       const result = await response.json();
-      
+
       if (editingAdmin) {
-        setAdmins(admins.map(admin => 
-          admin.id === editingAdmin.id ? { ...admin, ...data } : admin
-        ));
+        setAdmins(
+          admins.map((admin) =>
+            admin.id === editingAdmin.id ? { ...admin, ...data } : admin,
+          ),
+        );
       } else {
         setAdmins([...admins, result]);
         if (result.invitationLink) {
@@ -66,7 +70,7 @@ export function AdminProvider({ children }) {
           setShowInvitation(true);
         }
       }
-      
+
       return result;
     } catch (error) {
       setAdminsError(error.message);
@@ -76,16 +80,16 @@ export function AdminProvider({ children }) {
 
   // Handle delete admin
   const handleDeleteAdmin = async (id) => {
-    if (!confirm('Are you sure you want to delete this admin?')) return;
-    
+    if (!confirm("Are you sure you want to delete this admin?")) return;
+
     try {
       const response = await fetch(`/api/admins/${id}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
-      
-      if (!response.ok) throw new Error('Failed to delete admin');
-      
-      setAdmins(admins.filter(admin => admin.id !== id));
+
+      if (!response.ok) throw new Error("Failed to delete admin");
+
+      setAdmins(admins.filter((admin) => admin.id !== id));
     } catch (error) {
       setAdminsError(error.message);
     }
@@ -97,13 +101,13 @@ export function AdminProvider({ children }) {
       setFormData({
         name: admin.name || "",
         email: admin.email || "",
-        role: admin.role || "admin"
+        role: admin.role || "admin",
       });
     } else {
       setFormData({
         name: "",
         email: "",
-        role: "admin"
+        role: "admin",
       });
     }
   };
@@ -126,7 +130,7 @@ export function AdminProvider({ children }) {
   // Copy invitation to clipboard
   const copyInvitationToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    alert('Invitation link copied to clipboard!');
+    alert("Invitation link copied to clipboard!");
   };
 
   // Handle add new admin
@@ -164,7 +168,7 @@ export function AdminProvider({ children }) {
     showInvitation,
     invitationLink,
     formData,
-    
+
     // Actions
     fetchAdmins,
     handleSubmit,
@@ -178,20 +182,18 @@ export function AdminProvider({ children }) {
     handleBackFromInvitation,
     handleCopyInvitation,
     initializeCurrentUser,
-    setFormData
+    setFormData,
   };
 
   return (
-    <AdminContext.Provider value={value}>
-      {children}
-    </AdminContext.Provider>
+    <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
   );
 }
 
 export function useAdminContext() {
   const context = useContext(AdminContext);
   if (!context) {
-    throw new Error('useAdminContext must be used within an AdminProvider');
+    throw new Error("useAdminContext must be used within an AdminProvider");
   }
   return context;
 }

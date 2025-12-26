@@ -4,44 +4,44 @@
  */
 
 export const generateSlug = (title, existingSlugs = []) => {
-  if (!title || typeof title !== 'string') {
-    return '';
+  if (!title || typeof title !== "string") {
+    return "";
   }
 
   let slug = title
     .toLowerCase()
     .trim()
     // Replace French characters
-    .replace(/[éèêë]/g, 'e')
-    .replace(/[àâä]/g, 'a')
-    .replace(/[îï]/g, 'i')
-    .replace(/[ôö]/g, 'o')
-    .replace(/[ùûü]/g, 'u')
-    .replace(/[ç]/g, 'c')
+    .replace(/[éèêë]/g, "e")
+    .replace(/[àâä]/g, "a")
+    .replace(/[îï]/g, "i")
+    .replace(/[ôö]/g, "o")
+    .replace(/[ùûü]/g, "u")
+    .replace(/[ç]/g, "c")
     // Replace other common accented characters
-    .replace(/[áàâä]/g, 'a')
-    .replace(/[íìîï]/g, 'i')
-    .replace(/[óòôö]/g, 'o')
-    .replace(/[úùûü]/g, 'u')
-    .replace(/[ýỳŷÿ]/g, 'y')
-    .replace(/[ñ]/g, 'n')
+    .replace(/[áàâä]/g, "a")
+    .replace(/[íìîï]/g, "i")
+    .replace(/[óòôö]/g, "o")
+    .replace(/[úùûü]/g, "u")
+    .replace(/[ýỳŷÿ]/g, "y")
+    .replace(/[ñ]/g, "n")
     // Remove or replace special characters
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^a-z0-9\s-]/g, "")
     // Replace multiple spaces/hyphens with single hyphen
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
     // Remove leading/trailing hyphens
-    .replace(/^-+|-+$/g, '');
+    .replace(/^-+|-+$/g, "");
 
   // If slug is empty after processing, provide fallback
   if (!slug) {
-    slug = 'item';
+    slug = "item";
   }
 
   // Ensure uniqueness by adding number if needed
   let uniqueSlug = slug;
   let counter = 1;
-  
+
   while (existingSlugs.includes(uniqueSlug)) {
     uniqueSlug = `${slug}-${counter}`;
     counter++;
@@ -54,35 +54,35 @@ export const generateSlug = (title, existingSlugs = []) => {
  * Validate if a slug is properly formatted
  */
 export const validateSlug = (slug) => {
-  if (!slug || typeof slug !== 'string') {
-    return { isValid: false, error: 'Slug is required' };
+  if (!slug || typeof slug !== "string") {
+    return { isValid: false, error: "Slug is required" };
   }
 
   // Check length
   if (slug.length < 2) {
-    return { isValid: false, error: 'Slug must be at least 2 characters long' };
+    return { isValid: false, error: "Slug must be at least 2 characters long" };
   }
 
   if (slug.length > 100) {
-    return { isValid: false, error: 'Slug must be less than 100 characters' };
+    return { isValid: false, error: "Slug must be less than 100 characters" };
   }
 
   // Check for valid characters (lowercase, numbers, hyphens)
   if (!/^[a-z0-9-]+$/.test(slug)) {
-    return { 
-      isValid: false, 
-      error: 'Slug can only contain lowercase letters, numbers, and hyphens' 
+    return {
+      isValid: false,
+      error: "Slug can only contain lowercase letters, numbers, and hyphens",
     };
   }
 
   // Check for leading/trailing hyphens
-  if (slug.startsWith('-') || slug.endsWith('-')) {
-    return { isValid: false, error: 'Slug cannot start or end with a hyphen' };
+  if (slug.startsWith("-") || slug.endsWith("-")) {
+    return { isValid: false, error: "Slug cannot start or end with a hyphen" };
   }
 
   // Check for consecutive hyphens
-  if (slug.includes('--')) {
-    return { isValid: false, error: 'Slug cannot contain consecutive hyphens' };
+  if (slug.includes("--")) {
+    return { isValid: false, error: "Slug cannot contain consecutive hyphens" };
   }
 
   return { isValid: true, error: null };
@@ -96,7 +96,7 @@ export const copySlugToClipboard = async (slug) => {
     await navigator.clipboard.writeText(slug);
     return { success: true, error: null };
   } catch (error) {
-    return { success: false, error: 'Failed to copy to clipboard' };
+    return { success: false, error: "Failed to copy to clipboard" };
   }
 };
 
@@ -104,18 +104,20 @@ export const copySlugToClipboard = async (slug) => {
  * Extract slug from URL
  */
 export const extractSlugFromUrl = (url) => {
-  if (!url || typeof url !== 'string') {
-    return '';
+  if (!url || typeof url !== "string") {
+    return "";
   }
 
   try {
     const pathname = new URL(url).pathname;
-    const segments = pathname.split('/').filter(segment => segment.length > 0);
-    return segments[segments.length - 1] || '';
+    const segments = pathname
+      .split("/")
+      .filter((segment) => segment.length > 0);
+    return segments[segments.length - 1] || "";
   } catch (error) {
     // If URL parsing fails, treat as a path
-    const segments = url.split('/').filter(segment => segment.length > 0);
-    return segments[segments.length - 1] || '';
+    const segments = url.split("/").filter((segment) => segment.length > 0);
+    return segments[segments.length - 1] || "";
   }
 };
 
@@ -123,6 +125,6 @@ export const extractSlugFromUrl = (url) => {
  * Format slug for display
  */
 export const formatSlugForDisplay = (slug) => {
-  if (!slug) return '';
-  return slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  if (!slug) return "";
+  return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 };

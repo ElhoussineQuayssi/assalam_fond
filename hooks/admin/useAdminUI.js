@@ -5,7 +5,7 @@ export function useAdminUI() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState(null);
   const [showInvitation, setShowInvitation] = useState(false);
-  const [invitationLink, setInvitationLink] = useState('');
+  const [invitationLink, setInvitationLink] = useState("");
   const [isEditingBlog, setIsEditingBlog] = useState(false);
   const [currentBlog, setCurrentBlog] = useState(null);
   const [isEditingProject, setIsEditingProject] = useState(false);
@@ -15,7 +15,7 @@ export function useAdminUI() {
   const openModal = useCallback((admin = null) => {
     setEditingAdmin(admin);
     setShowInvitation(false);
-    setInvitationLink('');
+    setInvitationLink("");
     setIsModalOpen(true);
   }, []);
 
@@ -46,23 +46,32 @@ export function useAdminUI() {
     setProjectValidationErrors({});
   }, []);
 
-  const setFormData = useCallback((data) => {
-    if (editingAdmin) {
-      setEditingAdmin({ ...editingAdmin, ...data });
-    }
-  }, [editingAdmin]);
+  const setFormData = useCallback(
+    (data) => {
+      if (editingAdmin) {
+        setEditingAdmin({ ...editingAdmin, ...data });
+      }
+    },
+    [editingAdmin],
+  );
 
-  const setBlogFormData = useCallback((data) => {
-    if (currentBlog) {
-      setCurrentBlog({ ...currentBlog, ...data });
-    }
-  }, [currentBlog]);
+  const setBlogFormData = useCallback(
+    (data) => {
+      if (currentBlog) {
+        setCurrentBlog({ ...currentBlog, ...data });
+      }
+    },
+    [currentBlog],
+  );
 
-  const setProjectFormData = useCallback((data) => {
-    if (currentProject) {
-      setCurrentProject({ ...currentProject, ...data });
-    }
-  }, [currentProject]);
+  const setProjectFormData = useCallback(
+    (data) => {
+      if (currentProject) {
+        setCurrentProject({ ...currentProject, ...data });
+      }
+    },
+    [currentProject],
+  );
 
   return {
     // Modal state
@@ -70,16 +79,16 @@ export function useAdminUI() {
     editingAdmin,
     showInvitation,
     invitationLink,
-    
+
     // Blog state
     isEditingBlog,
     currentBlog,
-    
+
     // Project state
     isEditingProject,
     currentProject,
     projectValidationErrors,
-    
+
     // Actions
     openModal,
     closeModal,

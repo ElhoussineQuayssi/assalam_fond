@@ -1,17 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CSSPlugin } from 'gsap/CSSPlugin';
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CSSPlugin } from "gsap/CSSPlugin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 gsap.registerPlugin(ScrollTrigger, CSSPlugin);
 
-export default function ImpactCard({ value, title, icon, type = "blue", translatedTitle }) {
+export default function ImpactCard({
+  value,
+  title,
+  icon,
+  type = "blue",
+  translatedTitle,
+}) {
   const cardRef = useRef(null);
-  const [displayValue, setDisplayValue] = useState('0');
+  const [displayValue, setDisplayValue] = useState("0");
 
   const themes = {
     blue: "text-[#6495ED] border-blue-100 bg-blue-50",
@@ -38,7 +44,7 @@ export default function ImpactCard({ value, title, icon, type = "blue", translat
         rotationX: rotateX,
         duration: 0.3,
         ease: "power2.out",
-        transformPerspective: 1000
+        transformPerspective: 1000,
       });
     };
 
@@ -47,68 +53,86 @@ export default function ImpactCard({ value, title, icon, type = "blue", translat
         rotationX: 0,
         rotationY: 0,
         duration: 0.5,
-        ease: "power2.out"
+        ease: "power2.out",
       });
     };
 
-    card.addEventListener('mouseenter', handleMouseEnter);
-    card.addEventListener('mousemove', handleMouseMove);
-    card.addEventListener('mouseleave', handleMouseLeave);
+    card.addEventListener("mouseenter", handleMouseEnter);
+    card.addEventListener("mousemove", handleMouseMove);
+    card.addEventListener("mouseleave", handleMouseLeave);
 
     // Counting animation on scroll
     ScrollTrigger.create({
       trigger: card,
       start: "top 85%",
       onEnter: () => {
-        const numericValue = parseInt(value.replace(/[^\d]/g, ''));
-        gsap.fromTo({ count: 0 }, { count: numericValue }, {
-          count: numericValue,
-          duration: 2,
-          ease: "power2.out",
-          onUpdate: function() {
-            setDisplayValue(Math.floor(this.targets()[0].count) + (value.includes('+') ? '+' : value.includes('%') ? '%' : ''));
-          }
-        });
+        const numericValue = parseInt(value.replace(/[^\d]/g, ""));
+        gsap.fromTo(
+          { count: 0 },
+          { count: numericValue },
+          {
+            count: numericValue,
+            duration: 2,
+            ease: "power2.out",
+            onUpdate: function () {
+              setDisplayValue(
+                Math.floor(this.targets()[0].count) +
+                  (value.includes("+") ? "+" : value.includes("%") ? "%" : ""),
+              );
+            },
+          },
+        );
 
         // Icon bounce animation
-        const icon = card.querySelector('.icon-container');
-        gsap.fromTo(icon, { y: -10 }, {
-          y: 0,
-          duration: 0.6,
-          ease: "bounce.out",
-          delay: 0.2,
-          onComplete: () => {
-            // Continuous floating animation
-            gsap.to(icon, {
-              y: -5,
-              duration: 2,
-              ease: "power1.inOut",
-              yoyo: true,
-              repeat: -1
-            });
-          }
-        });
+        const icon = card.querySelector(".icon-container");
+        gsap.fromTo(
+          icon,
+          { y: -10 },
+          {
+            y: 0,
+            duration: 0.6,
+            ease: "bounce.out",
+            delay: 0.2,
+            onComplete: () => {
+              // Continuous floating animation
+              gsap.to(icon, {
+                y: -5,
+                duration: 2,
+                ease: "power1.inOut",
+                yoyo: true,
+                repeat: -1,
+              });
+            },
+          },
+        );
       },
-      once: true
+      once: true,
     });
 
     return () => {
-      card.removeEventListener('mouseenter', handleMouseEnter);
-      card.removeEventListener('mousemove', handleMouseMove);
-      card.removeEventListener('mouseleave', handleMouseLeave);
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      card.removeEventListener("mouseenter", handleMouseEnter);
+      card.removeEventListener("mousemove", handleMouseMove);
+      card.removeEventListener("mouseleave", handleMouseLeave);
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
-    <Card ref={cardRef} className="reveal-card bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-muted/50 rounded-[2rem]">
+    <Card
+      ref={cardRef}
+      className="reveal-card bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-muted/50 rounded-[2rem]"
+    >
       <CardHeader className="pb-2">
-        <div className={`icon-container w-12 h-12 rounded-xl flex items-center justify-center mb-2 shadow-md ${themes[type]}`}>
+        <div
+          className={`icon-container w-12 h-12 rounded-xl flex items-center justify-center mb-2 shadow-md ${themes[type]}`}
+        >
           {icon}
         </div>
       </CardHeader>
       <CardContent>
-        <div className={`text-4xl font-bold mb-1 ${themes[type].split(' ')[0]}`}>
+        <div
+          className={`text-4xl font-bold mb-1 ${themes[type].split(" ")[0]}`}
+        >
           {displayValue}
         </div>
         <CardTitle className="text-[11px] font-black uppercase tracking-widest text-slate-400">

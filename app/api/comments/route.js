@@ -1,5 +1,8 @@
-import { getAllComments, createComment } from '@/controllers/commentsController';
-import { NextResponse } from 'next/server';
+import {
+  getAllComments,
+  createComment,
+} from "@/controllers/commentsController";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {

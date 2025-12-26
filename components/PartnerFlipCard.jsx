@@ -48,19 +48,12 @@ export default function PartnerFlipCard({ image, title, className = "" }) {
       >
         {/* Front */}
         <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden bg-white flex items-center justify-center">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-contain p-4"
-          />
+          <Image src={image} alt={title} fill className="object-contain p-4" />
         </div>
 
         {/* Back */}
         <div className="absolute inset-0 backface-hidden rounded-xl bg-blue-600 text-white flex items-center justify-center rotate-y-180">
-          <h3 className="text-lg font-semibold text-center px-4">
-            {title}
-          </h3>
+          <h3 className="text-lg font-semibold text-center px-4">{title}</h3>
         </div>
       </div>
     </div>

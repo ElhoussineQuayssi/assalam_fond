@@ -23,19 +23,33 @@ export const AppDataProvider = ({ children }) => {
     let imagesData = [];
 
     try {
-      const blogsRes = await supabase.from("blog_posts").select("*, comments(*)").order("created_at", { ascending: false });
+      const blogsRes = await supabase
+        .from("blog_posts")
+        .select("*, comments(*)")
+        .order("created_at", { ascending: false });
       blogsData = blogsRes.data || [];
     } catch (error) {
       console.error("Error fetching blog_posts:", error);
-      console.error("Error details:", { message: error.message, name: error.name, stack: error.stack });
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
     }
 
     try {
-      const projectsRes = await supabase.from("projects").select("*").order("created_at", { ascending: false });
+      const projectsRes = await supabase
+        .from("projects")
+        .select("*")
+        .order("created_at", { ascending: false });
       projectsData = projectsRes.data || [];
     } catch (error) {
       console.error("Error fetching projects:", error);
-      console.error("Error details:", { message: error.message, name: error.name, stack: error.stack });
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
     }
 
     try {
@@ -43,7 +57,11 @@ export const AppDataProvider = ({ children }) => {
       configData = configRes.data || null;
     } catch (error) {
       console.error("Error fetching site_config:", error);
-      console.error("Error details:", { message: error.message, name: error.name, stack: error.stack });
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
     }
 
     try {
@@ -51,19 +69,28 @@ export const AppDataProvider = ({ children }) => {
       imagesData = imagesRes.data || [];
     } catch (error) {
       console.error("Error fetching project_images:", error);
-      console.error("Error details:", { message: error.message, name: error.name, stack: error.stack });
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
     }
 
     // N-rtbo l-data: kola project n-zido lih tsawer dyalou
-    const projectsWithImages = projectsData.map(project => ({
+    const projectsWithImages = projectsData.map((project) => ({
       ...project,
-      images: imagesData.filter(img => img.project_id === project.id) || []
+      images: imagesData.filter((img) => img.project_id === project.id) || [],
     }));
 
     setBlogs(blogsData);
     setProjects(projectsWithImages);
     setSiteConfig(configData);
-    setAllProjectImages(imagesData.map(img => ({ ...img, image_url: img.image_url.replace(/^"|"$/g, '') })));
+    setAllProjectImages(
+      imagesData.map((img) => ({
+        ...img,
+        image_url: img.image_url.replace(/^"|"$/g, ""),
+      })),
+    );
 
     setLoading(false);
   };
@@ -75,17 +102,28 @@ export const AppDataProvider = ({ children }) => {
   // 2. Add Comment (Table: comments)
   const addComment = async (commentData) => {
     try {
-      const { data, error } = await supabase.from("comments").insert([commentData]).select();
+      const { data, error } = await supabase
+        .from("comments")
+        .insert([commentData])
+        .select();
       if (!error) {
         // Update local state derya bach t-ban d l-user
-        setBlogs(prev => prev.map(post =>
-          post.id === commentData.post_id ? { ...post, comments: [...(post.comments || []), data[0]] } : post
-        ));
+        setBlogs((prev) =>
+          prev.map((post) =>
+            post.id === commentData.post_id
+              ? { ...post, comments: [...(post.comments || []), data[0]] }
+              : post,
+          ),
+        );
       }
       return { data, error };
     } catch (error) {
       console.error("Error adding comment:", error);
-      console.error("Error details:", { message: error.message, name: error.name, stack: error.stack });
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
       return { data: null, error };
     }
   };
@@ -93,26 +131,34 @@ export const AppDataProvider = ({ children }) => {
   // 3. Send Message (Table: messages)
   const sendMessage = async (messageData) => {
     try {
-      const { data, error } = await supabase.from("messages").insert([messageData]);
+      const { data, error } = await supabase
+        .from("messages")
+        .insert([messageData]);
       return { data, error };
     } catch (error) {
       console.error("Error sending message:", error);
-      console.error("Error details:", { message: error.message, name: error.name, stack: error.stack });
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
       return { data: null, error };
     }
   };
 
   return (
-    <AppDataContext.Provider value={{
-      blogs,
-      projects,
-      siteConfig,
-      allProjectImages,
-      loading,
-      addComment,
-      sendMessage,
-      refreshData: fetchData
-    }}>
+    <AppDataContext.Provider
+      value={{
+        blogs,
+        projects,
+        siteConfig,
+        allProjectImages,
+        loading,
+        addComment,
+        sendMessage,
+        refreshData: fetchData,
+      }}
+    >
       {children}
     </AppDataContext.Provider>
   );

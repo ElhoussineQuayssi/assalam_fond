@@ -1,25 +1,28 @@
-import { getAllBlogPosts, createBlogPost } from '@/controllers/blogPostsController';
-import { NextResponse } from 'next/server';
+import {
+  getAllBlogPosts,
+  createBlogPost,
+} from "@/controllers/blogPostsController";
+import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const search = searchParams.get('search') || '';
-    const status = searchParams.get('status') || 'all';
-    const category = searchParams.get('category') || 'all';
-    const sortBy = searchParams.get('sortBy') || 'updated_at';
-    const sortOrder = searchParams.get('sortOrder') || 'desc';
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const search = searchParams.get("search") || "";
+    const status = searchParams.get("status") || "all";
+    const category = searchParams.get("category") || "all";
+    const sortBy = searchParams.get("sortBy") || "updated_at";
+    const sortOrder = searchParams.get("sortOrder") || "desc";
 
-    console.log('API GET /api/blog-posts called with params:', {
+    console.log("API GET /api/blog-posts called with params:", {
       page,
       limit,
       search,
       status,
       category,
       sortBy,
-      sortOrder
+      sortOrder,
     });
 
     const data = await getAllBlogPosts({
@@ -29,14 +32,14 @@ export async function GET(request) {
       status,
       category,
       sortBy,
-      sortOrder
+      sortOrder,
     });
 
-    console.log('API returning data:', data);
+    console.log("API returning data:", data);
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error('API error:', error);
+    console.error("API error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

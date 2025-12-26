@@ -10,7 +10,7 @@ import { useAppData } from "./AppDataContext";
 
 const BlogComments = ({ postId }) => {
   const { blogs, addComment } = useAppData();
-  const post = blogs.find(p => p.id == postId);
+  const post = blogs.find((p) => p.id == postId);
   const comments = post?.comments || [];
 
   const formatDate = (dateString) => {
@@ -22,7 +22,7 @@ const BlogComments = ({ postId }) => {
     if (hours < 1) return "الآن";
     if (hours < 24) return `منذ ${hours} ساعة`;
     if (days < 7) return `منذ ${days} يوم`;
-    return date.toLocaleDateString('ar-MA');
+    return date.toLocaleDateString("ar-MA");
   };
   const [newComment, setNewComment] = useState("");
   const [name, setName] = useState("");
@@ -36,7 +36,8 @@ const BlogComments = ({ postId }) => {
 
   useEffect(() => {
     // Fix: Use gsap.fromTo to ensure opacity ends at 1
-    gsap.fromTo(".comment-card",
+    gsap.fromTo(
+      ".comment-card",
       { opacity: 0, y: 30 },
       {
         opacity: 1,
@@ -46,15 +47,16 @@ const BlogComments = ({ postId }) => {
         ease: "power2.out",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 80%"
-        }
-      }
+          start: "top 80%",
+        },
+      },
     );
   }, []);
 
   useEffect(() => {
     if (newlyLoaded.size > 0) {
-      gsap.fromTo(".new-comment",
+      gsap.fromTo(
+        ".new-comment",
         { opacity: 0, y: 20 },
         {
           opacity: 1,
@@ -62,8 +64,8 @@ const BlogComments = ({ postId }) => {
           duration: 0.6,
           stagger: 0.1,
           ease: "power2.out",
-          onComplete: () => setNewlyLoaded(new Set())
-        }
+          onComplete: () => setNewlyLoaded(new Set()),
+        },
       );
     }
   }, [visibleComments]);
@@ -76,7 +78,7 @@ const BlogComments = ({ postId }) => {
         email,
         text: newComment,
         parent_id: null,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       });
       setNewComment("");
       setName("");
@@ -87,32 +89,47 @@ const BlogComments = ({ postId }) => {
   const handleReply = (parentId) => {
     if (replyText.trim()) {
       const newId = Date.now();
-      setComments([...comments, {
-        id: newId,
-        name: "أنت",
-        date: "الآن",
-        text: replyText,
-        parentId
-      }]);
+      setComments([
+        ...comments,
+        {
+          id: newId,
+          name: "أنت",
+          date: "الآن",
+          text: replyText,
+          parentId,
+        },
+      ]);
       setReplyText("");
       setReplyingTo(null);
     }
   };
 
-  const getReplies = (parentId) => comments.filter(c => c.parent_id === parentId);
+  const getReplies = (parentId) =>
+    comments.filter((c) => c.parent_id === parentId);
 
   const loadMore = () => {
-    const newVisible = Math.min(visibleComments + 2, comments.filter(c => c.parent_id === null).length);
-    const newIds = comments.filter(c => c.parent_id === null).slice(visibleComments, newVisible).map(c => c.id);
+    const newVisible = Math.min(
+      visibleComments + 2,
+      comments.filter((c) => c.parent_id === null).length,
+    );
+    const newIds = comments
+      .filter((c) => c.parent_id === null)
+      .slice(visibleComments, newVisible)
+      .map((c) => c.id);
     setNewlyLoaded(new Set([...newlyLoaded, ...newIds]));
     setVisibleComments(newVisible);
   };
 
   return (
-    <section ref={sectionRef} className="max-w-4xl mx-auto py-20 px-4 relative z-10">
+    <section
+      ref={sectionRef}
+      className="max-w-4xl mx-auto py-20 px-4 relative z-10"
+    >
       <div className="flex items-center gap-3 mb-12">
         <MessageSquare className="text-blue-600" />
-        <h3 className="text-3xl font-black text-slate-900">الآراء والمناقشات</h3>
+        <h3 className="text-3xl font-black text-slate-900">
+          الآراء والمناقشات
+        </h3>
       </div>
 
       {/* --- Comment Input Card --- */}
@@ -158,87 +175,112 @@ const BlogComments = ({ postId }) => {
 
       {/* --- Comments Feed --- */}
       <div className="space-y-6">
-        {comments.filter(c => c.parent_id === null).slice(0, visibleComments).map((comment) => (
-          <div key={comment.id}>
-            <div className={`comment-card bg-slate-50/50 backdrop-blur-sm border border-white p-6 rounded-[2rem] flex gap-5 ${newlyLoaded.has(comment.id) ? 'new-comment' : ''}`}>
-              <Avatar className="h-14 w-14 shadow-sm">
-                <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.name}`} />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="font-bold text-slate-900 text-lg">{comment.name}</h4>
-                  <span className="text-xs text-slate-400 font-medium">{formatDate(comment.created_at)}</span>
-                </div>
-                <p className="text-slate-600 leading-relaxed text-sm mb-4">
-                  {comment.text}
-                </p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
-                  className="text-blue-600 hover:text-blue-700 p-0 h-auto"
-                >
-                  <Reply className="h-4 w-4 mr-1" />
-                  رد
-                </Button>
-              </div>
-            </div>
-
-            {/* Reply Form */}
-            {replyingTo === comment.id && (
-              <div className="ml-20 mt-4 bg-white rounded-[2rem] p-6 shadow-sm border border-slate-50">
-                <div className="flex gap-4 mb-4">
-                  <Avatar className="h-10 w-10 border-2 border-blue-100">
-                    <AvatarImage src="/current-user.jpg" />
-                    <AvatarFallback>ME</AvatarFallback>
-                  </Avatar>
-                  <Textarea
-                    value={replyText}
-                    onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="اكتب ردك..."
-                    className="flex-1 border-none bg-slate-50 rounded-2xl p-4 focus-visible:ring-blue-500 min-h-[80px] text-slate-800"
+        {comments
+          .filter((c) => c.parent_id === null)
+          .slice(0, visibleComments)
+          .map((comment) => (
+            <div key={comment.id}>
+              <div
+                className={`comment-card bg-slate-50/50 backdrop-blur-sm border border-white p-6 rounded-[2rem] flex gap-5 ${newlyLoaded.has(comment.id) ? "new-comment" : ""}`}
+              >
+                <Avatar className="h-14 w-14 shadow-sm">
+                  <AvatarImage
+                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.name}`}
                   />
-                </div>
-                <div className="flex justify-end gap-2">
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-2">
+                    <h4 className="font-bold text-slate-900 text-lg">
+                      {comment.name}
+                    </h4>
+                    <span className="text-xs text-slate-400 font-medium">
+                      {formatDate(comment.created_at)}
+                    </span>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed text-sm mb-4">
+                    {comment.text}
+                  </p>
                   <Button
-                    variant="outline"
-                    onClick={() => setReplyingTo(null)}
-                    className="rounded-full"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      setReplyingTo(
+                        replyingTo === comment.id ? null : comment.id,
+                      )
+                    }
+                    className="text-blue-600 hover:text-blue-700 p-0 h-auto"
                   >
-                    إلغاء
-                  </Button>
-                  <Button
-                    onClick={() => handleReply(comment.id)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6"
-                  >
+                    <Reply className="h-4 w-4 mr-1" />
                     رد
                   </Button>
                 </div>
               </div>
-            )}
 
-            {/* Replies */}
-            {getReplies(comment.id).map((reply) => (
-              <div key={reply.id} className="ml-20 mt-4 comment-card bg-slate-50/30 backdrop-blur-sm border border-white p-4 rounded-[1.5rem] flex gap-4">
-                <Avatar className="h-10 w-10 shadow-sm">
-                  <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${reply.name}`} />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h5 className="font-bold text-slate-900 text-sm">{reply.name}</h5>
-                    <span className="text-xs text-slate-400 font-medium">{formatDate(reply.created_at)}</span>
+              {/* Reply Form */}
+              {replyingTo === comment.id && (
+                <div className="ml-20 mt-4 bg-white rounded-[2rem] p-6 shadow-sm border border-slate-50">
+                  <div className="flex gap-4 mb-4">
+                    <Avatar className="h-10 w-10 border-2 border-blue-100">
+                      <AvatarImage src="/current-user.jpg" />
+                      <AvatarFallback>ME</AvatarFallback>
+                    </Avatar>
+                    <Textarea
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                      placeholder="اكتب ردك..."
+                      className="flex-1 border-none bg-slate-50 rounded-2xl p-4 focus-visible:ring-blue-500 min-h-[80px] text-slate-800"
+                    />
                   </div>
-                  <p className="text-slate-600 leading-relaxed text-xs">
-                    {reply.text}
-                  </p>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setReplyingTo(null)}
+                      className="rounded-full"
+                    >
+                      إلغاء
+                    </Button>
+                    <Button
+                      onClick={() => handleReply(comment.id)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6"
+                    >
+                      رد
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ))}
-        {visibleComments < comments.filter(c => c.parent_id === null).length && (
+              )}
+
+              {/* Replies */}
+              {getReplies(comment.id).map((reply) => (
+                <div
+                  key={reply.id}
+                  className="ml-20 mt-4 comment-card bg-slate-50/30 backdrop-blur-sm border border-white p-4 rounded-[1.5rem] flex gap-4"
+                >
+                  <Avatar className="h-10 w-10 shadow-sm">
+                    <AvatarImage
+                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${reply.name}`}
+                    />
+                    <AvatarFallback>U</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center mb-1">
+                      <h5 className="font-bold text-slate-900 text-sm">
+                        {reply.name}
+                      </h5>
+                      <span className="text-xs text-slate-400 font-medium">
+                        {formatDate(reply.created_at)}
+                      </span>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed text-xs">
+                      {reply.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        {visibleComments <
+          comments.filter((c) => c.parent_id === null).length && (
           <div className="text-center mt-8">
             <Button
               onClick={loadMore}

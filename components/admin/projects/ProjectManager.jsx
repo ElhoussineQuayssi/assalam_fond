@@ -22,14 +22,14 @@ export default function ProjectManager({ isDarkMode = false }) {
     currentProject,
     projectValidationErrors,
     projectFormData,
-    
+
     // Actions
     fetchProjects,
     openProjectForm,
     closeProjectForm,
     handleProjectSubmit,
     handleDeleteProject,
-    
+
     // Form handlers
     handleInputChange,
     handleArrayChange,
@@ -49,15 +49,19 @@ export default function ProjectManager({ isDarkMode = false }) {
   useGSAP(() => {
     if (!isEditingProject && tableRef.current) {
       // Table entrance animation
-      gsap.fromTo(tableRef.current, {
-        y: 50,
-        opacity: 0
-      }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out"
-      });
+      gsap.fromTo(
+        tableRef.current,
+        {
+          y: 50,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+      );
     }
   }, [isEditingProject]);
 
@@ -72,17 +76,21 @@ export default function ProjectManager({ isDarkMode = false }) {
         onComplete: () => {
           openProjectForm(project);
           if (formRef.current) {
-            gsap.fromTo(formRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              formRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       openProjectForm(project);
@@ -100,17 +108,21 @@ export default function ProjectManager({ isDarkMode = false }) {
         onComplete: () => {
           closeProjectForm();
           if (tableRef.current) {
-            gsap.fromTo(tableRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              tableRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       closeProjectForm();

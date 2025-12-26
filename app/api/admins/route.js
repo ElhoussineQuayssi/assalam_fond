@@ -1,5 +1,5 @@
-import { getAllAdmins, createInvitation } from '@/controllers/adminsController';
-import { NextResponse } from 'next/server';
+import { getAllAdmins, createInvitation } from "@/controllers/adminsController";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -16,7 +16,7 @@ export async function POST(request) {
     const data = await createInvitation(body);
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    console.error('Error creating invitation:', error);
+    console.error("Error creating invitation:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

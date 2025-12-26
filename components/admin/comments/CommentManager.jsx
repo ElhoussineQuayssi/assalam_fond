@@ -22,7 +22,7 @@ export default function CommentManager({ isDarkMode = false }) {
     isEditingComment,
     currentComment,
     commentFormData,
-    
+
     // Filters and pagination
     commentSearch,
     commentStatusFilter,
@@ -31,21 +31,21 @@ export default function CommentManager({ isDarkMode = false }) {
     commentPage,
     commentPageSize,
     commentTotal,
-    
+
     // Actions
     fetchComments,
     openCommentForm,
     closeCommentForm,
     handleCommentSubmit,
     handleDeleteComment,
-    
+
     // Filter handlers
     handleSearchChange,
     handleStatusFilterChange,
     handleSortChange,
     handlePageChange,
     handlePageSizeChange,
-    
+
     // Form data handler
     setCommentFormData,
   } = useCommentsData();
@@ -62,15 +62,19 @@ export default function CommentManager({ isDarkMode = false }) {
   useGSAP(() => {
     if (!isEditingComment && tableRef.current) {
       // Table entrance animation
-      gsap.fromTo(tableRef.current, {
-        y: 50,
-        opacity: 0
-      }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out"
-      });
+      gsap.fromTo(
+        tableRef.current,
+        {
+          y: 50,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+      );
     }
   }, [isEditingComment]);
 
@@ -85,17 +89,21 @@ export default function CommentManager({ isDarkMode = false }) {
         onComplete: () => {
           openCommentForm(comment);
           if (formRef.current) {
-            gsap.fromTo(formRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              formRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       openCommentForm(comment);
@@ -113,17 +121,21 @@ export default function CommentManager({ isDarkMode = false }) {
         onComplete: () => {
           closeCommentForm();
           if (tableRef.current) {
-            gsap.fromTo(tableRef.current, {
-              y: -50,
-              opacity: 0
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+            gsap.fromTo(
+              tableRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
           }
-        }
+        },
       });
     } else {
       closeCommentForm();

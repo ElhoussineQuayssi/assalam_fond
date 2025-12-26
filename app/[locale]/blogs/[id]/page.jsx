@@ -1,7 +1,7 @@
-import { createClient } from '@/utils/supabase/client';
-import { getTranslations } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-import BlogPostPage from './BlogPostPage';
+import { createClient } from "@/utils/supabase/client";
+import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
+import BlogPostPage from "./BlogPostPage";
 
 export async function generateMetadata({ params }) {
   const { locale, id } = await params;
@@ -9,29 +9,29 @@ export async function generateMetadata({ params }) {
 
   try {
     const { data: post, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('id', id)
+      .from("blog_posts")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error || !post) {
       return {
-        title: 'Blog Post Not Found',
-        description: 'The requested blog post could not be found.',
+        title: "Blog Post Not Found",
+        description: "The requested blog post could not be found.",
       };
     }
 
-    const t = await getTranslations({ locale, namespace: 'Blogs' });
+    const t = await getTranslations({ locale, namespace: "Blogs" });
 
     return {
-      title: `${post.title} - ${t('hero.title')}`,
+      title: `${post.title} - ${t("hero.title")}`,
       description: post.excerpt,
     };
   } catch (error) {
-    console.error('Error fetching blog post for metadata:', error);
+    console.error("Error fetching blog post for metadata:", error);
     return {
-      title: 'Blog Post',
-      description: 'Read our latest blog posts.',
+      title: "Blog Post",
+      description: "Read our latest blog posts.",
     };
   }
 }

@@ -6,32 +6,34 @@ export function useAdminTheme() {
 
   useEffect(() => {
     // Check for saved theme preference or default to light mode
-    const savedTheme = localStorage.getItem('admin-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    const savedTheme = localStorage.getItem("admin-theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
       setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     }
   }, []);
 
   useEffect(() => {
     // Apply theme changes to document
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('admin-theme', 'dark');
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("admin-theme", "dark");
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('admin-theme', 'light');
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("admin-theme", "light");
     }
   }, [isDarkMode]);
 
   const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
+    setIsDarkMode((prev) => !prev);
   };
 
   const setTheme = (theme) => {
-    const isDark = theme === 'dark';
+    const isDark = theme === "dark";
     setIsDarkMode(isDark);
   };
 

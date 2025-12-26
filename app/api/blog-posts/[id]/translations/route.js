@@ -1,5 +1,5 @@
-import { getBlogPostWithTranslations } from '@/controllers/blogPostsController';
-import { NextResponse } from 'next/server';
+import { getBlogPostWithTranslations } from "@/controllers/blogPostsController";
+import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   try {
@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
     const data = await getBlogPostWithTranslations(id);
     return NextResponse.json(data);
   } catch (error) {
-    const status = error.message === 'Blog post not found' ? 404 : 500;
+    const status = error.message === "Blog post not found" ? 404 : 500;
     return NextResponse.json({ error: error.message }, { status });
   }
 }

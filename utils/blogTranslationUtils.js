@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/utils/supabase/client';
+import { createAdminClient } from "@/utils/supabase/client";
 
 // Lazy initialize Supabase client
 let supabase = null;
@@ -7,7 +7,7 @@ const getSupabaseClient = () => {
     try {
       supabase = createAdminClient();
     } catch (error) {
-      console.error('Failed to initialize Supabase client:', error);
+      console.error("Failed to initialize Supabase client:", error);
       throw error;
     }
   }
@@ -28,31 +28,31 @@ export const saveBlogWithTranslations = async (formData, blogId = null) => {
     status: formData.status,
     published_at: formData.published_at,
     tags: formData.tags,
-    image: formData.image
+    image: formData.image,
   };
 
   // Prepare translation data
   const translations = [];
-  
+
   // English translation
-  if (formData.title.en && formData.title.en.trim() !== '') {
+  if (formData.title.en && formData.title.en.trim() !== "") {
     translations.push({
-      lang: 'en',
+      lang: "en",
       title: formData.title.en,
       excerpt: formData.excerpt.en,
       content: formData.content.en,
-      blog_id: blogId // Will be set after main blog creation
+      blog_id: blogId, // Will be set after main blog creation
     });
   }
 
   // Arabic translation
-  if (formData.title.ar && formData.title.ar.trim() !== '') {
+  if (formData.title.ar && formData.title.ar.trim() !== "") {
     translations.push({
-      lang: 'ar',
+      lang: "ar",
       title: formData.title.ar,
       excerpt: formData.excerpt.ar,
       content: formData.content.ar,
-      blog_id: blogId // Will be set after main blog creation
+      blog_id: blogId, // Will be set after main blog creation
     });
   }
 
@@ -63,9 +63,9 @@ export const saveBlogWithTranslations = async (formData, blogId = null) => {
     if (blogId) {
       // Update existing blog
       const { data, error } = await supabase
-        .from('blog_posts')
+        .from("blog_posts")
         .update(mainBlog)
-        .eq('id', blogId)
+        .eq("id", blogId)
         .select();
 
       if (error) throw error;
@@ -73,7 +73,7 @@ export const saveBlogWithTranslations = async (formData, blogId = null) => {
     } else {
       // Create new blog
       const { data, error } = await supabase
-        .from('blog_posts')
+        .from("blog_posts")
         .insert([mainBlog])
         .select();
 
@@ -83,21 +83,21 @@ export const saveBlogWithTranslations = async (formData, blogId = null) => {
 
     // Save translations
     if (translations.length > 0) {
-      const translationData = translations.map(translation => ({
+      const translationData = translations.map((translation) => ({
         ...translation,
-        blog_id: result.id
+        blog_id: result.id,
       }));
 
       const { error: translationError } = await supabase
-        .from('blog_translations')
-        .upsert(translationData, { onConflict: ['blog_id', 'lang'] });
+        .from("blog_translations")
+        .upsert(translationData, { onConflict: ["blog_id", "lang"] });
 
       if (translationError) throw translationError;
     }
 
     return result;
   } catch (error) {
-    console.error('Error saving blog with translations:', error);
+    console.error("Error saving blog with translations:", error);
     throw error;
   }
 };
@@ -111,18 +111,18 @@ export const loadBlogWithTranslations = async (blogId) => {
 
     // Get main blog
     const { data: mainBlog, error: mainError } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('id', blogId)
+      .from("blog_posts")
+      .select("*")
+      .eq("id", blogId)
       .single();
 
     if (mainError) throw mainError;
 
     // Get translations
     const { data: translations, error: translationError } = await supabase
-      .from('blog_translations')
-      .select('*')
-      .eq('blog_id', blogId);
+      .from("blog_translations")
+      .select("*")
+      .eq("blog_id", blogId);
 
     if (translationError) throw translationError;
 
@@ -133,43 +133,43 @@ export const loadBlogWithTranslations = async (blogId) => {
       category: mainBlog.category,
       status: mainBlog.status,
       published_at: mainBlog.published_at,
-      tags: mainBlog.tags || '',
+      tags: mainBlog.tags || "",
       image: mainBlog.image,
-      
+
       // Multilingual fields
       title: {
-        fr: mainBlog.title || '',
-        en: '',
-        ar: ''
+        fr: mainBlog.title || "",
+        en: "",
+        ar: "",
       },
       excerpt: {
-        fr: mainBlog.excerpt || '',
-        en: '',
-        ar: ''
+        fr: mainBlog.excerpt || "",
+        en: "",
+        ar: "",
       },
       content: {
-        fr: mainBlog.content || '',
-        en: '',
-        ar: ''
-      }
+        fr: mainBlog.content || "",
+        en: "",
+        ar: "",
+      },
     };
 
     // Fill in translation data
-    translations.forEach(translation => {
-      if (translation.lang === 'en') {
-        multilingualData.title.en = translation.title || '';
-        multilingualData.excerpt.en = translation.excerpt || '';
-        multilingualData.content.en = translation.content || '';
-      } else if (translation.lang === 'ar') {
-        multilingualData.title.ar = translation.title || '';
-        multilingualData.excerpt.ar = translation.excerpt || '';
-        multilingualData.content.ar = translation.content || '';
+    translations.forEach((translation) => {
+      if (translation.lang === "en") {
+        multilingualData.title.en = translation.title || "";
+        multilingualData.excerpt.en = translation.excerpt || "";
+        multilingualData.content.en = translation.content || "";
+      } else if (translation.lang === "ar") {
+        multilingualData.title.ar = translation.title || "";
+        multilingualData.excerpt.ar = translation.excerpt || "";
+        multilingualData.content.ar = translation.content || "";
       }
     });
 
     return multilingualData;
   } catch (error) {
-    console.error('Error loading blog with translations:', error);
+    console.error("Error loading blog with translations:", error);
     throw error;
   }
 };
@@ -181,39 +181,51 @@ export const validateMultilingualBlogFormData = (formData) => {
   const errors = {};
 
   // Validate French fields (required)
-  if (!formData.title.fr || formData.title.fr.trim() === '') {
-    errors.title = { ...errors.title, fr: 'French title is required' };
+  if (!formData.title.fr || formData.title.fr.trim() === "") {
+    errors.title = { ...errors.title, fr: "French title is required" };
   }
-  if (!formData.excerpt.fr || formData.excerpt.fr.trim() === '') {
-    errors.excerpt = { ...errors.excerpt, fr: 'French excerpt is required' };
+  if (!formData.excerpt.fr || formData.excerpt.fr.trim() === "") {
+    errors.excerpt = { ...errors.excerpt, fr: "French excerpt is required" };
   }
-  if (!formData.content.fr || formData.content.fr.trim() === '') {
-    errors.content = { ...errors.content, fr: 'French content is required' };
+  if (!formData.content.fr || formData.content.fr.trim() === "") {
+    errors.content = { ...errors.content, fr: "French content is required" };
   }
-  
+
   // Validate English fields
-  if (formData.title.en && formData.title.en.trim() !== '') {
-    if (!formData.excerpt.en || formData.excerpt.en.trim() === '') {
-      errors.excerpt = { ...errors.excerpt, en: 'English excerpt is required when English title is provided' };
+  if (formData.title.en && formData.title.en.trim() !== "") {
+    if (!formData.excerpt.en || formData.excerpt.en.trim() === "") {
+      errors.excerpt = {
+        ...errors.excerpt,
+        en: "English excerpt is required when English title is provided",
+      };
     }
-    if (!formData.content.en || formData.content.en.trim() === '') {
-      errors.content = { ...errors.content, en: 'English content is required when English title is provided' };
+    if (!formData.content.en || formData.content.en.trim() === "") {
+      errors.content = {
+        ...errors.content,
+        en: "English content is required when English title is provided",
+      };
     }
   }
-  
+
   // Validate Arabic fields
-  if (formData.title.ar && formData.title.ar.trim() !== '') {
-    if (!formData.excerpt.ar || formData.excerpt.ar.trim() === '') {
-      errors.excerpt = { ...errors.excerpt, ar: 'Arabic excerpt is required when Arabic title is provided' };
+  if (formData.title.ar && formData.title.ar.trim() !== "") {
+    if (!formData.excerpt.ar || formData.excerpt.ar.trim() === "") {
+      errors.excerpt = {
+        ...errors.excerpt,
+        ar: "Arabic excerpt is required when Arabic title is provided",
+      };
     }
-    if (!formData.content.ar || formData.content.ar.trim() === '') {
-      errors.content = { ...errors.content, ar: 'Arabic content is required when Arabic title is provided' };
+    if (!formData.content.ar || formData.content.ar.trim() === "") {
+      errors.content = {
+        ...errors.content,
+        ar: "Arabic content is required when Arabic title is provided",
+      };
     }
   }
-  
+
   // Validate shared fields
   if (!formData.category) {
-    errors.category = 'Category is required';
+    errors.category = "Category is required";
   }
 
   return errors;

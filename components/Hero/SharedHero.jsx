@@ -1,13 +1,19 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ChevronDown } from 'lucide-react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { useLocale } from 'next-intl';
+import { ChevronDown } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useLocale } from "next-intl";
 
-const SharedHero = ({ title, description, image, allProjectImages, showScrollButton = false }) => {
+const SharedHero = ({
+  title,
+  description,
+  image,
+  allProjectImages,
+  showScrollButton = false,
+}) => {
   const [index, setIndex] = useState(0);
   const [randomImages, setRandomImages] = useState([]);
   const titleRef = useRef(null);
@@ -28,27 +34,34 @@ const SharedHero = ({ title, description, image, allProjectImages, showScrollBut
     return () => clearInterval(timer);
   }, [randomImages]);
 
-  useGSAP(() => {
-    if (titleRef.current) {
-      const words = titleRef.current.querySelectorAll('span');
-      gsap.fromTo(words, {
-        opacity: 0,
-        y: 20
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power4.out",
-        delay: 0.5
-      });
-    }
-  }, { dependencies: [title] });
+  useGSAP(
+    () => {
+      if (titleRef.current) {
+        const words = titleRef.current.querySelectorAll("span");
+        gsap.fromTo(
+          words,
+          {
+            opacity: 0,
+            y: 20,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power4.out",
+            delay: 0.5,
+          },
+        );
+      }
+    },
+    { dependencies: [title] },
+  );
 
   const scrollToNext = () => {
-    const nextSection = document.querySelector('section:nth-of-type(2)');
+    const nextSection = document.querySelector("section:nth-of-type(2)");
     if (nextSection) {
-      nextSection.scrollIntoView({ behavior: 'smooth' });
+      nextSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -72,9 +85,18 @@ const SharedHero = ({ title, description, image, allProjectImages, showScrollBut
 
         {/* Hero Content */}
         <div className="relative z-10 text-center text-white px-4 max-w-4xl pt-24">
-          <h1 ref={titleRef} className={`text-6xl font-black mb-6 drop-shadow-2xl ${locale === 'ar' ? 'text-right' : ''}`}>
-            {(locale === 'ar' ? title.split(' ').reverse() : title.split(' ')).map((word, index) => (
-              <span key={index} className={`inline-block ${locale === 'ar' ? 'ml-2' : 'mr-2'}`}>
+          <h1
+            ref={titleRef}
+            className={`text-6xl font-black mb-6 drop-shadow-2xl ${locale === "ar" ? "text-right" : ""}`}
+          >
+            {(locale === "ar"
+              ? title.split(" ").reverse()
+              : title.split(" ")
+            ).map((word, index) => (
+              <span
+                key={index}
+                className={`inline-block ${locale === "ar" ? "ml-2" : "mr-2"}`}
+              >
                 {word}
               </span>
             ))}
@@ -96,31 +118,41 @@ const SharedHero = ({ title, description, image, allProjectImages, showScrollBut
     );
   }
 
-  if (randomImages.length === 0) return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-slate-900">
-      <div className="relative z-10 text-center text-white px-4 max-w-4xl pt-24">
-        <h1 ref={titleRef} className={`text-6xl font-black mb-6 drop-shadow-2xl ${locale === 'ar' ? 'text-right' : ''}`}>
-          {(locale === 'ar' ? title.split(' ').reverse() : title.split(' ')).map((word, index) => (
-            <span key={index} className={`inline-block ${locale === 'ar' ? 'ml-2' : 'mr-2'}`}>
-              {word}
-            </span>
-          ))}
-        </h1>
-        <p className="text-xl text-gray-100 max-w-2xl mx-auto drop-shadow-md mb-8">
-          {description}
-        </p>
-        {showScrollButton && (
-          <button
-            onClick={scrollToNext}
-            className="mt-8 p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors group"
-            aria-label="Scroll to next section"
+  if (randomImages.length === 0)
+    return (
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-slate-900">
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl pt-24">
+          <h1
+            ref={titleRef}
+            className={`text-6xl font-black mb-6 drop-shadow-2xl ${locale === "ar" ? "text-right" : ""}`}
           >
-            <ChevronDown className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
-          </button>
-        )}
-      </div>
-    </section>
-  );
+            {(locale === "ar"
+              ? title.split(" ").reverse()
+              : title.split(" ")
+            ).map((word, index) => (
+              <span
+                key={index}
+                className={`inline-block ${locale === "ar" ? "ml-2" : "mr-2"}`}
+              >
+                {word}
+              </span>
+            ))}
+          </h1>
+          <p className="text-xl text-gray-100 max-w-2xl mx-auto drop-shadow-md mb-8">
+            {description}
+          </p>
+          {showScrollButton && (
+            <button
+              onClick={scrollToNext}
+              className="mt-8 p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors group"
+              aria-label="Scroll to next section"
+            >
+              <ChevronDown className="w-6 h-6 group-hover:translate-y-1 transition-transform" />
+            </button>
+          )}
+        </div>
+      </section>
+    );
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-slate-900">
@@ -139,9 +171,18 @@ const SharedHero = ({ title, description, image, allProjectImages, showScrollBut
 
       {/* Overlay Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-        <h1 ref={titleRef} className={`text-4xl md:text-6xl font-black text-white mb-6 drop-shadow-lg ${locale === 'ar' ? 'text-right' : ''}`}>
-          {(locale === 'ar' ? title.split(' ').reverse() : title.split(' ')).map((word, index) => (
-            <span key={index} className={`inline-block ${locale === 'ar' ? 'ml-2' : 'mr-2'}`}>
+        <h1
+          ref={titleRef}
+          className={`text-4xl md:text-6xl font-black text-white mb-6 drop-shadow-lg ${locale === "ar" ? "text-right" : ""}`}
+        >
+          {(locale === "ar"
+            ? title.split(" ").reverse()
+            : title.split(" ")
+          ).map((word, index) => (
+            <span
+              key={index}
+              className={`inline-block ${locale === "ar" ? "ml-2" : "mr-2"}`}
+            >
               {word}
             </span>
           ))}
@@ -175,7 +216,9 @@ const SharedHero = ({ title, description, image, allProjectImages, showScrollBut
             key={i}
             onClick={() => setIndex(i)}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              i === index ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
+              i === index
+                ? "bg-white scale-125"
+                : "bg-white/50 hover:bg-white/75"
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />

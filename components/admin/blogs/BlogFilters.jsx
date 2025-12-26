@@ -1,15 +1,21 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function BlogFilters({
-  search = '',
-  statusFilter = 'all',
-  categoryFilter = 'all',
+  search = "",
+  statusFilter = "all",
+  categoryFilter = "all",
   onSearchChange,
   onStatusChange,
   onCategoryChange,
-  className = ""
+  className = "",
 }) {
   return (
     <div className={`mb-6 space-y-4 ${className}`}>

@@ -1,7 +1,7 @@
-import { useRef } from 'react';
-import { gsap } from 'gsap';
+import { useRef } from "react";
+import { gsap } from "gsap";
 
-const MarqueeText = ({ text, className = '' }) => {
+const MarqueeText = ({ text, className = "" }) => {
   const textRef = useRef(null);
   const animationRef = useRef(null);
 
@@ -14,7 +14,7 @@ const MarqueeText = ({ text, className = '' }) => {
         duration: 2,
         ease: "power2.inOut",
         yoyo: true,
-        repeat: -1
+        repeat: -1,
       });
     }
   };

@@ -20,7 +20,13 @@ const Table = ({ columns, data, className = "", rowRefs = null }) => {
           {data.map((row, index) => (
             <tr
               key={index}
-              ref={rowRefs ? (el) => { if (el) rowRefs.current[index] = el; } : null}
+              ref={
+                rowRefs
+                  ? (el) => {
+                      if (el) rowRefs.current[index] = el;
+                    }
+                  : null
+              }
               className="border-b border-slate-100 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700 transition-all duration-300"
             >
               {columns.map((col) => (

@@ -284,7 +284,11 @@
         "status": "Actif",
         "detailed_description": "ريحانة السلام هو برنامج تعليمي شامل يهدف إلى توفير تعليم عالي الجودة للأطفال والشباب في المناطق المحرومة. يشمل البرنامج دروساً في القراءة والكتابة والرياضيات، بالإضافة إلى أنشطة ثقافية وترفيهية.",
         "impact": "أكثر من 500 طفل مستفيد، معدل نجاح 95% في الامتحانات المدرسية.",
-        "gallery": ["/images/rayhana1.jpg", "/images/rayhana2.jpg", "/images/rayhana3.jpg"]
+        "gallery": [
+          "/images/rayhana1.jpg",
+          "/images/rayhana2.jpg",
+          "/images/rayhana3.jpg"
+        ]
       },
       "himaya": {
         "title": "مركز الحماية",
@@ -293,7 +297,11 @@
         "status": "Actif",
         "detailed_description": "مركز الحماية يقدم دعماً نفسياً واجتماعياً للنساء والعائلات اللواتي يعانين من الصعوبات. يشمل البرنامج استشارات فردية وجماعية، ومساعدة في الحصول على حقوق قانونية واجتماعية.",
         "impact": "أكثر من 200 عائلة مستفيدة، معدل رضا 98% من المستفيدين.",
-        "gallery": ["/images/himaya1.jpg", "/images/himaya2.jpg", "/images/himaya3.jpg"]
+        "gallery": [
+          "/images/himaya1.jpg",
+          "/images/himaya2.jpg",
+          "/images/himaya3.jpg"
+        ]
       },
       "fataer": {
         "title": "فتائر البركة",
@@ -302,7 +310,11 @@
         "status": "Nouveau",
         "detailed_description": "برنامج فتائر البركة يهدف إلى تمكين النساء اقتصادياً من خلال تدريبهن على حرف تقليدية وحديثة، وتقديم قروض صغيرة لبدء مشاريعهن الخاصة.",
         "impact": "أكثر من 150 امرأة تم تمكينهن اقتصادياً، إنشاء 50 مشروع صغير.",
-        "gallery": ["/images/fataer1.jpg", "/images/fataer2.jpg", "/images/fataer3.jpg"]
+        "gallery": [
+          "/images/fataer1.jpg",
+          "/images/fataer2.jpg",
+          "/images/fataer3.jpg"
+        ]
       },
       "imtiaz": {
         "title": "برنامج الامتياز",
@@ -311,7 +323,11 @@
         "status": "Actif",
         "detailed_description": "برنامج الامتياز يدعم الطلاب المتميزين أكاديمياً من خلال منح دراسية، دورات تدريبية متقدمة، وفرص تبادل ثقافي مع جامعات دولية.",
         "impact": "أكثر من 100 طالب متميز مستفيد، 80% منهم نجحوا في الالتحاق بجامعات مرموقة.",
-        "gallery": ["/images/imtiaz1.jpg", "/images/imtiaz2.jpg", "/images/imtiaz3.jpg"]
+        "gallery": [
+          "/images/imtiaz1.jpg",
+          "/images/imtiaz2.jpg",
+          "/images/imtiaz3.jpg"
+        ]
       },
       "kafala": {
         "title": "برنامج الكفالة",
@@ -320,7 +336,11 @@
         "status": "Actif",
         "detailed_description": "برنامج الكفالة يوفر رعاية شاملة للأطفال والأيتام، بما في ذلك التعليم، الرعاية الصحية، والدعم النفسي والاجتماعي.",
         "impact": "أكثر من 300 طفل مستفيد، تحسن ملحوظ في الصحة والتعليم.",
-        "gallery": ["/images/kafala1.jpg", "/images/kafala2.jpg", "/images/kafala3.jpg"]
+        "gallery": [
+          "/images/kafala1.jpg",
+          "/images/kafala2.jpg",
+          "/images/kafala3.jpg"
+        ]
       },
       "nadi": {
         "title": "نادي السلام",
@@ -329,7 +349,11 @@
         "status": "Nouveau",
         "detailed_description": "نادي السلام يقدم تدريباً مهنياً ودعماً للشباب والبالغين لتحقيق الاستقلال الاقتصادي من خلال ورش عمل وبرامج تدريبية متخصصة.",
         "impact": "أكثر من 250 شاب مستفيد، معدل توظيف 75% بعد التدريب.",
-        "gallery": ["/images/nadi1.jpg", "/images/nadi2.jpg", "/images/nadi3.jpg"]
+        "gallery": [
+          "/images/nadi1.jpg",
+          "/images/nadi2.jpg",
+          "/images/nadi3.jpg"
+        ]
       }
     },
     "cta": "اقرأ المزيد",

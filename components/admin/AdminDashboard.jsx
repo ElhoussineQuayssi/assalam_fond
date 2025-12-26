@@ -14,13 +14,9 @@ if (typeof window !== "undefined") {
 
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Custom hooks
   const { isDarkMode } = useAdminTheme();
-  
-
-
-
 
   // Initialize loading state
   useEffect(() => {
@@ -29,14 +25,6 @@ export default function AdminDashboard() {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
-
-
-
-
-
-
-
 
   return (
     <AdminProvider>
