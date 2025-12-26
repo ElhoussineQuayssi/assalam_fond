@@ -23,11 +23,18 @@ export const AppDataProvider = ({ children }) => {
     let imagesData = [];
 
     try {
+      console.time("fetchBlogs");
       const blogsRes = await supabase
         .from("blog_posts")
         .select("*, comments(*)")
         .order("created_at", { ascending: false });
       blogsData = blogsRes.data || [];
+      console.timeEnd("fetchBlogs");
+      console.log(`Fetched ${blogsData.length} blog posts`);
+      if (blogsData.length > 0) {
+        const totalComments = blogsData.reduce((sum, post) => sum + (post.comments?.length || 0), 0);
+        console.log(`Total comments across all posts: ${totalComments}`);
+      }
     } catch (error) {
       console.error("Error fetching blog_posts:", error);
       console.error("Error details:", {

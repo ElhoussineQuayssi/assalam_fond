@@ -161,7 +161,7 @@ export default function ProjectsSection() {
                     {project.description}
                   </p>
                   <div className="text-blue-600 text-sm font-bold flex items-center gap-2 group-hover:translate-x-[-5px] transition-transform">
-                    اقرأ المزيد ←
+                    {t("read_more")}
                   </div>
                 </Link>
               );

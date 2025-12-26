@@ -20,10 +20,13 @@ export default function BlogsPage() {
 
   // Memoize blog posts to prevent infinite re-renders
   const blogPosts = useMemo(() => {
-    return blogs.map((post, index) => ({
+    console.log(`BlogsPage: Processing ${blogs.length} blog posts`);
+    const processed = blogs.map((post, index) => ({
       ...post,
       image: post.image || `/blog-${index + 1}.jpg`,
     }));
+    console.log(`BlogsPage: Processed ${processed.length} posts with images`);
+    return processed;
   }, [blogs]);
 
   const categories = useMemo(() => {
@@ -87,6 +90,7 @@ export default function BlogsPage() {
   useEffect(() => {
     if (blogPosts.length === 0) return;
 
+    console.time("filterPosts");
     let filtered = blogPosts;
 
     // Filter by category
@@ -106,6 +110,8 @@ export default function BlogsPage() {
 
     setFilteredPosts(filtered);
     setVisiblePosts(3); // Reset visible posts when filtering
+    console.timeEnd("filterPosts");
+    console.log(`Filtered to ${filtered.length} posts`);
   }, [selectedCategory, searchTerm, blogPosts, categories]);
 
   const featuredPost = blogPosts[0];
