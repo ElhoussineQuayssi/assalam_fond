@@ -185,6 +185,53 @@ export const getAnalyticsOverview = async (period = "30d") => {
   }
 };
 
+// Get analytics categories data
+export const getAnalyticsCategories = async (period = "30d") => {
+  try {
+    const { startDate, endDate, label } = getDateRange(period);
+
+    // Category distribution for pie/doughnut charts
+    const projectsByCategory = await supabase
+      .from("projects")
+      .select("category, created_at")
+      .gte("created_at", startDate.toISOString())
+      .lte("created_at", endDate.toISOString());
+
+    const categoryStats = {};
+    (projectsByCategory.data || []).forEach((project) => {
+      const category = project.category || "Uncategorized";
+      categoryStats[category] = (categoryStats[category] || 0) + 1;
+    });
+
+    const categoryData = Object.entries(categoryStats).map(
+      ([category, count]) => ({
+        category,
+        count,
+        percentage: (
+          (count / (projectsByCategory.data?.length || 1)) *
+          100
+        ).toFixed(1),
+      }),
+    );
+
+    return {
+      period: label,
+      dateRange: {
+        start: startDate.toISOString().split("T")[0],
+        end: endDate.toISOString().split("T")[0],
+      },
+      categories: {
+        data: categoryData,
+        labels: categoryData.map((d) => d.category),
+        values: categoryData.map((d) => d.count),
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching analytics categories:", error);
+    throw error;
+  }
+};
+
 // Get chart data for visualizations
 export const getAnalyticsCharts = async (period = "30d", chartType = "all") => {
   try {
