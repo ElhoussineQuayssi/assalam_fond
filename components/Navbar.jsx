@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import gsap from "gsap";
 import { Menu, X, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 import { useAppData } from "./AppDataContext";
 
 export default function Navbar() {
   const t = useTranslations('navbar');
+  const locale = useLocale();
   const { siteConfig, loading } = useAppData();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -78,15 +79,23 @@ export default function Navbar() {
       ${isScrolled ? "bg-white shadow-md py-3" : "bg-transparent py-5"}`}>
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
-        {!loading && siteConfig ? (
-          <img src={siteConfig.arabe_logo} alt="Logo" className="h-12" />
-        ) : (
-          <div className={`text-2xl font-black tracking-tighter transition-colors ${
-            isScrolled ? "text-blue-600" : "text-white drop-shadow-md"
-          }`}>
-            ASSALAM
-          </div>
-        )}
+        {(() => {
+          const logos = {
+            fr: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20francais.png",
+            ar: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20arabe.png",
+            en: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20anglais.png",
+          };
+          const logoUrl = logos[locale] || siteConfig?.arabe_logo;
+          return logoUrl ? (
+            <img src={logoUrl} alt="Logo" className="h-16 md:h-12" />
+          ) : (
+            <div className={`text-2xl font-black tracking-tighter transition-colors ${
+              isScrolled ? "text-blue-600" : "text-white drop-shadow-md"
+            }`}>
+              ASSALAM
+            </div>
+          );
+        })()}
 
         {/* Desktop Links */}
         <div className={`hidden md:flex items-center gap-10 font-medium transition-colors ${
@@ -129,11 +138,19 @@ export default function Navbar() {
         
         {/* Header west l-menu (Logo + Close Button) */}
         <div className="flex items-center justify-between p-6 border-b border-slate-50">
-          {!loading && siteConfig ? (
-            <img src={siteConfig.arabe_logo} alt="Logo" className="h-8" />
-          ) : (
-            <div className="text-xl font-black text-blue-600">ASSALAM</div>
-          )}
+          {(() => {
+            const logos = {
+              fr: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20francais.png",
+              ar: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20arabe.png",
+              en: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20anglais.png",
+            };
+            const logoUrl = logos[locale] || siteConfig?.arabe_logo;
+            return logoUrl ? (
+                <img src={logoUrl} alt="Logo" className="h-12" />
+            ) : (
+              <div className="text-xl font-black text-blue-600">ASSALAM</div>
+            );
+          })()}
           <button onClick={() => setIsOpen(false)} className="p-2 bg-slate-100 rounded-full">
             <X size={24} />
           </button>

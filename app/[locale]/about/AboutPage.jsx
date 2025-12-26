@@ -1,6 +1,6 @@
 "use client";
 import { Target, Eye, Heart, Shield, GraduationCap, Users, Sprout, Award } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Container from "@/components/Container/Container.jsx";
 import SharedHero from "@/components/Hero/SharedHero.jsx";
 import AboutTimeline from "@/components/Blocks/AboutTimeline.jsx";
@@ -8,6 +8,7 @@ import BlogsSection from "@/components/Blocks/BlogsSection.jsx";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import PartnerFlipCard from '@/components/PartnerFlipCard';
 import { useAppData } from '@/components/AppDataContext';
 
 const Counter = ({ end, suffix = "" }) => {
@@ -17,6 +18,42 @@ const Counter = ({ end, suffix = "" }) => {
 export default function AboutPage() {
   const t = useTranslations('About');
   const { allProjectImages } = useAppData();
+  const locale = useLocale();
+
+  const partners = [
+    {
+      img: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/markaz_himaya.png",
+      names: {
+        fr: "Centre Himaya",
+        en: "Himaya Center",
+        ar: "مركز حماية",
+      },
+    },
+    {
+      img: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/mobadara.jpeg",
+      names: {
+        fr: "Initiative Nationale pour le Développement Humain",
+        en: "National Initiative for Human Development",
+        ar: "المبادرة الوطنية للتنمية البشرية",
+      },
+    },
+    {
+      img: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/niyabat_anfa.jpg",
+      names: {
+        fr: "Direction Provinciale du Ministère de l’Éducation Nationale – Casablanca-Anfa",
+        en: "Provincial Directorate of the Ministry of National Education – Casablanca-Anfa",
+        ar: "المديرية الإقليمية لوزارة التربية الوطنية – الدار البيضاء أنفا",
+      },
+    },
+    {
+      img: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/ta3awon_lwatani.png",
+      names: {
+        fr: "Entraide Nationale",
+        en: "National Mutual Aid",
+        ar: "التعاون الوطني",
+      },
+    },
+  ];
 
   return (
     <div className="flex flex-col">
@@ -54,27 +91,20 @@ export default function AboutPage() {
         <Container>
           <h2 className="text-center text-3xl font-black text-slate-900 mb-16">{t('impact.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-12 bg-blue-50 rounded-[2rem] border border-blue-100">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-blue-100 flex items-center justify-center">
-                <Target size={32} className="text-blue-600" />
+            {[
+              { icon: <Target size={32} />, value: <Counter end="36" suffix="+" />, label: t('impact.sections') },
+              { icon: <Users size={32} />, value: <Counter end="6000" suffix="+" />, label: t('impact.beneficiaries') },
+              { icon: <Eye size={32} />, value: <Counter end="98" suffix="%" />, label: t('impact.transparency') },
+            ].map((card, i) => (
+              <div key={i} className="text-center p-12 rounded-[2rem] bg-[rgba(0,122,204,0.08)] border" style={{borderColor: 'rgba(0,122,204,0.16)'}}>
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center" style={{backgroundColor: 'rgba(0,122,204,0.12)'}}>
+                  {/** icon color */}
+                  <div className="text-[#007ACC]">{card.icon}</div>
+                </div>
+                <div className="text-6xl font-black text-[#007ACC] mb-4">{card.value}</div>
+                <p className="text-[#007ACC] font-medium">{card.label}</p>
               </div>
-              <div className="text-6xl font-black text-blue-900 mb-4"><Counter end="36" suffix="+" /></div>
-              <p className="text-blue-700 font-medium">{t('impact.sections')}</p>
-            </div>
-            <div className="text-center p-12 bg-green-50 rounded-[2rem] border border-green-100">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-green-100 flex items-center justify-center">
-                <Users size={32} className="text-green-600" />
-              </div>
-              <div className="text-6xl font-black text-green-900 mb-4"><Counter end="6000" suffix="+" /></div>
-              <p className="text-green-700 font-medium">{t('impact.beneficiaries')}</p>
-            </div>
-            <div className="text-center p-12 bg-purple-50 rounded-[2rem] border border-purple-100">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-purple-100 flex items-center justify-center">
-                <Eye size={32} className="text-purple-600" />
-              </div>
-              <div className="text-6xl font-black text-purple-900 mb-4"><Counter end="98" suffix="%" /></div>
-              <p className="text-purple-700 font-medium">{t('impact.transparency')}</p>
-            </div>
+            ))}
           </div>
         </Container>
       </section>
@@ -111,27 +141,15 @@ export default function AboutPage() {
           <div className="mb-16">
             <h2 className="text-center text-3xl font-black text-slate-900 mb-12">{t('partners.title')}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-              {/* Placeholder logos - replace with actual partner logos */}
-              <div className="text-center group">
-                <div className="w-24 h-24 mx-auto bg-slate-200 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold text-slate-600 group-hover:text-blue-600">{t('partners.indh')}</span>
+              {partners.map((p, idx) => (
+                <div key={idx} className="text-center">
+                  <PartnerFlipCard
+                    image={p.img}
+                    title={p.names[locale] || p.names.en}
+                    className="w-40 h-36 mx-auto"
+                  />
                 </div>
-              </div>
-              <div className="text-center group">
-                <div className="w-24 h-24 mx-auto bg-slate-200 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold text-slate-600 group-hover:text-blue-600">{t('partners.entraide')}</span>
-                </div>
-              </div>
-              <div className="text-center group">
-                <div className="w-24 h-24 mx-auto bg-slate-200 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold text-slate-600 group-hover:text-blue-600">{t('partners.unicef')}</span>
-                </div>
-              </div>
-              <div className="text-center group">
-                <div className="w-24 h-24 mx-auto bg-slate-200 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold text-slate-600 group-hover:text-blue-600">{t('partners.who')}</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

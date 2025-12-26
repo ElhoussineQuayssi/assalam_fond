@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from 'next-intl';
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { useLocale } from 'next-intl';
 import Container from "@/components/Container/Container";
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
@@ -14,6 +15,7 @@ export default function Footer() {
   const t = useTranslations('Home');
   const tNav = useTranslations();
   const tContact = useTranslations('Contact');
+  const locale = useLocale();
   const footerRef = useRef();
 
   useEffect(() => {
@@ -62,8 +64,20 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-black text-blue-600 tracking-tighter">ASSALAM</span>
-            </Link>
+                {(() => {
+                  const logos = {
+                    fr: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20francais.png",
+                    ar: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20arabe.png",
+                    en: "https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/Assalam/fondation%20anglais.png",
+                  };
+                  const logoUrl = logos[locale];
+                  return logoUrl ? (
+                    <img src={logoUrl} alt="Assalam" className="h-14 mb-4" />
+                  ) : (
+                    <span className="text-2xl font-black text-blue-600 tracking-tighter">ASSALAM</span>
+                  );
+                })()}
+              </Link>
             <p className="text-slate-600 text-sm leading-relaxed max-w-md">
               {t('footer.description')}
             </p>
@@ -135,6 +149,13 @@ export default function Footer() {
               {t('footer.terms')}
             </Link>
           </div>
+        </div>
+
+        {/* Signature */}
+        <div className="mt-6 text-center">
+          <p className="text-slate-400 text-xs">
+            {t('footer.signature')}
+          </p>
         </div>
       </Container>
     </footer>

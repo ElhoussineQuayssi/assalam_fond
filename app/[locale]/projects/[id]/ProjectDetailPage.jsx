@@ -86,17 +86,26 @@ export default function ProjectDetailPage() {
 
             {/* Sidebar */}
             <div className="lg:col-span-1">
+              <div className="lg:sticky lg:top-24">
+                {/* CTA */}
+                <div className="bg-blue-50 rounded-2xl p-6 mb-4">
+                  <h3 className="text-xl font-bold mb-4">{t('contribute_title')}</h3>
+                  <p className="text-gray-700 mb-6">
+                    {t('contribute_desc')}
+                  </p>
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    {t('contribute')}
+                  </Button>
+                </div>
 
-
-              {/* CTA */}
-              <div className="bg-blue-50 rounded-2xl p-6">
-                <h3 className="text-xl font-bold mb-4">{t('contribute_title')}</h3>
-                <p className="text-gray-700 mb-6">
-                  {t('contribute_desc')}
-                </p>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                  {t('contribute')}
-                </Button>
+                {/* View Gallery Button */}
+                <div className="bg-white rounded-2xl p-4 border">
+                  <Link href={`/${locale}/projects/${id}/gallery`} className="w-full block">
+                    <Button className="w-full btn-outline">
+                      {t('view_gallery')}
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

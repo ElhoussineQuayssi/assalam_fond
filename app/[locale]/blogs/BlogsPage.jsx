@@ -264,16 +264,6 @@ export default function BlogsPage() {
                 ))}
               </div>
             </div>
-
-            {/* Newsletter */}
-            <div className="sidebar-widget p-8 bg-blue-50 backdrop-blur-md rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-blue-100">
-              <h4 className="font-bold mb-4 text-sm">Newsletter</h4>
-              <p className="text-slate-600 text-sm mb-4">Subscribe to get the latest updates</p>
-              <div className="flex gap-2">
-                <Input placeholder="Your email" className="flex-1 rounded-full bg-white border-none" />
-                <Button className="rounded-full px-6 bg-blue-600 hover:bg-blue-700">Subscribe</Button>
-              </div>
-            </div>
           </aside>
         </div>
       </div>
