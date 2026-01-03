@@ -1,39 +1,17 @@
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
 import Container from "@/components/Container/Container.jsx";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function TestimonialsSection() {
   const t = useTranslations("Home");
   const testimonials = t.raw("testimonials.list");
-  const sectionRef = useRef();
 
-  useEffect(() => {
-    const cards = gsap.utils.toArray(".testimonial-card");
-    gsap.set(cards, { x: -50, opacity: 0 });
-
-    ScrollTrigger.batch(cards, {
-      onEnter: (batch) =>
-        gsap.to(batch, {
-          x: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power3.out",
-        }),
-      start: "top 85%",
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
+  // Don't render anything if testimonials aren't available yet
+  if (!testimonials || testimonials.length === 0) {
+    return null;
+  }
 
   return (
-    <section ref={sectionRef} className="py-24 bg-white">
+    <section className="py-24 bg-white">
       <Container>
         <div className="text-center mb-16">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#6495ED] mb-4 block">

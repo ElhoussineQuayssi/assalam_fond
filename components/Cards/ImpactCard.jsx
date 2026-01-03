@@ -2,11 +2,10 @@
 
 import { gsap } from "gsap";
 import { CSSPlugin } from "gsap/CSSPlugin";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-gsap.registerPlugin(ScrollTrigger, CSSPlugin);
+gsap.registerPlugin(CSSPlugin);
 
 export default function ImpactCard({
   value,
@@ -16,7 +15,6 @@ export default function ImpactCard({
   translatedTitle,
 }) {
   const cardRef = useRef(null);
-  const [displayValue, setDisplayValue] = useState("0");
 
   const themes = {
     blue: "text-[#6495ED] border-blue-100 bg-blue-50",
@@ -60,61 +58,34 @@ export default function ImpactCard({
     card.addEventListener("mousemove", handleMouseMove);
     card.addEventListener("mouseleave", handleMouseLeave);
 
-    // Counting animation on scroll
-    ScrollTrigger.create({
-      trigger: card,
-      start: "top 85%",
-      onEnter: () => {
-        const numericValue = parseInt(value.replace(/[^\d]/g, ""), 10);
-        gsap.fromTo(
-          { count: 0 },
-          { count: numericValue },
-          {
-            count: numericValue,
+    // Icon bounce animation (trigger immediately on mount)
+    const icon = card.querySelector(".icon-container");
+    gsap.fromTo(
+      icon,
+      { y: -10 },
+      {
+        y: 0,
+        duration: 0.6,
+        ease: "bounce.out",
+        onComplete: () => {
+          // Continuous floating animation
+          gsap.to(icon, {
+            y: -5,
             duration: 2,
-            ease: "power2.out",
-            onUpdate: function () {
-              setDisplayValue(
-                Math.floor(this.targets()[0].count) +
-                  (value.includes("+") ? "+" : value.includes("%") ? "%" : ""),
-              );
-            },
-          },
-        );
-
-        // Icon bounce animation
-        const icon = card.querySelector(".icon-container");
-        gsap.fromTo(
-          icon,
-          { y: -10 },
-          {
-            y: 0,
-            duration: 0.6,
-            ease: "bounce.out",
-            delay: 0.2,
-            onComplete: () => {
-              // Continuous floating animation
-              gsap.to(icon, {
-                y: -5,
-                duration: 2,
-                ease: "power1.inOut",
-                yoyo: true,
-                repeat: -1,
-              });
-            },
-          },
-        );
+            ease: "power1.inOut",
+            yoyo: true,
+            repeat: -1,
+          });
+        },
       },
-      once: true,
-    });
+    );
 
     return () => {
       card.removeEventListener("mouseenter", handleMouseEnter);
       card.removeEventListener("mousemove", handleMouseMove);
       card.removeEventListener("mouseleave", handleMouseLeave);
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [value.includes, value.replace]);
+  }, []);
 
   return (
     <Card
@@ -132,7 +103,7 @@ export default function ImpactCard({
         <div
           className={`text-4xl font-bold mb-1 ${themes[type].split(" ")[0]}`}
         >
-          {displayValue}
+          {value}
         </div>
         <CardTitle className="text-[11px] font-black uppercase tracking-widest text-slate-400">
           {translatedTitle || title}

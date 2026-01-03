@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { useAppData } from "@/components/AppDataContext";
 import ImpactCard from "@/components/Cards/ImpactCard";
@@ -52,6 +52,7 @@ const _categoryColors = {
 
 export default function ProjectsPage() {
   const t = useTranslations("Projects");
+  const locale = useLocale();
   const { projects, allProjectImages } = useAppData();
   const [activeTab, setActiveTab] = useState("all");
   const [showAll, setShowAll] = useState(false);
@@ -283,7 +284,7 @@ export default function ProjectsPage() {
               <div key={partner.img} className="text-center">
                 <PartnerFlipCard
                   image={partner.img}
-                  title={partner.names.en}
+                  title={partner.names[locale] || partner.names.fr}
                   className="w-40 h-36 mx-auto"
                 />
               </div>
