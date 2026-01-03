@@ -1,41 +1,55 @@
 "use client";
-import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import {
-  CheckCircle2,
-  Clock,
-  GraduationCap,
-  Target,
-  TrendingUp,
-} from "lucide-react";
+import { CheckCircle2, Clock, TrendingUp } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 // --- 1. Text Block (Heading أصغر و Padding متوازن) ---
-const TextBlock = ({ heading, text }) => (
-  <section className="py-6 max-w-3xl mx-auto px-6">
-    <h2 className="text-lg font-bold text-slate-800 mb-3 border-l-4 border-blue-500 pl-4">
-      {heading}
-    </h2>
-    <p className="text-sm text-slate-600 leading-relaxed">{text}</p>
-  </section>
-);
+const TextBlock = ({ heading, text, language = "fr" }) => {
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
+  const displayText =
+    typeof text === "object" ? text[language] || text.fr || "" : text || "";
+
+  return (
+    <section className="py-6 max-w-3xl mx-auto px-6">
+      {displayHeading && (
+        <h2 className="text-lg font-bold text-slate-800 mb-3 border-l-4 border-blue-500 pl-4">
+          {displayHeading}
+        </h2>
+      )}
+      {displayText && (
+        <p className="text-sm text-slate-600 leading-relaxed">{displayText}</p>
+      )}
+    </section>
+  );
+};
 
 // --- 3. Programme Block (نفس اللي في الصورة ولكن أصغر) ---
-const ProgrammeBlock = ({ heading, modules, duration }) => {
+const ProgrammeBlock = ({ heading, modules, duration, language = "fr" }) => {
   // Ensure modules is an array
   const safeModules = Array.isArray(modules) ? modules : [];
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
+  const displayDuration =
+    typeof duration === "object"
+      ? duration[language] || duration.fr || ""
+      : duration || "";
 
   return (
     <section className="py-10 max-w-5xl mx-auto px-6">
       <div className="flex flex-col md:flex-row gap-6">
         <div className="md:w-1/4 bg-blue-600 text-white p-6 rounded-3xl shadow-lg shadow-blue-100">
-          <h3 className="text-md font-bold mb-4">{heading}</h3>
+          <h3 className="text-md font-bold mb-4">{displayHeading}</h3>
           <div className="flex items-center gap-2 text-xs">
-            <Clock size={14} /> {duration}
+            <Clock size={14} /> {displayDuration}
           </div>
         </div>
         <div className="md:w-3/4 grid gap-3">
@@ -59,17 +73,23 @@ const ProgrammeBlock = ({ heading, modules, duration }) => {
 };
 
 // --- 4. Impact & Sponsorship (Cards صغار وهادئين) ---
-const ImpactBlock = ({ heading, impacts, formulas }) => {
+const ImpactBlock = ({ heading, impacts, formulas, language = "fr" }) => {
   // Ensure impacts and formulas are arrays
   const safeImpacts = Array.isArray(impacts) ? impacts : [];
   const safeFormulas = Array.isArray(formulas) ? formulas : [];
   const items = safeImpacts.length > 0 ? safeImpacts : safeFormulas;
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
 
   return (
     <section className="py-10 max-w-5xl mx-auto px-6">
-      <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8 text-center">
-        {heading}
-      </h3>
+      {displayHeading && (
+        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8 text-center">
+          {displayHeading}
+        </h3>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {items.map((item, i) => (
           <div
@@ -93,15 +113,21 @@ const ImpactBlock = ({ heading, impacts, formulas }) => {
 };
 
 // --- 5. Timeline (المشاريع الموسمية - Missing) ---
-const TimelineBlock = ({ heading, events }) => {
+const TimelineBlock = ({ heading, events, language = "fr" }) => {
   // Ensure events is an array
   const safeEvents = Array.isArray(events) ? events : [];
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
 
   return (
     <section className="py-10 max-w-3xl mx-auto px-6">
-      <h3 className="text-sm font-black mb-6 text-blue-600 uppercase">
-        {heading}
-      </h3>
+      {displayHeading && (
+        <h3 className="text-sm font-black mb-6 text-blue-600 uppercase">
+          {displayHeading}
+        </h3>
+      )}
       <div className="space-y-6 border-l-2 border-blue-50 ml-2">
         {safeEvents.map((ev, i) => (
           <div key={i} className="relative pl-8">
@@ -119,15 +145,19 @@ const TimelineBlock = ({ heading, events }) => {
 };
 
 // --- 2. Services Block (نفس اللي في الصورة ولكن أصغر) ---
-const ServicesBlock = ({ heading, categories }) => {
+const ServicesBlock = ({ heading, categories, language = "fr" }) => {
   // Ensure categories is an array
   const safeCategories = Array.isArray(categories) ? categories : [];
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
 
   return (
     <section className="py-10 max-w-5xl mx-auto px-6">
-      {heading && (
+      {displayHeading && (
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-8 text-center">
-          {heading}
+          {displayHeading}
         </h3>
       )}
       <div className="space-y-6">
@@ -167,15 +197,19 @@ const ServicesBlock = ({ heading, categories }) => {
 };
 
 // --- 3. Stats Block (أصغر وهدوء) ---
-const StatsBlock = ({ heading, stats }) => {
+const StatsBlock = ({ heading, stats, language = "fr" }) => {
   // Ensure stats is an array
   const safeStats = Array.isArray(stats) ? stats : [];
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
 
   return (
     <section className="py-10 max-w-5xl mx-auto px-6">
-      {heading && (
+      {displayHeading && (
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-8 text-center">
-          {heading}
+          {displayHeading}
         </h3>
       )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -205,28 +239,37 @@ const StatsBlock = ({ heading, stats }) => {
 };
 
 // --- 6. List Block (Fixed empty state handling) ---
-const ListBlock = ({ heading, items = [] }) => {
+const ListBlock = ({ heading, items = [], language = "fr" }) => {
   // Ensure items is always an array
   const safeItems = Array.isArray(items) ? items : [];
+  const displayHeading =
+    typeof heading === "object"
+      ? heading[language] || heading.fr || ""
+      : heading || "";
 
   // Don't render if no heading and no items
-  if ((!heading || heading.trim() === "") && safeItems.length === 0) {
+  if (
+    (!displayHeading || displayHeading.trim() === "") &&
+    safeItems.length === 0
+  ) {
     return null;
   }
 
   // Don't render if only heading but no items and heading is generic
   if (
     safeItems.length === 0 &&
-    (!heading || heading.trim() === "" || heading === "List Title")
+    (!displayHeading ||
+      displayHeading.trim() === "" ||
+      displayHeading === "List Title")
   ) {
     return null;
   }
 
   return (
     <section className="py-10 max-w-5xl mx-auto px-6">
-      {heading && heading.trim() !== "" && (
+      {displayHeading && displayHeading.trim() !== "" && (
         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-8 text-center">
-          {heading}
+          {displayHeading}
         </h3>
       )}
       <div className="space-y-4">
@@ -268,7 +311,7 @@ const ListBlock = ({ heading, items = [] }) => {
 };
 
 // --- Master Renderer ---
-export const ProjectContentRenderer = ({ contentArray }) => {
+export const ProjectContentRenderer = ({ contentArray, language = "fr" }) => {
   // Ensure contentArray is always an array
   const safeContentArray = Array.isArray(contentArray) ? contentArray : [];
 
@@ -302,22 +345,22 @@ export const ProjectContentRenderer = ({ contentArray }) => {
         const { type, content, id } = block;
         switch (type) {
           case "text":
-            return <TextBlock key={id} {...content} />;
+            return <TextBlock key={id} {...content} language={language} />;
           case "services":
-            return <ServicesBlock key={id} {...content} />;
+            return <ServicesBlock key={id} {...content} language={language} />;
           case "stats":
-            return <StatsBlock key={id} {...content} />;
+            return <StatsBlock key={id} {...content} language={language} />;
           case "programme":
-            return <ProgrammeBlock key={id} {...content} />;
+            return <ProgrammeBlock key={id} {...content} language={language} />;
           case "impact":
-            return <ImpactBlock key={id} {...content} />;
+            return <ImpactBlock key={id} {...content} language={language} />;
           case "sponsorship":
-            return <ImpactBlock key={id} {...content} />;
+            return <ImpactBlock key={id} {...content} language={language} />;
           case "timeline":
-            return <TimelineBlock key={id} {...content} />;
+            return <TimelineBlock key={id} {...content} language={language} />;
 
           case "list":
-            return <ListBlock key={id} {...content} />;
+            return <ListBlock key={id} {...content} language={language} />;
           default:
             console.warn(`Unknown block type: ${type}`);
             return null;

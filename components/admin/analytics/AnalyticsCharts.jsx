@@ -1,20 +1,21 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
+  ArcElement,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  ArcElement,
 } from "chart.js";
-import { Line, Bar, Doughnut } from "react-chartjs-2";
+import gsap from "gsap";
+import { Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Bar, Line } from "react-chartjs-2";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -23,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -44,7 +44,7 @@ ChartJS.register(
 
 export default function AnalyticsCharts({ isDarkMode = false }) {
   const chartRef = useRef();
-  const barsRef = useRef([]);
+  const _barsRef = useRef([]);
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -187,7 +187,7 @@ export default function AnalyticsCharts({ isDarkMode = false }) {
   };
 
   // Prepare doughnut chart data for categories
-  const getDoughnutChartData = () => {
+  const _getDoughnutChartData = () => {
     if (!chartData?.categories) return null;
 
     const colors = [

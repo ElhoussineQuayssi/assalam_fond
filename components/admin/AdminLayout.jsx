@@ -1,28 +1,21 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import {
-  Home,
-  Users,
-  FileText,
-  Folder,
-  Moon,
-  Sun,
-  LogOut,
-  MessageCircle,
-  Mail,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LogOut, Moon, Sun } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAdminNavigation } from "@/hooks/admin/useAdminNavigation";
+import { Button } from "@/components/ui/button";
 import { useAdminContext } from "@/hooks/admin/useAdminContext";
-import DashboardOverview from "./dashboard/DashboardOverview";
+import { useAdminNavigation } from "@/hooks/admin/useAdminNavigation";
+import { useAuth } from "@/hooks/admin/useAuth";
+import { useOnboarding } from "@/hooks/admin/useOnboarding";
 import AdminList from "./admins/AdminList";
 import AdminModal from "./admins/AdminModal";
 import BlogManager from "./blogs/BlogManager";
 import CommentManager from "./comments/CommentManager";
+import DashboardOverview from "./dashboard/DashboardOverview";
 import MessageManager from "./messages/MessageManager";
+import OnboardingDashboard from "./onboarding/OnboardingDashboard";
 import ProjectManager from "./projects/ProjectManager";
 
 if (typeof window !== "undefined") {
@@ -33,6 +26,9 @@ export default function AdminLayout({ children, isLoading = false }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { activeMenu, menuItems, handleMenuClick } = useAdminNavigation();
   const adminContext = useAdminContext();
+  const { completed, isNewUser, loading: onboardingLoading } = useOnboarding();
+  const { currentAdmin, logout } = useAuth();
+
   const sidebarRef = useRef();
   const menuRef = useRef();
   const contentRef = useRef();
@@ -150,7 +146,7 @@ export default function AdminLayout({ children, isLoading = false }) {
         gsap.to(icon, { rotation: 360, duration: 0.5, ease: "power2.out" });
       }
     }
-  }, [activeMenu]);
+  }, [activeMenu, menuItems.findIndex]);
 
   // Theme effect
   useEffect(() => {
@@ -160,6 +156,11 @@ export default function AdminLayout({ children, isLoading = false }) {
       document.documentElement.classList.remove("dark");
     }
   }, [isDarkMode]);
+
+  // Show onboarding for new users who haven't completed it
+  if (!onboardingLoading && isNewUser && !completed) {
+    return <OnboardingDashboard />;
+  }
 
   return (
     <div
@@ -176,10 +177,18 @@ export default function AdminLayout({ children, isLoading = false }) {
           <Avatar>
             <AvatarImage src="/admin-avatar.jpg" alt="Admin" />
             <AvatarFallback className="bg-blue-500 text-white">
-              A
+              {currentAdmin?.name?.charAt(0)?.toUpperCase() || "A"}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium">Welcome, Admin</span>
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">
+              Welcome, {currentAdmin?.name || "Admin"}
+            </span>
+            <span className="text-xs text-slate-500 capitalize">
+              {currentAdmin?.role?.replace("_", " ") || "Admin"}
+            </span>
+          </div>
+          {/* Language switching removed from header — handled inside forms */}
           <Button
             variant="outline"
             size="sm"
@@ -195,6 +204,7 @@ export default function AdminLayout({ children, isLoading = false }) {
           </Button>
           <Button
             variant="outline"
+            onClick={logout}
             className={`flex items-center space-x-2 dark:bg-slate-800 ${isDarkMode ? "text-slate-400" : ""}`}
           >
             <LogOut className="h-4 w-4" />

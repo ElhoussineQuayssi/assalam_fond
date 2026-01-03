@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
 import Container from "@/components/Container/Container.jsx";
 
 gsap.registerPlugin(ScrollTrigger);

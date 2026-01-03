@@ -1,7 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
 
 export default function AnalyticsMetrics({
   isDarkMode = false,
@@ -43,9 +42,9 @@ export default function AnalyticsMetrics({
 
   const formatNumber = (num) => {
     if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + "M";
+      return `${(num / 1000000).toFixed(1)}M`;
     } else if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "K";
+      return `${(num / 1000).toFixed(1)}K`;
     }
     return num.toString();
   };
@@ -136,7 +135,7 @@ export default function AnalyticsMetrics({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {metricsData.map((metric, index) => (
+      {metricsData.map((metric, _index) => (
         <Card
           key={metric.title}
           className={`shadow-lg transition-all duration-200 hover:shadow-xl ${isDarkMode ? "bg-slate-800 border-slate-600" : "bg-white border-slate-200"}`}

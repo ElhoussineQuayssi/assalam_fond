@@ -1,6 +1,7 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
+import { authenticatedFetch } from "@/utils/api";
 import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
@@ -16,13 +17,13 @@ export function useAdminData() {
     setAdminsLoading(true);
     setAdminsError(null);
     try {
-      const response = await fetch("/api/admins");
+      const response = await authenticatedFetch("/api/admins");
       if (!response.ok) throw new Error("Failed to fetch admins");
       const data = await response.json();
       setAdmins(data);
     } catch (error) {
       setAdminsError(error.message);
-      toast.error("Failed to fetch admins: " + error.message);
+      toast.error(`Failed to fetch admins: ${error.message}`);
     } finally {
       setAdminsLoading(false);
     }
@@ -45,9 +46,8 @@ export function useAdminData() {
           : "/api/admins";
         const method = data.editingAdmin ? "PUT" : "POST";
 
-        const response = await fetch(url, {
+        const response = await authenticatedFetch(url, {
           method,
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend),
         });
 
@@ -69,7 +69,7 @@ export function useAdminData() {
 
         return result;
       } catch (error) {
-        toast.error("Error saving admin: " + error.message);
+        toast.error(`Error saving admin: ${error.message}`);
         throw error;
       }
     },
@@ -80,12 +80,14 @@ export function useAdminData() {
     async (id) => {
       if (!confirm("Are you sure you want to delete this admin?")) return;
       try {
-        const response = await fetch(`/api/admins/${id}`, { method: "DELETE" });
+        const response = await authenticatedFetch(`/api/admins/${id}`, {
+          method: "DELETE",
+        });
         if (!response.ok) throw new Error("Failed to delete admin");
         await fetchAdmins(); // Refresh the list
         toast.success("Admin deleted successfully!");
       } catch (error) {
-        toast.error("Error deleting admin: " + error.message);
+        toast.error(`Error deleting admin: ${error.message}`);
       }
     },
     [fetchAdmins],
@@ -103,7 +105,7 @@ export function useAdminData() {
     try {
       await navigator.clipboard.writeText(link);
       toast.success("Invitation link copied to clipboard!");
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to copy invitation link");
     }
   }, []);

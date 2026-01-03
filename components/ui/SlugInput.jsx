@@ -1,21 +1,21 @@
 "use client";
-import { useState, useEffect } from "react";
 import {
-  Copy,
-  RefreshCw,
-  Eye,
-  CheckCircle,
   AlertCircle,
+  CheckCircle,
+  Copy,
   Edit3,
+  Eye,
+  RefreshCw,
   Save,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
+  copySlugToClipboard,
   generateSlug,
   validateSlug,
-  copySlugToClipboard,
 } from "@/utils/slugGenerator";
 
 export default function SlugInput({

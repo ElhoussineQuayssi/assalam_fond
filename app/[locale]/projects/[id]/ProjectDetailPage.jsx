@@ -1,23 +1,22 @@
 "use client";
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import SharedHero from "@/components/Hero/SharedHero";
 import {
-  BookOpen,
-  ShieldCheck,
-  Zap,
-  GraduationCap,
-  Users,
-  Briefcase,
   ArrowLeft,
+  BookOpen,
+  Briefcase,
+  GraduationCap,
+  ShieldCheck,
+  Users,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAppData } from "@/components/AppDataContext";
-import { ProjectContentRenderer } from "@/components/ProjectContentRenderer";
 import ProjectGalleryRenderer from "@/components/Blocks/ProjectGalleryRenderer";
+import SharedHero from "@/components/Hero/SharedHero";
+import { ProjectContentRenderer } from "@/components/ProjectContentRenderer";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const iconMap = {
   rayhana: BookOpen,
@@ -39,7 +38,7 @@ export default function ProjectDetailPage() {
   const { locale, id } = params;
   const t = useTranslations("Projects");
   const { projects, allProjectImages } = useAppData();
-  const project = projects.find((p) => p.id == id);
+  const project = projects.find((p) => p.id === id);
 
   if (!project) {
     return <div>Project not found</div>;
@@ -106,9 +105,11 @@ export default function ProjectDetailPage() {
                     {t("contribute_title")}
                   </h3>
                   <p className="text-gray-700 mb-6">{t("contribute_desc")}</p>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                    {t("contribute")}
-                  </Button>
+                  <Link href={`/${locale}/contact`}>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      {t("contribute")}
+                    </Button>
+                  </Link>
                 </div>
 
                 {/* View Gallery Button */}

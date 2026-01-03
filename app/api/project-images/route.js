@@ -1,8 +1,8 @@
-import {
-  getAllProjectImages,
-  createProjectImage,
-} from "@/controllers/projectImagesController";
 import { NextResponse } from "next/server";
+import {
+  createProjectImage,
+  getAllProjectImages,
+} from "@/controllers/projectImagesController";
 
 export async function GET(request) {
   try {

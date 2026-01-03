@@ -1,6 +1,6 @@
 "use client";
+import { ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { useState } from "react";
-import { ChevronUp, ChevronDown, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -30,7 +30,7 @@ export default function MessageList({
   onView,
   onDelete,
 }) {
-  const [tableRowsRef, setTableRowsRef] = useState([]);
+  const [_tableRowsRef, _setTableRowsRef] = useState([]);
 
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -62,7 +62,7 @@ export default function MessageList({
     if (!subject || typeof subject !== "string") {
       return "No subject";
     }
-    return subject.length > 40 ? subject.substring(0, 40) + "..." : subject;
+    return subject.length > 40 ? `${subject.substring(0, 40)}...` : subject;
   };
 
   // Helper function to safely get message status with fallback
@@ -280,7 +280,7 @@ export default function MessageList({
                     <Select
                       value={pageSize.toString()}
                       onValueChange={(value) =>
-                        onPageSizeChange(parseInt(value))
+                        onPageSizeChange(parseInt(value, 10))
                       }
                     >
                       <SelectTrigger className="w-20">

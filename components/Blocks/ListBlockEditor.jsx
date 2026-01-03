@@ -1,14 +1,7 @@
-import React from "react";
+import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Plus,
-  Trash2,
-  GripVertical,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
 
 export const ListBlockEditor = ({ heading, items = [], onChange }) => {
   // Ensure items is always an array

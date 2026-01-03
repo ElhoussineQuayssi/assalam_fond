@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
 export function useMessagesData() {
@@ -9,6 +9,7 @@ export function useMessagesData() {
 
   // Message management (read-only for most fields, but we can update status)
   const [isEditingMessage, setIsEditingMessage] = useState(false);
+  const [isViewingMessage, setIsViewingMessage] = useState(false);
   const [currentMessage, setCurrentMessage] = useState(null);
   const [messageFormData, setMessageFormData] = useState({
     name: "",
@@ -60,7 +61,7 @@ export function useMessagesData() {
     } catch (error) {
       console.error("Error in fetchMessages:", error);
       setMessagesError(error.message);
-      toast.error("Failed to fetch messages: " + error.message);
+      toast.error(`Failed to fetch messages: ${error.message}`);
     } finally {
       setMessagesLoading(false);
     }
@@ -100,6 +101,16 @@ export function useMessagesData() {
     setCurrentMessage(null);
   }, []);
 
+  const openMessageView = useCallback((message) => {
+    setCurrentMessage(message);
+    setIsViewingMessage(true);
+  }, []);
+
+  const closeMessageView = useCallback(() => {
+    setIsViewingMessage(false);
+    setCurrentMessage(null);
+  }, []);
+
   const handleMessageSubmit = useCallback(
     async (e, formData) => {
       e.preventDefault();
@@ -129,7 +140,7 @@ export function useMessagesData() {
         fetchMessages(); // Refresh the list
         closeMessageForm();
       } catch (error) {
-        toast.error("Failed to update message: " + error.message);
+        toast.error(`Failed to update message: ${error.message}`);
         throw error;
       }
     },
@@ -147,7 +158,7 @@ export function useMessagesData() {
         toast.success("Message deleted successfully!");
         fetchMessages(); // Refresh the list
       } catch (error) {
-        toast.error("Failed to delete message: " + error.message);
+        toast.error(`Failed to delete message: ${error.message}`);
       }
     },
     [fetchMessages],
@@ -185,6 +196,7 @@ export function useMessagesData() {
     messagesLoading,
     messagesError,
     isEditingMessage,
+    isViewingMessage,
     currentMessage,
     messageFormData,
 
@@ -201,6 +213,8 @@ export function useMessagesData() {
     fetchMessages,
     openMessageForm,
     closeMessageForm,
+    openMessageView,
+    closeMessageView,
     handleMessageSubmit,
     handleDeleteMessage,
 

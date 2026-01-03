@@ -1,13 +1,12 @@
 "use client";
-import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
-import MessageFilters from "./MessageFilters";
-import MessageList from "./MessageList";
-import MessageForm from "./MessageForm";
-
+import { useEffect, useRef } from "react";
 import { useMessagesData } from "@/hooks/admin/useMessagesData";
+import MessageFilters from "./MessageFilters";
+import MessageForm from "./MessageForm";
+import MessageList from "./MessageList";
+import MessageView from "./MessageView";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -20,6 +19,7 @@ export default function MessageManager({ isDarkMode = false }) {
     messagesLoading,
     messagesError,
     isEditingMessage,
+    isViewingMessage,
     currentMessage,
     messageFormData,
 
@@ -36,6 +36,8 @@ export default function MessageManager({ isDarkMode = false }) {
     fetchMessages,
     openMessageForm,
     closeMessageForm,
+    openMessageView,
+    closeMessageView,
     handleMessageSubmit,
     handleDeleteMessage,
 
@@ -52,6 +54,7 @@ export default function MessageManager({ isDarkMode = false }) {
 
   const tableRef = useRef();
   const formRef = useRef();
+  const viewRef = useRef();
 
   // Fetch messages when component mounts and when dependencies change
   useEffect(() => {
@@ -60,7 +63,7 @@ export default function MessageManager({ isDarkMode = false }) {
 
   // Animation effects
   useGSAP(() => {
-    if (!isEditingMessage && tableRef.current) {
+    if (!isEditingMessage && !isViewingMessage && tableRef.current) {
       // Table entrance animation
       gsap.fromTo(
         tableRef.current,
@@ -76,9 +79,9 @@ export default function MessageManager({ isDarkMode = false }) {
         },
       );
     }
-  }, [isEditingMessage]);
+  }, [isEditingMessage, isViewingMessage]);
 
-  const openMessageFormWithAnimation = (message = null) => {
+  const _openMessageFormWithAnimation = (message = null) => {
     // Animate table down and form up
     if (tableRef.current) {
       gsap.to(tableRef.current, {
@@ -142,6 +145,70 @@ export default function MessageManager({ isDarkMode = false }) {
     }
   };
 
+  const openMessageViewWithAnimation = (message) => {
+    // Animate table down and view up
+    if (tableRef.current) {
+      gsap.to(tableRef.current, {
+        y: 50,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          openMessageView(message);
+          if (viewRef.current) {
+            gsap.fromTo(
+              viewRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
+          }
+        },
+      });
+    } else {
+      openMessageView(message);
+    }
+  };
+
+  const closeMessageViewWithAnimation = () => {
+    // Animate view down and table up
+    if (viewRef.current) {
+      gsap.to(viewRef.current, {
+        y: 50,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          closeMessageView();
+          if (tableRef.current) {
+            gsap.fromTo(
+              tableRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
+          }
+        },
+      });
+    } else {
+      closeMessageView();
+    }
+  };
+
   const handleSubmit = (e, formData) => {
     handleMessageSubmit(e, formData);
     // Note: closeMessageFormWithAnimation will be called by the success handler in useMessagesData
@@ -149,7 +216,7 @@ export default function MessageManager({ isDarkMode = false }) {
 
   return (
     <>
-      {!isEditingMessage ? (
+      {!isEditingMessage && !isViewingMessage ? (
         <>
           <MessageFilters
             search={messageSearch}
@@ -172,11 +239,19 @@ export default function MessageManager({ isDarkMode = false }) {
               onPageChange={handlePageChange}
               onPageSizeChange={handlePageSizeChange}
               onRefresh={fetchMessages}
-              onView={(message) => openMessageFormWithAnimation(message)}
+              onView={(message) => openMessageViewWithAnimation(message)}
               onDelete={handleDeleteMessage}
             />
           </div>
         </>
+      ) : isViewingMessage ? (
+        <div ref={viewRef}>
+          <MessageView
+            message={currentMessage}
+            onClose={closeMessageViewWithAnimation}
+            isDarkMode={isDarkMode}
+          />
+        </div>
       ) : (
         <div ref={formRef}>
           <MessageForm

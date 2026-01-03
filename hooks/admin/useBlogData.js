@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
 export function useBlogData() {
@@ -11,15 +11,15 @@ export function useBlogData() {
   const [isEditingBlog, setIsEditingBlog] = useState(false);
   const [currentBlog, setCurrentBlog] = useState(null);
   const [blogFormData, setBlogFormData] = useState({
-    title: "",
     slug: "",
-    excerpt: "",
-    content: "",
     category: "",
     status: "draft",
-    image: "",
     published_at: "",
     tags: "",
+    image: "",
+    title: { fr: "", en: "", ar: "" },
+    excerpt: { fr: "", en: "", ar: "" },
+    content: { fr: "", en: "", ar: "" },
   });
 
   // Filters and pagination
@@ -69,7 +69,7 @@ export function useBlogData() {
     } catch (error) {
       console.error("Error in fetchBlogs:", error);
       setBlogsError(error.message);
-      toast.error("Failed to fetch blog posts: " + error.message);
+      toast.error(`Failed to fetch blog posts: ${error.message}`);
     } finally {
       setBlogsLoading(false);
     }
@@ -83,33 +83,65 @@ export function useBlogData() {
     blogSortOrder,
   ]);
 
-  const openBlogForm = useCallback((blog = null) => {
+  const openBlogForm = useCallback(async (blog = null) => {
     setCurrentBlog(blog);
     if (blog) {
-      setBlogFormData({
-        title: blog.title || "",
-        slug: blog.slug || "",
-        excerpt: blog.excerpt || "",
-        content: blog.content || "",
-        category: blog.category || "",
-        status: blog.status || "draft",
-        image: blog.image || "",
-        published_at: blog.published_at
-          ? new Date(blog.published_at).toISOString().split("T")[0]
-          : "",
-        tags: blog.tags || "",
-      });
+      console.log("Opening blog form for editing:", blog);
+      console.log("Blog category value:", blog.category);
+      try {
+        // Load full multilingual data when editing
+        const response = await fetch(`/api/blog-posts/${blog.id}/translations`);
+        if (!response.ok) {
+          throw new Error("Failed to load blog data");
+        }
+        const multilingualData = await response.json();
+        console.log("Multilingual data loaded:", multilingualData);
+        console.log("Multilingual category:", multilingualData.category);
+        setBlogFormData(multilingualData);
+      } catch (error) {
+        console.error("Error loading blog with translations:", error);
+        // Fallback to basic blog data with multilingual structure
+        const fallbackData = {
+          slug: blog.slug || "",
+          category: blog.category || "",
+          status: blog.status || "draft",
+          published_at: blog.published_at
+            ? new Date(blog.published_at).toISOString().split("T")[0]
+            : "",
+          tags: blog.tags || "",
+          image: blog.image || "",
+          title: {
+            fr: blog.title || "",
+            en: blog.title_en || "",
+            ar: blog.title_ar || "",
+          },
+          excerpt: {
+            fr: blog.excerpt || "",
+            en: blog.excerpt_en || "",
+            ar: blog.excerpt_ar || "",
+          },
+          content: {
+            fr: blog.content || "",
+            en: blog.content_en || "",
+            ar: blog.content_ar || "",
+          },
+        };
+        console.log("Using fallback data:", fallbackData);
+        console.log("Fallback category:", fallbackData.category);
+        setBlogFormData(fallbackData);
+      }
     } else {
+      // For new blogs, initialize with empty multilingual structure
       setBlogFormData({
-        title: "",
         slug: "",
-        excerpt: "",
-        content: "",
         category: "",
         status: "draft",
-        image: "",
         published_at: "",
         tags: "",
+        image: "",
+        title: { fr: "", en: "", ar: "" },
+        excerpt: { fr: "", en: "", ar: "" },
+        content: { fr: "", en: "", ar: "" },
       });
     }
     setIsEditingBlog(true);
@@ -125,44 +157,44 @@ export function useBlogData() {
       e.preventDefault();
       try {
         // Handle multilingual form data structure
-        const formDataToSubmit = { ...formData };
+        let formDataToSubmit = { ...formData };
 
         // If we have multilingual structure, transform it for the API
         if (
           formDataToSubmit.title &&
           typeof formDataToSubmit.title === "object"
         ) {
-          // Use French as the primary language for the main record
-          formDataToSubmit.title = formDataToSubmit.title.fr || "";
-          formDataToSubmit.excerpt = formDataToSubmit.excerpt.fr || "";
-          formDataToSubmit.content = formDataToSubmit.content.fr || "";
+          // Create a new object with the transformed structure
+          const transformedData = {
+            // French values as main record fields
+            title: formDataToSubmit.title.fr || "",
+            excerpt: formDataToSubmit.excerpt.fr || "",
+            content: formDataToSubmit.content.fr || "",
 
-          // Add translation fields
-          if (formDataToSubmit.title.en) {
-            formDataToSubmit.title_en = formDataToSubmit.title.en;
-          }
-          if (formDataToSubmit.excerpt.en) {
-            formDataToSubmit.excerpt_en = formDataToSubmit.excerpt.en;
-          }
-          if (formDataToSubmit.content.en) {
-            formDataToSubmit.content_en = formDataToSubmit.content.en;
-          }
+            // Translation fields
+            title_en: formDataToSubmit.title.en || "",
+            excerpt_en: formDataToSubmit.excerpt.en || "",
+            content_en: formDataToSubmit.content.en || "",
+            title_ar: formDataToSubmit.title.ar || "",
+            excerpt_ar: formDataToSubmit.excerpt.ar || "",
+            content_ar: formDataToSubmit.content.ar || "",
 
-          if (formDataToSubmit.title.ar) {
-            formDataToSubmit.title_ar = formDataToSubmit.title.ar;
-          }
-          if (formDataToSubmit.excerpt.ar) {
-            formDataToSubmit.excerpt_ar = formDataToSubmit.excerpt.ar;
-          }
-          if (formDataToSubmit.content.ar) {
-            formDataToSubmit.content_ar = formDataToSubmit.content.ar;
-          }
+            // Copy other fields
+            slug: formDataToSubmit.slug || "",
+            category: formDataToSubmit.category || "",
+            status: formDataToSubmit.status || "draft",
+            published_at: formDataToSubmit.published_at || "",
+            tags: formDataToSubmit.tags || "",
+            image: formDataToSubmit.image || "",
+          };
 
-          // Remove the object structure
-          delete formDataToSubmit.title;
-          delete formDataToSubmit.excerpt;
-          delete formDataToSubmit.content;
+          formDataToSubmit = transformedData;
         }
+
+        console.log(
+          "Form data to submit after transformation:",
+          formDataToSubmit,
+        );
 
         // Auto-generate slug if not provided
         if (!formDataToSubmit.slug && formDataToSubmit.title) {
@@ -203,7 +235,7 @@ export function useBlogData() {
         fetchBlogs(); // Refresh the list
         closeBlogForm();
       } catch (error) {
-        toast.error("Failed to save blog post: " + error.message);
+        toast.error(`Failed to save blog post: ${error.message}`);
         throw error;
       }
     },
@@ -221,7 +253,7 @@ export function useBlogData() {
         toast.success("Blog post deleted successfully!");
         fetchBlogs(); // Refresh the list
       } catch (error) {
-        toast.error("Failed to delete blog post: " + error.message);
+        toast.error(`Failed to delete blog post: ${error.message}`);
       }
     },
     [fetchBlogs],

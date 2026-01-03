@@ -1,9 +1,9 @@
+import { NextResponse } from "next/server";
 import {
-  getAllProjects,
   createProject,
+  getAllProjects,
   validateProjectData,
 } from "@/controllers/projectsController";
-import { NextResponse } from "next/server";
 
 // Standardized error response format
 const errorResponse = (message, status = 400, details = null) => {
@@ -30,9 +30,12 @@ const successResponse = (data, status = 200) => {
   );
 };
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const data = await getAllProjects();
+    const { searchParams } = new URL(request.url);
+    const locale = searchParams.get("locale") || "";
+
+    const data = await getAllProjects({ locale });
     return successResponse(data);
   } catch (error) {
     console.error("Error fetching projects:", error);

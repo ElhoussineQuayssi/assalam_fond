@@ -1,8 +1,8 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import { Link, usePathname } from "@/app/i18n";
-import { useState } from "react";
 import { Globe } from "lucide-react";
+import { useLocale } from "next-intl";
+import { useState } from "react";
+import { Link, usePathname } from "@/app/i18n";
 
 export default function LanguageSwitcher() {
   const locale = useLocale();

@@ -6,6 +6,7 @@ export default function ProjectList({
   projects = [],
   loading = false,
   error = null,
+  // Actions
   onRefresh,
   onAddNew,
   onEdit,
@@ -15,12 +16,7 @@ export default function ProjectList({
     return (
       <Card className="rounded-lg border bg-white shadow-sm border-gray-200 dark:bg-[#1A1F2E] dark:shadow-none">
         <CardContent className="p-0">
-          <div className="p-6 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-2 text-slate-500 dark:text-slate-400">
-              Loading projects...
-            </p>
-          </div>
+          <div className="p-6 text-center">Loading projects...</div>
         </CardContent>
       </Card>
     );
@@ -36,11 +32,11 @@ export default function ProjectList({
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-400">
           Projects Management
         </h2>
-        <div className="flex space-x-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
           <Button variant="outline" onClick={onRefresh} disabled={loading}>
             {loading ? "Loading..." : "Refresh"}
           </Button>
@@ -52,7 +48,7 @@ export default function ProjectList({
 
       <Card className="rounded-lg border bg-white shadow-sm border-gray-200 dark:bg-[#1A1F2E] dark:shadow-none">
         <CardContent className="p-0">
-          {!projects || projects.length === 0 ? (
+          {projects.length === 0 ? (
             <div className="p-6 text-center">
               <p className="text-slate-500 dark:text-slate-400">
                 No projects found. Click "Add New Project" to create one.
@@ -67,16 +63,22 @@ export default function ProjectList({
                       Title
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
+                      Slug
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
                       Categories
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
                       Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
-                      Start Date
+                      Location
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
-                      Location
+                      People Helped
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
+                      Updated At
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-300 uppercase tracking-wider">
                       Actions
@@ -90,61 +92,55 @@ export default function ProjectList({
                       className="hover:bg-gray-50 dark:hover:bg-slate-700"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        {project.title}
+                        {project.title && project.title.length > 25
+                          ? `${project.title.substring(0, 25)}...`
+                          : project.title || "Untitled"}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex flex-wrap gap-1">
-                          {Array.isArray(project.categories) &&
-                          project.categories.length > 0 ? (
-                            project.categories.map((cat, index) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded"
-                              >
-                                {cat}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-slate-400 text-xs">
-                              No categories
-                            </span>
-                          )}
-                        </div>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
+                        {project.slug && project.slug.length > 25
+                          ? `${project.slug.substring(0, 25)}...`
+                          : project.slug || "No slug"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
+                        {project.categories && project.categories.length > 0
+                          ? project.categories.join(", ")
+                          : "No categories"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-2 py-1 rounded-full text-xs ${
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
                             project.status === "published"
                               ? "bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400"
-                              : project.status === "Actif"
-                                ? "bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-400"
-                                : project.status === "Inactif"
-                                  ? "bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-400"
-                                  : project.status === "draft"
-                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400"
-                                    : "bg-gray-100 text-gray-800 dark:bg-gray-500/10 dark:text-gray-400"
+                              : "bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-400"
                           }`}
                         >
-                          {project.status}
+                          {project.status || "draft"}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
-                        {project.start_date || "-"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
                         {project.location || "-"}
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
+                        {project.people_helped || "-"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
+                        {project.updated_at
+                          ? new Date(project.updated_at).toLocaleDateString()
+                          : project.created_at
+                            ? new Date(project.created_at).toLocaleDateString()
+                            : "N/A"}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             onClick={() => onEdit(project)}
                           >
                             Edit
                           </Button>
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             className="text-red-600 hover:text-red-700"
                             onClick={() => onDelete(project.id)}

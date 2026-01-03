@@ -31,7 +31,7 @@ export default function AnalyticsSummary({ isDarkMode = false }) {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {summaryData.map((item, index) => (
+          {summaryData.map((item, _index) => (
             <div key={item.title} className="text-center">
               <div className={`text-3xl font-bold ${item.color}`}>
                 {item.value}

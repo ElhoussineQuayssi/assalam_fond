@@ -277,6 +277,13 @@
       "economic": "Autonomisation Économique",
       "social": "Soins Sociaux"
     },
+    "view_more_projects": "Voir Plus de Projets",
+    "partners_title": "Nos Partenaires",
+    "impact": {
+      "sections": "Sections Nationales",
+      "beneficiaries": "Bénéficiaires",
+      "transparency": "Transparence"
+    },
     "projects": {
       "rayhana": {
         "title": "Rayhana Assalam",
@@ -391,7 +398,9 @@
       "recent_posts_title": "Articles Récents",
       "author_bio": "À propos de l'auteur",
       "share_article": "Partager cet article",
-      "stay_updated": "Restez informé",
+      "share_in_media": "Partager dans les médias",
+      "copy_link": "Copier le lien",
+      "link_copied": "Lien copié dans le presse-papiers !",
       "newsletter_desc_individual": "Recevez les derniers articles directement dans votre boîte mail.",
       "related_articles": "Articles connexes",
       "your_email": "Votre email",
@@ -497,7 +506,77 @@
       "description": "Nous sommes là pour répondre à vos questions. N'hésitez pas à nous contacter.",
       "address": "152 bd yacoub al mansour, Casablanca",
       "phone": "05229-93699",
-      "email": "bn.assalam@gmail.com"
+      "email": "assalamanfa@gmail.com"
+    }
+  },
+  "Comments": {
+    "title": "Commentaires & Discussions",
+    "name": "Nom complet",
+    "email": "Adresse e-mail",
+    "comment_placeholder": "Partagez vos pensées sur ce sujet...",
+    "reply_placeholder": "Écrivez votre réponse...",
+    "submit": "Publier le commentaire",
+    "reply": "Répondre",
+    "cancel": "Annuler",
+    "load_more": "Charger plus",
+    "reply_to": "Répondre à",
+    "no_comments": "Aucun commentaire pour le moment. Soyez le premier à commenter !",
+    "time": {
+      "now": "maintenant",
+      "hours_ago": "il y a {{hours}} heures",
+      "days_ago": "il y a {{days}} jours",
+      "hour_ago": "il y a 1 heure",
+      "day_ago": "il y a 1 jour"
+    }
+  },
+  "Terms": {
+    "hero": {
+      "title": "Conditions d'Utilisation",
+      "description": "Veuillez lire attentivement ces conditions d'utilisation avant d'utiliser notre site web et nos services."
+    },
+    "introduction": {
+      "title": "Introduction",
+      "content": "Ces Conditions d'Utilisation régissent votre utilisation du site web et des services de la Fondation Assalam. En accédant ou utilisant nos services, vous acceptez d'être lié par ces conditions."
+    },
+    "acceptance": {
+      "title": "Acceptation des Conditions",
+      "content": "En utilisant notre site web, vous reconnaissez avoir lu, compris et accepté d'être lié par ces Conditions d'Utilisation et notre Politique de Confidentialité."
+    },
+    "services": {
+      "title": "Nos Services",
+      "content": "La Fondation Assalam fournit des services caritatifs, des programmes éducatifs, un soutien communautaire et une aide humanitaire aux personnes dans le besoin."
+    },
+    "user_responsibilities": {
+      "title": "Responsabilités des Utilisateurs",
+      "content": "Les utilisateurs sont tenus d'utiliser nos services de manière responsable et conformément aux lois et réglementations applicables."
+    },
+    "prohibited_activities": {
+      "title": "Activités Interdites",
+      "content": "Vous ne pouvez pas utiliser nos services à des fins illégales ou nuisibles, y compris, mais sans s'y limiter, le harcèlement, la fraude ou la violation des droits d'autrui."
+    },
+    "intellectual_property": {
+      "title": "Propriété Intellectuelle",
+      "content": "Tous les contenus, marques et matériaux sur notre site web appartiennent à la Fondation Assalam et sont protégés par les lois applicables sur la propriété intellectuelle."
+    },
+    "disclaimer": {
+      "title": "Avis de Non-Responsabilité",
+      "content": "Nos services sont fournis 'tels quels' sans aucune garantie. Nous ne garantissons pas un service ininterrompu ou sans erreur."
+    },
+    "limitation_liability": {
+      "title": "Limitation de Responsabilité",
+      "content": "La Fondation Assalam ne sera pas responsable des dommages directs, indirects, accessoires ou consécutifs découlant de votre utilisation de nos services."
+    },
+    "termination": {
+      "title": "Résiliation",
+      "content": "Nous nous réservons le droit de résilier ou suspendre votre accès à nos services à tout moment en cas de violation de ces conditions."
+    },
+    "changes": {
+      "title": "Modifications des Conditions",
+      "content": "Nous pouvons modifier ces Conditions d'Utilisation à tout moment. L'utilisation continue de nos services constitue l'acceptation des conditions mises à jour."
+    },
+    "contact": {
+      "title": "Informations de Contact",
+      "content": "Si vous avez des questions concernant ces Conditions d'Utilisation, veuillez nous contacter via notre page de contact."
     }
   }
 }

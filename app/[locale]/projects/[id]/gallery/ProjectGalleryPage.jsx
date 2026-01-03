@@ -1,20 +1,20 @@
 "use client";
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
-import SharedHero from "@/components/Hero/SharedHero";
 import {
-  BookOpen,
-  ShieldCheck,
-  Zap,
-  GraduationCap,
-  Users,
-  Briefcase,
   ArrowLeft,
+  BookOpen,
+  Briefcase,
+  GraduationCap,
+  ShieldCheck,
+  Users,
+  Zap,
 } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAppData } from "@/components/AppDataContext";
+import SharedHero from "@/components/Hero/SharedHero";
+import { Badge } from "@/components/ui/badge";
 
 const iconMap = {
   rayhana: BookOpen,
@@ -36,7 +36,7 @@ export default function ProjectGalleryPage() {
   const { locale, id } = params;
   const t = useTranslations("Projects");
   const { projects, allProjectImages } = useAppData();
-  const project = projects.find((p) => p.id == id);
+  const project = projects.find((p) => p.id === id);
 
   if (!project) {
     return <div>Project not found</div>;
@@ -96,13 +96,14 @@ export default function ProjectGalleryPage() {
                 return null;
               return (
                 <div
-                  key={index}
+                  key={src}
                   className="group relative aspect-square bg-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow"
                 >
-                  <img
+                  <Image
                     src={src}
                     alt={`${project.title} ${index + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                 </div>

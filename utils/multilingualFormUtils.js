@@ -1,9 +1,4 @@
 // Import existing controllers instead of creating new Supabase client
-import { createProject, updateProject } from "@/controllers/projectsController";
-import {
-  createBlogPost,
-  updateBlogPost,
-} from "@/controllers/blogPostsController";
 
 /**
  * Transform multilingual form data to database structure for projects
@@ -107,8 +102,8 @@ export const transformBlogFormData = (formData) => {
  * using the existing createProject/updateProject functions from projectsController
  */
 export const saveProjectWithTranslations = async (
-  formData,
-  projectId = null,
+  _formData,
+  _projectId = null,
 ) => {
   // This is a placeholder - the actual implementation should be in the form components
   // using the existing controller functions to maintain consistency with the existing API
@@ -122,7 +117,7 @@ export const saveProjectWithTranslations = async (
  * Note: This function should be implemented in the form components
  * using the existing createBlogPost/updateBlogPost functions from blogPostsController
  */
-export const saveBlogWithTranslations = async (formData, blogId = null) => {
+export const saveBlogWithTranslations = async (_formData, _blogId = null) => {
   // This is a placeholder - the actual implementation should be in the form components
   // using the existing controller functions to maintain consistency with the existing API
   throw new Error(
@@ -135,7 +130,7 @@ export const saveBlogWithTranslations = async (formData, blogId = null) => {
  * Note: This function should be implemented in the form components
  * using the existing getProjectById function from projectsController
  */
-export const loadProjectWithTranslations = async (projectId) => {
+export const loadProjectWithTranslations = async (_projectId) => {
   // This is a placeholder - the actual implementation should be in the form components
   // using the existing controller functions to maintain consistency with the existing API
   throw new Error(
@@ -148,7 +143,7 @@ export const loadProjectWithTranslations = async (projectId) => {
  * Note: This function should be implemented in the form components
  * using the existing getBlogPostById function from blogPostsController
  */
-export const loadBlogWithTranslations = async (blogId) => {
+export const loadBlogWithTranslations = async (_blogId) => {
   // This is a placeholder - the actual implementation should be in the form components
   // using the existing controller functions to maintain consistency with the existing API
   throw new Error(

@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 import gsap from "gsap";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+import { useAppData } from "@/components/AppDataContext";
+import SharedHero from "@/components/Hero/SharedHero.jsx";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -12,14 +13,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import SharedHero from "@/components/Hero/SharedHero.jsx";
-import { useAppData } from "@/components/AppDataContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 
 const ContactPage = () => {
   const t = useTranslations("Contact");
   const formRef = useRef(null);
-  const { sendMessage, allProjectImages } = useAppData();
+  const mapRef = useRef(null);
+  const infoRef = useRef(null);
+  const { sendMessage, allProjectImages, projects } = useAppData();
 
   const [generalForm, setGeneralForm] = useState({
     first_name: "",
@@ -114,12 +116,75 @@ const ContactPage = () => {
   };
 
   useEffect(() => {
-    // GSAP Animation for the form when page loads
-    gsap.from(formRef.current, {
+    // Enhanced GSAP Animations
+    const tl = gsap.timeline();
+
+    // Form animation
+    tl.from(formRef.current, {
       opacity: 0,
-      y: 30,
+      y: 50,
       duration: 1,
       ease: "power3.out",
+    });
+
+    // Stagger form elements
+    tl.from(
+      ".form-element",
+      {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+      },
+      "-=0.5",
+    );
+
+    // Info section animation
+    tl.from(
+      infoRef.current,
+      {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+      },
+      "-=0.3",
+    );
+
+    // Add hover animations
+    const formElements = gsap.utils.toArray(".form-element");
+    formElements.forEach((element) => {
+      element.addEventListener("mouseenter", () => {
+        gsap.to(element, {
+          scale: 1.02,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      });
+      element.addEventListener("mouseleave", () => {
+        gsap.to(element, {
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      });
+    });
+
+    // Info section hover effect
+    infoRef.current.addEventListener("mouseenter", () => {
+      gsap.to(infoRef.current, {
+        scale: 1.02,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    });
+    infoRef.current.addEventListener("mouseleave", () => {
+      gsap.to(infoRef.current, {
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+      });
     });
   }, []);
 
@@ -167,7 +232,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.first_name")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                   <Input
                     value={generalForm.last_name}
@@ -178,7 +243,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.last_name")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                 </div>
                 <Input
@@ -188,7 +253,7 @@ const ContactPage = () => {
                     setGeneralForm({ ...generalForm, email: e.target.value })
                   }
                   placeholder={t("form.email")}
-                  className="rounded-xl h-12"
+                  className="rounded-xl h-12 form-element"
                 />
                 <Input
                   value={generalForm.phone}
@@ -196,7 +261,7 @@ const ContactPage = () => {
                     setGeneralForm({ ...generalForm, phone: e.target.value })
                   }
                   placeholder={t("form.phone")}
-                  className="rounded-xl h-12"
+                  className="rounded-xl h-12 form-element"
                 />
                 <Textarea
                   value={generalForm.message}
@@ -204,11 +269,11 @@ const ContactPage = () => {
                     setGeneralForm({ ...generalForm, message: e.target.value })
                   }
                   placeholder={t("form.message")}
-                  className="rounded-xl min-h-[150px]"
+                  className="rounded-xl min-h-[150px] form-element"
                 />
                 <Button
                   onClick={handleGeneralSubmit}
-                  className="w-full bg-blue-600 h-12 rounded-xl"
+                  className="w-full bg-blue-600 h-12 rounded-xl form-element"
                 >
                   {t("form.send")}
                 </Button>
@@ -226,7 +291,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.first_name")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                   <Input
                     value={projectForm.last_name}
@@ -237,7 +302,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.last_name")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                 </div>
                 <Input
@@ -247,7 +312,7 @@ const ContactPage = () => {
                     setProjectForm({ ...projectForm, email: e.target.value })
                   }
                   placeholder={t("form.email")}
-                  className="rounded-xl h-12"
+                  className="rounded-xl h-12 form-element"
                 />
                 <Input
                   value={projectForm.phone}
@@ -255,7 +320,7 @@ const ContactPage = () => {
                     setProjectForm({ ...projectForm, phone: e.target.value })
                   }
                   placeholder={t("form.phone")}
-                  className="rounded-xl h-12"
+                  className="rounded-xl h-12 form-element"
                 />
                 <Select
                   value={projectForm.project}
@@ -263,22 +328,15 @@ const ContactPage = () => {
                     setProjectForm({ ...projectForm, project: value })
                   }
                 >
-                  <SelectTrigger className="rounded-xl h-12">
+                  <SelectTrigger className="rounded-xl h-12 form-element">
                     <SelectValue placeholder={t("form.select_project")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="rayhana">
-                      {t("projects.rayhana")}
-                    </SelectItem>
-                    <SelectItem value="kafala">
-                      {t("projects.kafala")}
-                    </SelectItem>
-                    <SelectItem value="imtiaz">
-                      {t("projects.imtiaz")}
-                    </SelectItem>
-                    <SelectItem value="himaya">
-                      {t("projects.himaya")}
-                    </SelectItem>
+                    {projects.map((project) => (
+                      <SelectItem key={project.id} value={project.id}>
+                        {project.title}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Textarea
@@ -287,11 +345,11 @@ const ContactPage = () => {
                     setProjectForm({ ...projectForm, message: e.target.value })
                   }
                   placeholder={t("form.project_message")}
-                  className="rounded-xl min-h-[150px]"
+                  className="rounded-xl min-h-[150px] form-element"
                 />
                 <Button
                   onClick={handleProjectSubmit}
-                  className="w-full bg-blue-600 h-12 rounded-xl"
+                  className="w-full bg-blue-600 h-12 rounded-xl form-element"
                 >
                   {t("form.send_request")}
                 </Button>
@@ -309,7 +367,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.first_name")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                   <Input
                     value={volunteerForm.last_name}
@@ -320,7 +378,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.last_name")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -334,7 +392,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.email")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                   <Input
                     value={volunteerForm.phone}
@@ -345,7 +403,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.phone")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -358,7 +416,7 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.city")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                   <Input
                     value={volunteerForm.skills}
@@ -369,12 +427,12 @@ const ContactPage = () => {
                       })
                     }
                     placeholder={t("form.skills")}
-                    className="rounded-xl h-12"
+                    className="rounded-xl h-12 form-element"
                   />
                 </div>
                 <Button
                   onClick={handleVolunteerSubmit}
-                  className="w-full bg-emerald-600 h-12 rounded-xl"
+                  className="w-full bg-emerald-600 h-12 rounded-xl form-element"
                 >
                   {t("form.join_us")}
                 </Button>
@@ -384,7 +442,10 @@ const ContactPage = () => {
 
           {/* --- Right Side: Info & Map --- */}
           <div className="space-y-8">
-            <div className="bg-blue-600 text-white p-10 rounded-[3rem] space-y-6 shadow-xl">
+            <div
+              ref={infoRef}
+              className="bg-blue-600 text-white p-10 rounded-[3rem] space-y-6 shadow-[inset_0_0_50px_rgba(0,0,0,0.3)]"
+            >
               <h3 className="text-2xl font-bold">{t("info.title")}</h3>
               <p className="opacity-80">{t("info.description")}</p>
               <div className="space-y-4 text-sm">
@@ -395,14 +456,18 @@ const ContactPage = () => {
             </div>
 
             {/* Map Section */}
-            <div className="h-[350px] w-full rounded-[3rem] overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all duration-700 border border-slate-200">
+            <div
+              ref={mapRef}
+              className="h-[350px] w-full rounded-[3rem] overflow-hidden shadow-[inset_0_0_50px_rgba(0,0,0,0.3)] grayscale hover:grayscale-0 transition-all duration-700 border border-slate-200"
+            >
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.8463!2d-7.6534!3d33.5897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDM1JzIyLjkiTiA3wrAzOScxMi4yIlc!5e0!3m2!1sen!2sma!4v123456789"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d106374.3912414848!2d-7.788413556640638!3d33.57416319999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda62d6b070965af%3A0x21387d47b3a8450d!2sFondation%20Assalam%20Casa%20Anfa!5e0!3m2!1sfr!2sma!4v1767367385407!5m2!1sfr!2sma"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
+                title="Location map of Fondation Assalam Casa Anfa"
               ></iframe>
             </div>
           </div>

@@ -1,29 +1,21 @@
 "use client";
-import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { useTranslations } from "next-intl";
 import { Globe, Heart, ShieldCheck } from "lucide-react";
-
-import Container from "@/components/Container/Container.jsx";
-import SharedHero from "@/components/Hero/SharedHero.jsx";
-import ImpactCard from "@/components/Cards/ImpactCard.jsx";
-import SoftInfoBlock from "@/components/Blocks/SoftInfoBlock.jsx";
-import ProjectsSection from "@/components/Blocks/ProjectsSection.jsx";
+import { useTranslations } from "next-intl";
+import { useRef } from "react";
+import { useAppData } from "@/components/AppDataContext.js";
 import BlogsSection from "@/components/Blocks/BlogsSection.jsx";
+import CommitmentVisionSection from "@/components/Blocks/CommitmentVisionSection.jsx";
+import FAQSection from "@/components/Blocks/FAQSection.jsx";
+import ProjectsSection from "@/components/Blocks/ProjectsSection.jsx";
 import TestimonialsSection from "@/components/Blocks/TestimonialsSection.jsx";
 import TimelineSection from "@/components/Blocks/TimelineSection.jsx";
-import FAQSection from "@/components/Blocks/FAQSection.jsx";
-import CommitmentVisionSection from "@/components/Blocks/CommitmentVisionSection.jsx";
+import ImpactCard from "@/components/Cards/ImpactCard.jsx";
+import Container from "@/components/Container/Container.jsx";
+import SharedHero from "@/components/Hero/SharedHero.jsx";
 import { Separator } from "@/components/ui/separator"; // Shadcn Separator
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { useAppData } from "@/components/AppDataContext.js";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

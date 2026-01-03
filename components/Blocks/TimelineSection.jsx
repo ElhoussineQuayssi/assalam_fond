@@ -1,9 +1,9 @@
-import { useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Award, Calendar, Globe, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
 import Container from "@/components/Container/Container.jsx";
-import { Calendar, Users, Award, Globe } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 

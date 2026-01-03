@@ -1,11 +1,10 @@
+import { NextResponse } from "next/server";
 import {
-  getProjectById,
   updateProject,
-  deleteProject,
   validateProjectData,
 } from "@/controllers/projectsController";
-import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/client";
+
 const supabase = createClient();
 
 // Standardized error response format
@@ -33,7 +32,7 @@ const successResponse = (data, status = 200) => {
   );
 };
 
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
   try {
     // Await params Promise (Next.js 13+ requirement)
     const { id } = await params;
@@ -91,7 +90,10 @@ export async function PUT(request, { params }) {
     };
 
     // Validate the processed data (which has proper excerpt mapping)
-    const validationErrors = validateProjectData(processedData);
+    // For updates, be less strict about content validation to allow saving incomplete content
+    const validationErrors = validateProjectData(processedData, {
+      allowIncompleteContent: true,
+    });
 
     if (validationErrors.length > 0) {
       console.log("Validation errors:", validationErrors);
@@ -117,7 +119,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(_request, { params }) {
   try {
     // Await params Promise (Next.js 13+ requirement)
     const { id } = await params;

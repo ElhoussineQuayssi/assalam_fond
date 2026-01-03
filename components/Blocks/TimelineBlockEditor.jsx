@@ -1,11 +1,11 @@
 "use client";
+import { ChevronDown, ChevronUp, Clock, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Trash2, ChevronUp, ChevronDown, Clock } from "lucide-react";
-import { toast } from "sonner";
 
 const TimelineBlockEditor = ({
   content = { heading: "", events: [] },

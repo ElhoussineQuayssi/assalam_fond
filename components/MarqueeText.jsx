@@ -1,5 +1,5 @@
-import { useRef } from "react";
 import { gsap } from "gsap";
+import { useRef } from "react";
 
 const MarqueeText = ({ text, className = "" }) => {
   const textRef = useRef(null);

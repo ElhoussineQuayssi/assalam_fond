@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 export default function PartnerFlipCard({ image, title, className = "" }) {
   const cardRef = useRef(null);

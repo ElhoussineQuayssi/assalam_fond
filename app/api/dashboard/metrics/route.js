@@ -1,5 +1,5 @@
-import { getDashboardMetrics } from "@/controllers/dashboardController";
 import { NextResponse } from "next/server";
+import { getDashboardMetrics } from "@/controllers/dashboardController";
 
 // Standardized error response format
 const errorResponse = (message, status = 400, details = null) => {

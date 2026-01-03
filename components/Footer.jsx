@@ -1,21 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations } from "next-intl";
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
-import { useLocale } from "next-intl";
-import Container from "@/components/Container/Container";
-import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  Youtube,
+} from "lucide-react";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
+import Container from "@/components/Container/Container";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -154,24 +153,10 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-slate-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-slate-200 mt-8 pt-8 flex flex-col md:flex-row justify-center items-center">
           <p className="text-slate-500 text-sm">
             © 2024 Assalam Foundation. {t("footer.rights")}
           </p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <Link
-              href="/privacy"
-              className="footer-link text-slate-500 hover:text-blue-600 text-sm transition-colors"
-            >
-              {t("footer.privacy")}
-            </Link>
-            <Link
-              href="/terms"
-              className="footer-link text-slate-500 hover:text-blue-600 text-sm transition-colors"
-            >
-              {t("footer.terms")}
-            </Link>
-          </div>
         </div>
 
         {/* Signature */}

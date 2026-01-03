@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -31,7 +31,14 @@ export default function CommentList({
   onEdit,
   onDelete,
 }) {
-  const [tableRowsRef, setTableRowsRef] = useState([]);
+  const [_tableRowsRef, _setTableRowsRef] = useState([]);
+
+  const handlePageSizeChange = useCallback(
+    (value) => {
+      onPageSizeChange(parseInt(value, 10));
+    },
+    [onPageSizeChange],
+  );
 
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -168,7 +175,7 @@ export default function CommentList({
                             title={comment.content}
                           >
                             {comment.content.length > 50
-                              ? comment.content.substring(0, 50) + "..."
+                              ? `${comment.content.substring(0, 50)}...`
                               : comment.content}
                           </div>
                         </td>
@@ -222,9 +229,7 @@ export default function CommentList({
                     </span>
                     <Select
                       value={pageSize.toString()}
-                      onValueChange={(value) =>
-                        onPageSizeChange(parseInt(value))
-                      }
+                      onValueChange={handlePageSizeChange}
                     >
                       <SelectTrigger className="w-20">
                         <SelectValue />

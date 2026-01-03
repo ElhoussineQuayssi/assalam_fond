@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { ImageIcon } from "lucide-react";
+import Image from "next/image";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -47,24 +47,53 @@ const ProjectGalleryRenderer = ({
       {/* Images Grid */}
       <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
         {publishedImages.map((img, i) => {
-          // Handle different image URL formats
-          const src = (img.url || img.image_url || img)
+          // Handle different image URL formats with safe encoding
+          const rawSrc = (img.url || img.image_url || img)
             .toString()
             .replace(/^"|"$/g, "");
-          if (!src || typeof src !== "string" || src.trim() === "") return null;
+
+          if (!rawSrc || typeof rawSrc !== "string" || rawSrc.trim() === "")
+            return null;
+
+          // Safely encode URL - avoid double-encoding already encoded URLs
+          let safeSrc;
+          try {
+            // If URL contains %2520 (double-encoded), decode it first
+            if (rawSrc.includes("%2520")) {
+              safeSrc = decodeURIComponent(rawSrc);
+            } else {
+              safeSrc = encodeURI(rawSrc);
+            }
+          } catch (error) {
+            console.warn("URL encoding failed for image:", rawSrc, error);
+            safeSrc = rawSrc; // Fallback to raw URL
+          }
 
           return (
             <div
               key={img.id || i}
-              className="break-inside-avoid rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300 group"
+              className="break-inside-avoid rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 group"
             >
-              <div className="relative">
-                <img
-                  src={src}
+              <div className="relative w-full aspect-[4/3] group-hover:scale-105 transition-transform duration-500">
+                <Image
+                  src={safeSrc}
                   alt={img.caption || `Gallery image ${i + 1}`}
-                  className="w-full h-auto hover:scale-105 transition-transform duration-500"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  loading={i < 3 ? "eager" : "lazy"}
+                  priority={i < 2}
                   onError={(e) => {
-                    e.target.src = "/placeholder-image.jpg";
+                    // Fallback: try to render as regular img tag if Next.js Image fails
+                    const imgElement = e.target;
+                    const fallbackImg = document.createElement("img");
+                    fallbackImg.src = safeSrc;
+                    fallbackImg.alt = img.caption || `Gallery image ${i + 1}`;
+                    fallbackImg.className = "w-full h-full object-cover";
+                    fallbackImg.onerror = () => {
+                      fallbackImg.src = "/placeholder-image.jpg";
+                    };
+                    imgElement.parentNode.replaceChild(fallbackImg, imgElement);
                   }}
                 />
                 {/* Image Caption Overlay */}

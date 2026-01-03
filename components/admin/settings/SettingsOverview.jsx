@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GeneralSettings from "./GeneralSettings";
-import EmailSettings from "./EmailSettings";
-import SecuritySettings from "./SecuritySettings";
 import AppearanceSettings from "./AppearanceSettings";
+import EmailSettings from "./EmailSettings";
+import GeneralSettings from "./GeneralSettings";
+import SecuritySettings from "./SecuritySettings";
 
 export default function SettingsOverview({ isDarkMode = false }) {
   const [activeTab, setActiveTab] = useState("general");

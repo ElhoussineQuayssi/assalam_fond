@@ -1,5 +1,21 @@
 "use client";
-import { useState } from "react";
+import {
+  BarChart3,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  Edit,
+  Eye,
+  GraduationCap,
+  Plus,
+  Settings,
+  Trash2,
+  TrendingUp,
+  Type,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,35 +25,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Plus,
-  Edit,
-  Trash2,
-  ChevronUp,
-  ChevronDown,
-  Eye,
-  Type,
-  BarChart3,
-  Settings,
-  GraduationCap,
-  TrendingUp,
-  Clock,
-  ImageIcon,
-  CheckCircle2,
-} from "lucide-react";
-import { toast } from "sonner";
-
-// Individual block editors
-import TextBlockEditor from "./TextBlockEditor";
+import ImpactBlockEditor from "./ImpactBlockEditor";
+import { ListBlockEditor } from "./ListBlockEditor";
+import ProgrammeBlockEditor from "./ProgrammeBlockEditor";
 import ServicesBlockEditor from "./ServicesBlockEditor";
 import StatsBlockEditor from "./StatsBlockEditor";
-import ProgrammeBlockEditor from "./ProgrammeBlockEditor";
-import ImpactBlockEditor from "./ImpactBlockEditor";
+// Individual block editors
+import TextBlockEditor from "./TextBlockEditor";
 import TimelineBlockEditor from "./TimelineBlockEditor";
-
-import { ListBlockEditor } from "./ListBlockEditor";
 
 const generateId = () => {
   return Math.random().toString(36).substr(2, 9);
@@ -48,66 +43,155 @@ const ContentBlockManager = ({
   onChange,
   isDarkMode = false,
   projectId = null,
+  currentLanguage = "fr",
 }) => {
   // Ensure contentBlocks is always an array
   const safeContentBlocks = Array.isArray(contentBlocks) ? contentBlocks : [];
+
+  // Initialize state with proper defaults to prevent controlled/uncontrolled switching
   const [activeEditor, setActiveEditor] = useState(null);
-  const [newBlockType, setNewBlockType] = useState("");
+  const [newBlockType, setNewBlockType] = useState(null); // Initialize to null for stable Select behavior
   const [previewMode, setPreviewMode] = useState(false);
 
-  const blockTypes = [
-    {
-      value: "text",
-      label: "Text Block",
-      icon: Type,
-      description: "Simple text with heading",
-    },
-    {
-      value: "services",
-      label: "Services Block",
-      icon: Settings,
-      description: "Organized services and categories",
-    },
-    {
-      value: "stats",
-      label: "Stats Block",
-      icon: BarChart3,
-      description: "Statistics and key metrics",
-    },
-    {
-      value: "programme",
-      label: "Programme Block",
-      icon: GraduationCap,
-      description: "Programme with modules",
-    },
-    {
-      value: "impact",
-      label: "Impact Block",
-      icon: TrendingUp,
-      description: "Impact and results",
-    },
-    {
-      value: "sponsorship",
-      label: "Sponsorship Block",
-      icon: TrendingUp,
-      description: "Sponsorship impact and formulas",
-    },
-    {
-      value: "timeline",
-      label: "Timeline Block",
-      icon: Clock,
-      description: "Project timeline events",
-    },
+  // Render tracking for debugging infinite loops
+  const renderCountRef = useRef(0);
+  const instanceIdRef = useRef(Math.random().toString(36).slice(2, 9));
+  const lastPropsRef = useRef(null);
 
-    {
-      value: "list",
-      label: "List Block",
-      icon: CheckCircle2,
-      description: "Organized lists with titles and descriptions",
-    },
-  ];
+  // Development mode logging with detailed prop tracking
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      renderCountRef.current += 1;
 
-  const handleAddBlock = () => {
+      console.log(
+        `🔄 ContentBlockManager:${instanceIdRef.current} RENDER #${renderCountRef.current} - STARTING`,
+      );
+      console.log(`📋 Content blocks: ${safeContentBlocks.length} blocks`);
+      console.log(
+        `🎯 Current state - activeEditor: ${activeEditor}, newBlockType: "${newBlockType}", previewMode: ${previewMode}`,
+      );
+      console.log(
+        `📊 Props - isDarkMode: ${isDarkMode}, projectId: ${projectId}`,
+      );
+      console.log(
+        `🔍 Content blocks details:`,
+        safeContentBlocks.map((b) => ({ id: b.id, type: b.type })),
+      );
+
+      // Track prop changes
+      const currentProps = {
+        contentBlocks: safeContentBlocks,
+        isDarkMode,
+        projectId,
+      };
+      if (lastPropsRef.current) {
+        const changes = {};
+        Object.keys(currentProps).forEach((key) => {
+          if (
+            JSON.stringify(lastPropsRef.current[key]) !==
+            JSON.stringify(currentProps[key])
+          ) {
+            changes[key] = {
+              from: lastPropsRef.current[key],
+              to: currentProps[key],
+            };
+          }
+        });
+        if (Object.keys(changes).length > 0) {
+          console.log(`🔄 PROP CHANGES DETECTED:`, changes);
+        } else {
+          console.warn(
+            `⚠️ RENDER WITHOUT PROP CHANGES - Possible state update loop!`,
+          );
+        }
+      }
+      lastPropsRef.current = currentProps;
+
+      return () => {
+        console.log(
+          `🏗️ ContentBlockManager:${instanceIdRef.current} RENDER #${renderCountRef.current} - COMPLETING`,
+        );
+      };
+    }
+  });
+
+  // Prevent cascading re-renders by stabilizing props
+  const _stableProps = useMemo(
+    () => ({
+      contentBlocks: safeContentBlocks,
+      isDarkMode,
+      projectId,
+    }),
+    [isDarkMode, projectId, safeContentBlocks],
+  ); // Only depend on primitive values
+
+  const blockTypes = useMemo(
+    () => [
+      {
+        value: "text",
+        label: "Text Block",
+        icon: Type,
+        description: "Simple text with heading",
+      },
+      {
+        value: "services",
+        label: "Services Block",
+        icon: Settings,
+        description: "Organized services and categories",
+      },
+      {
+        value: "stats",
+        label: "Stats Block",
+        icon: BarChart3,
+        description: "Statistics and key metrics",
+      },
+      {
+        value: "programme",
+        label: "Programme Block",
+        icon: GraduationCap,
+        description: "Programme with modules",
+      },
+      {
+        value: "impact",
+        label: "Impact Block",
+        icon: TrendingUp,
+        description: "Impact and results",
+      },
+      {
+        value: "sponsorship",
+        label: "Sponsorship Block",
+        icon: TrendingUp,
+        description: "Sponsorship impact and formulas",
+      },
+      {
+        value: "timeline",
+        label: "Timeline Block",
+        icon: Clock,
+        description: "Project timeline events",
+      },
+
+      {
+        value: "list",
+        label: "List Block",
+        icon: CheckCircle2,
+        description: "Organized lists with titles and descriptions",
+      },
+    ],
+    [],
+  );
+
+  // Memoized callback for handling block type selection with guarded setter
+  const handleBlockTypeChange = useCallback((value) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log(`🔧 handleBlockTypeChange called with value: ${value}`);
+    }
+    setNewBlockType((prev) => {
+      if (prev === value) return prev; // Guard against same value
+      return value;
+    });
+  }, []);
+
+  const handleAddBlock = useCallback(() => {
     if (!newBlockType) {
       toast.error("Please select a block type");
       return;
@@ -121,52 +205,72 @@ const ContentBlockManager = ({
 
     onChange([...safeContentBlocks, newBlock]);
     setActiveEditor(newBlock.id);
-    setNewBlockType("");
+    setNewBlockType(null); // Reset to null for stable Select behavior
     toast.success("New block added successfully!");
-  };
+  }, [newBlockType, onChange, getDefaultContent, safeContentBlocks]);
 
   const getDefaultContent = (type) => {
     switch (type) {
       case "text":
         return {
-          heading: "",
-          text: "",
+          heading: { fr: "", en: "", ar: "" },
+          text: { fr: "", en: "", ar: "" },
         };
       case "services":
         return {
-          heading: "Services Offered",
+          heading: {
+            fr: "Services Offerts",
+            en: "Services Offered",
+            ar: "الخدمات المقدمة",
+          },
           categories: [],
         };
       case "stats":
         return {
-          heading: "Key Statistics",
+          heading: {
+            fr: "Statistiques Clés",
+            en: "Key Statistics",
+            ar: "الإحصائيات الرئيسية",
+          },
           stats: [],
         };
       case "programme":
         return {
-          heading: "",
-          duration: "",
+          heading: { fr: "", en: "", ar: "" },
+          duration: { fr: "", en: "", ar: "" },
           modules: [],
         };
       case "impact":
         return {
-          heading: "Impact & Results",
+          heading: {
+            fr: "Impact & Résultats",
+            en: "Impact & Results",
+            ar: "التأثير والنتائج",
+          },
           impacts: [],
         };
       case "sponsorship":
         return {
-          heading: "Sponsorship Impact",
+          heading: {
+            fr: "Impact du Parrainage",
+            en: "Sponsorship Impact",
+            ar: "تأثير الرعاية",
+          },
           formulas: [],
         };
       case "timeline":
         return {
-          heading: "Project Timeline",
+          heading: {
+            fr: "Chronologie du Projet",
+            en: "Project Timeline",
+            ar: "الجدول الزمني للمشروع",
+          },
           events: [],
         };
 
       case "list":
         return {
-          heading: "", // Start with empty heading
+          heading: { fr: "", en: "", ar: "" }, // Start with empty heading
           items: [], // Start with empty items array
         };
       default:
@@ -174,45 +278,54 @@ const ContentBlockManager = ({
     }
   };
 
-  const handleUpdateBlock = (blockId, updatedContent) => {
-    const updatedBlocks = safeContentBlocks.map((block) =>
-      block.id === blockId ? { ...block, content: updatedContent } : block,
-    );
-    onChange(updatedBlocks);
-  };
-
-  const handleDeleteBlock = (blockId) => {
-    if (confirm("Are you sure you want to delete this block?")) {
-      const updatedBlocks = safeContentBlocks.filter(
-        (block) => block.id !== blockId,
+  const handleUpdateBlock = useCallback(
+    (blockId, updatedContent) => {
+      const updatedBlocks = safeContentBlocks.map((block) =>
+        block.id === blockId ? { ...block, content: updatedContent } : block,
       );
       onChange(updatedBlocks);
-      if (activeEditor === blockId) {
-        setActiveEditor(null);
+    },
+    [safeContentBlocks, onChange],
+  );
+
+  const handleDeleteBlock = useCallback(
+    (blockId) => {
+      if (confirm("Are you sure you want to delete this block?")) {
+        const updatedBlocks = safeContentBlocks.filter(
+          (block) => block.id !== blockId,
+        );
+        onChange(updatedBlocks);
+        if (activeEditor === blockId) {
+          setActiveEditor(null);
+        }
+        toast.success("Block deleted successfully!");
       }
-      toast.success("Block deleted successfully!");
-    }
-  };
+    },
+    [safeContentBlocks, onChange, activeEditor],
+  );
 
-  const handleMoveBlock = (blockId, direction) => {
-    const currentIndex = safeContentBlocks.findIndex(
-      (block) => block.id === blockId,
-    );
-    if (
-      (direction === "up" && currentIndex === 0) ||
-      (direction === "down" && currentIndex === safeContentBlocks.length - 1)
-    ) {
-      return;
-    }
+  const handleMoveBlock = useCallback(
+    (blockId, direction) => {
+      const currentIndex = safeContentBlocks.findIndex(
+        (block) => block.id === blockId,
+      );
+      if (
+        (direction === "up" && currentIndex === 0) ||
+        (direction === "down" && currentIndex === safeContentBlocks.length - 1)
+      ) {
+        return;
+      }
 
-    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
-    const updatedBlocks = [...safeContentBlocks];
-    [updatedBlocks[currentIndex], updatedBlocks[newIndex]] = [
-      updatedBlocks[newIndex],
-      updatedBlocks[currentIndex],
-    ];
-    onChange(updatedBlocks);
-  };
+      const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+      const updatedBlocks = [...safeContentBlocks];
+      [updatedBlocks[currentIndex], updatedBlocks[newIndex]] = [
+        updatedBlocks[newIndex],
+        updatedBlocks[currentIndex],
+      ];
+      onChange(updatedBlocks);
+    },
+    [safeContentBlocks, onChange],
+  );
 
   const renderBlockPreview = (block) => {
     const { type, content } = block;
@@ -334,6 +447,7 @@ const ContentBlockManager = ({
             content={content}
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
+            currentLanguage={currentLanguage}
           />
         );
       case "services":
@@ -343,6 +457,7 @@ const ContentBlockManager = ({
             content={content}
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
+            currentLanguage={currentLanguage}
           />
         );
       case "stats":
@@ -352,6 +467,7 @@ const ContentBlockManager = ({
             content={content}
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
+            currentLanguage={currentLanguage}
           />
         );
       case "programme":
@@ -361,6 +477,7 @@ const ContentBlockManager = ({
             content={content}
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
+            currentLanguage={currentLanguage}
           />
         );
       case "impact":
@@ -371,6 +488,7 @@ const ContentBlockManager = ({
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
             blockType="impact"
+            currentLanguage={currentLanguage}
           />
         );
       case "sponsorship":
@@ -381,6 +499,7 @@ const ContentBlockManager = ({
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
             blockType="sponsorship"
+            currentLanguage={currentLanguage}
           />
         );
       case "timeline":
@@ -390,6 +509,7 @@ const ContentBlockManager = ({
             content={content}
             onChange={(updatedContent) => handleUpdateBlock(id, updatedContent)}
             isDarkMode={isDarkMode}
+            currentLanguage={currentLanguage}
           />
         );
 
@@ -400,6 +520,7 @@ const ContentBlockManager = ({
             heading={content.heading}
             items={content.items}
             onChange={(newContent) => handleUpdateBlock(id, newContent)}
+            currentLanguage={currentLanguage}
           />
         );
       default:
@@ -429,7 +550,10 @@ const ContentBlockManager = ({
               >
                 Add New Block
               </label>
-              <Select value={newBlockType} onValueChange={setNewBlockType}>
+              <Select
+                value={newBlockType}
+                onValueChange={handleBlockTypeChange}
+              >
                 <SelectTrigger
                   className={`${isDarkMode ? "bg-slate-700 border-slate-600 text-white" : "bg-white border-gray-300"}`}
                 >
@@ -453,6 +577,7 @@ const ContentBlockManager = ({
               </Select>
             </div>
             <Button
+              type="button"
               onClick={handleAddBlock}
               className="bg-blue-600 hover:bg-blue-700"
             >
@@ -460,6 +585,7 @@ const ContentBlockManager = ({
               Add Block
             </Button>
             <Button
+              type="button"
               variant="outline"
               onClick={() => setPreviewMode(!previewMode)}
               className={isDarkMode ? "border-slate-600 text-slate-300" : ""}
@@ -527,6 +653,7 @@ const ContentBlockManager = ({
 
                   <div className="flex items-center gap-2">
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => handleMoveBlock(block.id, "up")}
@@ -538,6 +665,7 @@ const ContentBlockManager = ({
                       <ChevronUp className="h-4 w-4" />
                     </Button>
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => handleMoveBlock(block.id, "down")}
@@ -549,6 +677,7 @@ const ContentBlockManager = ({
                       <ChevronDown className="h-4 w-4" />
                     </Button>
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() =>
@@ -563,6 +692,7 @@ const ContentBlockManager = ({
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteBlock(block.id)}

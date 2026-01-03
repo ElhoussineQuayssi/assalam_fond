@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CSSPlugin } from "gsap/CSSPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 gsap.registerPlugin(ScrollTrigger, CSSPlugin);
 
@@ -66,7 +65,7 @@ export default function ImpactCard({
       trigger: card,
       start: "top 85%",
       onEnter: () => {
-        const numericValue = parseInt(value.replace(/[^\d]/g, ""));
+        const numericValue = parseInt(value.replace(/[^\d]/g, ""), 10);
         gsap.fromTo(
           { count: 0 },
           { count: numericValue },
@@ -115,7 +114,7 @@ export default function ImpactCard({
       card.removeEventListener("mouseleave", handleMouseLeave);
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [value.includes, value.replace]);
 
   return (
     <Card

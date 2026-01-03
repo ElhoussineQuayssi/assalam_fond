@@ -1,8 +1,8 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { ChevronDown, X, Search, Plus, Check } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Check, ChevronDown, Plus, Search, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const PREDEFINED_CATEGORIES = [
   "Protection sociale",
@@ -109,32 +109,30 @@ export default function MultiSelect({
             {placeholder}
           </span>
         ) : (
-          <>
-            {value.map((item, index) => (
-              <span
-                key={index}
-                className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full ${
-                  isDarkMode
-                    ? "bg-blue-600 text-white"
-                    : "bg-blue-100 text-blue-800"
+          value.map((item, index) => (
+            <span
+              key={index}
+              className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full ${
+                isDarkMode
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-100 text-blue-800"
+              }`}
+            >
+              {item}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemove(item);
+                }}
+                className={`ml-1 hover:bg-opacity-80 rounded-full p-0.5 ${
+                  isDarkMode ? "hover:bg-slate-500" : "hover:bg-blue-200"
                 }`}
               >
-                {item}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemove(item);
-                  }}
-                  className={`ml-1 hover:bg-opacity-80 rounded-full p-0.5 ${
-                    isDarkMode ? "hover:bg-slate-500" : "hover:bg-blue-200"
-                  }`}
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </>
+                <X className="h-3 w-3" />
+              </button>
+            </span>
+          ))
         )}
         <ChevronDown
           className={`ml-auto h-4 w-4 transition-transform duration-200 ${

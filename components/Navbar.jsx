@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { useTranslations, useLocale } from "next-intl";
 import gsap from "gsap";
-import { Menu, X, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 import { useAppData } from "./AppDataContext";
 
 export default function Navbar() {

@@ -277,6 +277,14 @@
       "economic": "Economic Empowerment",
       "social": "Social Care"
     },
+    "view_more_projects": "View More Projects",
+    "impact_title": "Impact and Achievements",
+    "partners_title": "Our Partners",
+    "impact": {
+      "sections": "National Sections",
+      "beneficiaries": "Beneficiaries",
+      "transparency": "Transparency"
+    },
     "projects": {
       "rayhana": {
         "title": "Rayhana Assalam",
@@ -360,7 +368,6 @@
     "cta": "Read More",
     "contribute": "Contribute to this project",
     "back_to_projects": "Back to Projects",
-    "impact_title": "Impact and Achievements",
     "gallery_title": "Photo Gallery",
     "contribute_title": "Contribute to this Project",
     "contribute_desc": "Your support helps us expand this project and help more beneficiaries.",
@@ -391,7 +398,9 @@
       "recent_posts_title": "Recent Posts",
       "author_bio": "About the Author",
       "share_article": "Share This Article",
-      "stay_updated": "Stay Updated",
+      "share_in_media": "Share in Media",
+      "copy_link": "Copy Link",
+      "link_copied": "Link copied to clipboard!",
       "newsletter_desc_individual": "Get the latest articles delivered to your inbox.",
       "related_articles": "Related Articles",
       "your_email": "Your email",
@@ -497,7 +506,75 @@
       "description": "We're here to answer your questions. Don't hesitate to contact us.",
       "address": "152 bd yacoub al mansour, Casablanca",
       "phone": "05229-93699",
-      "email": "bn.assalam@gmail.com"
+      "email": "assalamanfa@gmail.com"
+    }
+  },
+  "Comments": {
+    "title": "Comments & Discussions",
+    "name": "Full Name",
+    "email": "Email Address",
+    "comment_placeholder": "Share your thoughts on this topic...",
+    "reply_placeholder": "Write your reply...",
+    "submit": "Post Comment",
+    "reply": "Reply",
+    "cancel": "Cancel",
+    "load_more": "Load More",
+    "reply_to": "Reply to",
+    "no_comments": "No comments yet. Be the first to comment!",
+    "time": {
+      "now": "now",
+      "hours_ago": "{{hours}} hour{{hours > 1 ? 's' : ''}} ago",
+      "days_ago": "{{days}} day{{days > 1 ? 's' : ''}} ago"
+    }
+  },
+  "Terms": {
+    "hero": {
+      "title": "Terms of Service",
+      "description": "Please read these terms of service carefully before using our website and services."
+    },
+    "introduction": {
+      "title": "Introduction",
+      "content": "These Terms of Service govern your use of the Assalam Foundation website and services. By accessing or using our services, you agree to be bound by these terms."
+    },
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "content": "By using our website, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy."
+    },
+    "services": {
+      "title": "Our Services",
+      "content": "Assalam Foundation provides charitable services, educational programs, community support, and humanitarian aid to those in need."
+    },
+    "user_responsibilities": {
+      "title": "User Responsibilities",
+      "content": "Users are expected to use our services responsibly and in accordance with applicable laws and regulations."
+    },
+    "prohibited_activities": {
+      "title": "Prohibited Activities",
+      "content": "You may not use our services for any illegal or harmful purposes, including but not limited to harassment, fraud, or violation of others' rights."
+    },
+    "intellectual_property": {
+      "title": "Intellectual Property",
+      "content": "All content, trademarks, and materials on our website are owned by Assalam Foundation and are protected by applicable intellectual property laws."
+    },
+    "disclaimer": {
+      "title": "Disclaimer of Warranties",
+      "content": "Our services are provided 'as is' without any warranties. We do not guarantee uninterrupted or error-free service."
+    },
+    "limitation_liability": {
+      "title": "Limitation of Liability",
+      "content": "Assalam Foundation shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of our services."
+    },
+    "termination": {
+      "title": "Termination",
+      "content": "We reserve the right to terminate or suspend your access to our services at any time for violations of these terms."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "content": "We may modify these Terms of Service at any time. Continued use of our services constitutes acceptance of the updated terms."
+    },
+    "contact": {
+      "title": "Contact Information",
+      "content": "If you have any questions about these Terms of Service, please contact us through our contact page."
     }
   }
 }

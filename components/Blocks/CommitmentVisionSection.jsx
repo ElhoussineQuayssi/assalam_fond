@@ -1,8 +1,9 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 
 const AccordionItem = ({ title, content, index, isOpen, setOpenIndex }) => {
   const contentRef = useRef(null);
@@ -43,6 +44,7 @@ const AccordionItem = ({ title, content, index, isOpen, setOpenIndex }) => {
       />
 
       <button
+        type="button"
         onClick={toggleAccordion}
         className="flex w-full items-center justify-between p-6 text-left"
       >
@@ -161,9 +163,10 @@ const CommitmentVisionSection = () => {
               ref={imageRef}
               className="bg-white rounded-[3rem] p-4 shadow-sm border border-slate-100 aspect-square flex items-center justify-center overflow-hidden"
             >
-              <img
+              <Image
                 src="https://hpymvpexiunftdgeobiw.supabase.co/storage/v1/object/public/projects/Centre/IDC08872.JPG"
-                className="w-full h-full object-cover rounded-[2.5rem] opacity-90"
+                fill
+                className="object-cover rounded-[2.5rem] opacity-90"
                 alt="Impact"
               />
             </div>

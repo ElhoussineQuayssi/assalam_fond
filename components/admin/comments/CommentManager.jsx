@@ -1,13 +1,12 @@
 "use client";
-import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
-import CommentFilters from "./CommentFilters";
-import CommentList from "./CommentList";
-import CommentForm from "./CommentForm";
-
+import { useEffect, useRef } from "react";
 import { useCommentsData } from "@/hooks/admin/useCommentsData";
+import CommentFilters from "./CommentFilters";
+import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
+import CommentView from "./CommentView";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -20,6 +19,7 @@ export default function CommentManager({ isDarkMode = false }) {
     commentsLoading,
     commentsError,
     isEditingComment,
+    isViewingComment,
     currentComment,
     commentFormData,
 
@@ -36,6 +36,8 @@ export default function CommentManager({ isDarkMode = false }) {
     fetchComments,
     openCommentForm,
     closeCommentForm,
+    openCommentView,
+    closeCommentView,
     handleCommentSubmit,
     handleDeleteComment,
 
@@ -52,6 +54,7 @@ export default function CommentManager({ isDarkMode = false }) {
 
   const tableRef = useRef();
   const formRef = useRef();
+  const viewRef = useRef();
 
   // Fetch comments when component mounts and when dependencies change
   useEffect(() => {
@@ -60,7 +63,7 @@ export default function CommentManager({ isDarkMode = false }) {
 
   // Animation effects
   useGSAP(() => {
-    if (!isEditingComment && tableRef.current) {
+    if (!isEditingComment && !isViewingComment && tableRef.current) {
       // Table entrance animation
       gsap.fromTo(
         tableRef.current,
@@ -76,7 +79,7 @@ export default function CommentManager({ isDarkMode = false }) {
         },
       );
     }
-  }, [isEditingComment]);
+  }, [isEditingComment, isViewingComment]);
 
   const openCommentFormWithAnimation = (comment = null) => {
     // Animate table down and form up
@@ -142,6 +145,70 @@ export default function CommentManager({ isDarkMode = false }) {
     }
   };
 
+  const openCommentViewWithAnimation = (comment) => {
+    // Animate table down and view up
+    if (tableRef.current) {
+      gsap.to(tableRef.current, {
+        y: 50,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          openCommentView(comment);
+          if (viewRef.current) {
+            gsap.fromTo(
+              viewRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
+          }
+        },
+      });
+    } else {
+      openCommentView(comment);
+    }
+  };
+
+  const closeCommentViewWithAnimation = () => {
+    // Animate view down and table up
+    if (viewRef.current) {
+      gsap.to(viewRef.current, {
+        y: 50,
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          closeCommentView();
+          if (tableRef.current) {
+            gsap.fromTo(
+              tableRef.current,
+              {
+                y: -50,
+                opacity: 0,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+            );
+          }
+        },
+      });
+    } else {
+      closeCommentView();
+    }
+  };
+
   const handleSubmit = (e, formData) => {
     handleCommentSubmit(e, formData);
     // Note: closeCommentFormWithAnimation will be called by the success handler in useCommentsData
@@ -149,7 +216,7 @@ export default function CommentManager({ isDarkMode = false }) {
 
   return (
     <>
-      {!isEditingComment ? (
+      {!isEditingComment && !isViewingComment ? (
         <>
           <CommentFilters
             search={commentSearch}
@@ -173,11 +240,19 @@ export default function CommentManager({ isDarkMode = false }) {
               onPageSizeChange={handlePageSizeChange}
               onRefresh={fetchComments}
               onAddNew={() => openCommentFormWithAnimation()}
-              onEdit={openCommentFormWithAnimation}
+              onEdit={openCommentViewWithAnimation}
               onDelete={handleDeleteComment}
             />
           </div>
         </>
+      ) : isViewingComment ? (
+        <div ref={viewRef}>
+          <CommentView
+            comment={currentComment}
+            onClose={closeCommentViewWithAnimation}
+            isDarkMode={isDarkMode}
+          />
+        </div>
       ) : (
         <div ref={formRef}>
           <CommentForm

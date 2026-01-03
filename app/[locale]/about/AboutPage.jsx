@@ -1,24 +1,24 @@
 "use client";
 import {
-  Target,
+  Award,
   Eye,
+  GraduationCap,
   Heart,
   Shield,
-  GraduationCap,
-  Users,
   Sprout,
-  Award,
+  Target,
+  Users,
 } from "lucide-react";
-import { useTranslations, useLocale } from "next-intl";
-import Container from "@/components/Container/Container.jsx";
-import SharedHero from "@/components/Hero/SharedHero.jsx";
+import Image from "next/image";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { useAppData } from "@/components/AppDataContext";
 import AboutTimeline from "@/components/Blocks/AboutTimeline.jsx";
 import BlogsSection from "@/components/Blocks/BlogsSection.jsx";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Container from "@/components/Container/Container.jsx";
+import SharedHero from "@/components/Hero/SharedHero.jsx";
 import PartnerFlipCard from "@/components/PartnerFlipCard";
-import { useAppData } from "@/components/AppDataContext";
+import { Button } from "@/components/ui/button";
 
 const Counter = ({ end, suffix = "" }) => {
   return (
@@ -109,23 +109,26 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
+                key: "sections",
                 icon: <Target size={32} />,
                 value: <Counter end="36" suffix="+" />,
                 label: t("impact.sections"),
               },
               {
+                key: "beneficiaries",
                 icon: <Users size={32} />,
                 value: <Counter end="6000" suffix="+" />,
                 label: t("impact.beneficiaries"),
               },
               {
+                key: "transparency",
                 icon: <Eye size={32} />,
                 value: <Counter end="98" suffix="%" />,
                 label: t("impact.transparency"),
               },
-            ].map((card, i) => (
+            ].map((card, _i) => (
               <div
-                key={i}
+                key={card.key}
                 className="text-center p-12 rounded-[2rem] bg-[rgba(0,122,204,0.08)] border"
                 style={{ borderColor: "rgba(0,122,204,0.16)" }}
               >
@@ -160,9 +163,9 @@ export default function AboutPage() {
               { icon: <Users size={24} />, key: "empowerment" },
               { icon: <Sprout size={24} />, key: "sustainability" },
               { icon: <Award size={24} />, key: "transparency" },
-            ].map((v, i) => (
+            ].map((v, _i) => (
               <div
-                key={i}
+                key={v.key}
                 className="group p-8 rounded-[2rem] bg-slate-50 border border-transparent hover:border-blue-100 hover:bg-white transition-all duration-300 shadow-sm hover:shadow-xl"
               >
                 <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -189,8 +192,8 @@ export default function AboutPage() {
               {t("partners.title")}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-              {partners.map((p, idx) => (
-                <div key={idx} className="text-center">
+              {partners.map((p, _idx) => (
+                <div key={p.img} className="text-center">
                   <PartnerFlipCard
                     image={p.img}
                     title={p.names[locale] || p.names.en}
@@ -211,8 +214,8 @@ export default function AboutPage() {
                 { key: "fatima", image: "/team/fatema.jpg" },
                 { key: "youssef", image: "/team/youssef.jpg" },
                 { key: "ahmed", image: "/team/ahmed.jpg" },
-              ].map((member, i) => (
-                <div key={i} className="text-center">
+              ].map((member, _i) => (
+                <div key={member.key} className="text-center">
                   <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden bg-slate-200">
                     <Image
                       src={member.image}
@@ -244,9 +247,11 @@ export default function AboutPage() {
           <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
             {t("cta.description")}
           </p>
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-            {t("cta.button")}
-          </Button>
+          <Link href={`/${locale}/contact`}>
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+              {t("cta.button")}
+            </Button>
+          </Link>
         </Container>
       </section>
     </div>

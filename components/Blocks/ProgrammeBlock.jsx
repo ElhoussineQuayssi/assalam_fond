@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { Clock, GraduationCap, BookOpen, CheckCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CheckCircle, Clock, GraduationCap } from "lucide-react";
+import { useEffect } from "react";
+import { Card } from "@/components/ui/card";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,30 +62,29 @@ const ProgrammeBlock = ({ heading, modules, duration, certification }) => {
         {/* --- Modules List --- */}
         <div className="md:w-2/3">
           <div className="grid gap-4">
-            {modules &&
-              modules.map((module, index) => (
-                <Card
-                  key={index}
-                  className="module-card group p-6 rounded-3xl border-slate-100 hover:border-blue-200 transition-all duration-300 hover:shadow-xl hover:shadow-blue-50/50"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center font-black text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-bold text-slate-800 mb-1">
-                        {typeof module === "string" ? module : module.title}
-                      </h4>
-                      {module.description && (
-                        <p className="text-sm text-slate-500 leading-relaxed">
-                          {module.description}
-                        </p>
-                      )}
-                    </div>
-                    <CheckCircle className="w-5 h-5 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            {modules?.map((module, index) => (
+              <Card
+                key={index}
+                className="module-card group p-6 rounded-3xl border-slate-100 hover:border-blue-200 transition-all duration-300 hover:shadow-xl hover:shadow-blue-50/50"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center font-black text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    {index + 1}
                   </div>
-                </Card>
-              ))}
+                  <div className="flex-1">
+                    <h4 className="text-lg font-bold text-slate-800 mb-1">
+                      {typeof module === "string" ? module : module.title}
+                    </h4>
+                    {module.description && (
+                      <p className="text-sm text-slate-500 leading-relaxed">
+                        {module.description}
+                      </p>
+                    )}
+                  </div>
+                  <CheckCircle className="w-5 h-5 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
       </div>

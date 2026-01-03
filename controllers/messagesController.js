@@ -31,6 +31,17 @@ export const createMessage = async (messageData) => {
   return { message: "Message sent successfully" };
 };
 
+export const updateMessage = async (id, updateData) => {
+  const { data, error } = await supabase
+    .from("messages")
+    .update(updateData)
+    .eq("id", id)
+    .select();
+
+  if (error) throw error;
+  return data[0];
+};
+
 export const deleteMessage = async (id) => {
   const { error } = await supabase.from("messages").delete().eq("id", id);
 

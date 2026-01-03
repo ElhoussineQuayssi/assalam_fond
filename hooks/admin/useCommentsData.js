@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
 export function useCommentsData() {
@@ -9,11 +9,12 @@ export function useCommentsData() {
 
   // Form state
   const [isEditingComment, setIsEditingComment] = useState(false);
+  const [isViewingComment, setIsViewingComment] = useState(false);
   const [currentComment, setCurrentComment] = useState(null);
   const [commentFormData, setCommentFormData] = useState({
     content: "",
-    author_name: "",
-    author_email: "",
+    name: "",
+    email: "",
     post_id: "",
     status: "pending",
   });
@@ -49,7 +50,7 @@ export function useCommentsData() {
     } catch (error) {
       console.error("Error in fetchComments:", error);
       setCommentsError(error.message);
-      toast.error("Failed to fetch comments: " + error.message);
+      toast.error(`Failed to fetch comments: ${error.message}`);
     } finally {
       setCommentsLoading(false);
     }
@@ -67,16 +68,16 @@ export function useCommentsData() {
     if (comment) {
       setCommentFormData({
         content: comment.content || "",
-        author_name: comment.author_name || "",
-        author_email: comment.author_email || "",
+        name: comment.author_name || comment.name || "",
+        email: comment.author_email || comment.email || "",
         post_id: comment.post_id || "",
         status: comment.status || "pending",
       });
     } else {
       setCommentFormData({
         content: "",
-        author_name: "",
-        author_email: "",
+        name: "",
+        email: "",
         post_id: "",
         status: "pending",
       });
@@ -86,6 +87,16 @@ export function useCommentsData() {
 
   const closeCommentForm = useCallback(() => {
     setIsEditingComment(false);
+    setCurrentComment(null);
+  }, []);
+
+  const openCommentView = useCallback((comment) => {
+    setCurrentComment(comment);
+    setIsViewingComment(true);
+  }, []);
+
+  const closeCommentView = useCallback(() => {
+    setIsViewingComment(false);
     setCurrentComment(null);
   }, []);
 
@@ -117,7 +128,7 @@ export function useCommentsData() {
         fetchComments(); // Refresh the list
         closeCommentForm();
       } catch (error) {
-        toast.error("Failed to save comment: " + error.message);
+        toast.error(`Failed to save comment: ${error.message}`);
         throw error;
       }
     },
@@ -135,7 +146,7 @@ export function useCommentsData() {
         toast.success("Comment deleted successfully!");
         fetchComments(); // Refresh the list
       } catch (error) {
-        toast.error("Failed to delete comment: " + error.message);
+        toast.error(`Failed to delete comment: ${error.message}`);
       }
     },
     [fetchComments],
@@ -173,6 +184,7 @@ export function useCommentsData() {
     commentsLoading,
     commentsError,
     isEditingComment,
+    isViewingComment,
     currentComment,
     commentFormData,
 
@@ -189,6 +201,8 @@ export function useCommentsData() {
     fetchComments,
     openCommentForm,
     closeCommentForm,
+    openCommentView,
+    closeCommentView,
     handleCommentSubmit,
     handleDeleteComment,
 

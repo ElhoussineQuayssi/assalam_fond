@@ -1,8 +1,8 @@
+import { NextResponse } from "next/server";
 import {
   getSiteConfig,
   updateSiteConfig,
 } from "@/controllers/siteConfigController";
-import { NextResponse } from "next/server";
 
 export async function GET() {
   try {

@@ -1,11 +1,11 @@
+import { NextResponse } from "next/server";
 import {
+  deleteComment,
   getCommentById,
   updateComment,
-  deleteComment,
 } from "@/controllers/commentsController";
-import { NextResponse } from "next/server";
 
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
   try {
     const { id } = await params;
     const data = await getCommentById(id);
@@ -28,7 +28,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(_request, { params }) {
   try {
     const { id } = await params;
     await deleteComment(id);

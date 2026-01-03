@@ -11,17 +11,38 @@ export const getAllBlogPosts = async (filters = {}) => {
     category = "all",
     sortBy = "updated_at",
     sortOrder = "desc",
+    locale,
   } = filters;
 
   console.log("getAllBlogPosts called with filters:", filters);
 
-  let query = supabase.from("blog_posts").select("*", { count: "exact" });
+  let query;
+  if (locale) {
+    query = supabase.from("blog_posts").select(
+      `
+      *,
+      comments(*),
+      blogs_translation!left(title, excerpt, content, lang)
+    `,
+      { count: "exact" },
+    );
+  } else {
+    query = supabase
+      .from("blog_posts")
+      .select("*, comments(*)", { count: "exact" });
+  }
 
   // Apply search filter
   if (search) {
-    query = query.or(
-      `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`,
-    );
+    if (locale) {
+      query = query.or(
+        `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%,blogs_translation.title.ilike.%${search}%,blogs_translation.content.ilike.%${search}%,blogs_translation.excerpt.ilike.%${search}%`,
+      );
+    } else {
+      query = query.or(
+        `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`,
+      );
+    }
   }
 
   // Apply status filter
@@ -51,8 +72,31 @@ export const getAllBlogPosts = async (filters = {}) => {
 
   if (error) throw error;
 
+  let blogs = data;
+  if (locale) {
+    blogs = blogs.map((blog) => {
+      const { blogs_translation, ...rest } = blog;
+      // `blogs_translation` can be an array of translations or a single object depending on the query.
+      // Find the translation that matches the requested locale first, otherwise fall back to the first translation.
+      const translationsArray = Array.isArray(blogs_translation)
+        ? blogs_translation
+        : blogs_translation
+          ? [blogs_translation]
+          : [];
+      const matched =
+        translationsArray.find((t) => t && t.lang === locale) ||
+        translationsArray[0];
+      return {
+        ...rest,
+        title: matched?.title || rest.title,
+        excerpt: matched?.excerpt || rest.excerpt,
+        content: matched?.content || rest.content,
+      };
+    });
+  }
+
   return {
-    blogs: data,
+    blogs,
     total: count,
     page,
     limit,
@@ -121,7 +165,7 @@ export const createBlogPost = async (blogPostData) => {
     }));
 
     const { error: translationError } = await supabase
-      .from("blog_translations")
+      .from("blogs_translation")
       .insert(translationData);
 
     if (translationError) throw translationError;
@@ -155,7 +199,7 @@ export const getBlogPostWithTranslations = async (id) => {
 
   // Get translations
   const { data: translations, error: translationError } = await supabase
-    .from("blog_translations")
+    .from("blogs_translation")
     .select("*")
     .eq("blog_id", id);
 
@@ -258,7 +302,7 @@ export const updateBlogPost = async (id, updateData) => {
   if (translations.length > 0) {
     for (const translation of translations) {
       const { error: translationError } = await supabase
-        .from("blog_translations")
+        .from("blogs_translation")
         .upsert(
           {
             blog_id: id,
@@ -281,4 +325,42 @@ export const deleteBlogPost = async (id) => {
   const { error } = await supabase.from("blog_posts").delete().eq("id", id);
 
   if (error) throw error;
+};
+
+export const saveBlogTranslations = async (blogId, translationData) => {
+  // Extract translation data from multilingual structure
+  const translations = [];
+
+  // English translation
+  if (translationData.title?.en) {
+    translations.push({
+      lang: "en",
+      title: translationData.title.en,
+      excerpt: translationData.excerpt.en || "",
+      content: translationData.content.en || "",
+      blog_id: blogId,
+    });
+  }
+
+  // Arabic translation
+  if (translationData.title?.ar) {
+    translations.push({
+      lang: "ar",
+      title: translationData.title.ar,
+      excerpt: translationData.excerpt.ar || "",
+      content: translationData.content.ar || "",
+      blog_id: blogId,
+    });
+  }
+
+  // Save translations to database
+  if (translations.length > 0) {
+    const { error } = await supabase
+      .from("blogs_translation")
+      .upsert(translations, { onConflict: ["blog_id", "lang"] });
+
+    if (error) throw error;
+  }
+
+  return { message: "Translations saved successfully" };
 };

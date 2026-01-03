@@ -1,6 +1,5 @@
-import { createClient } from "@/utils/supabase/client";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 import ProjectDetailPage from "./ProjectDetailPage";
 
 export async function generateMetadata({ params }) {

@@ -1,19 +1,53 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { createClient } from "@/utils/supabase/client";
 
 const AppDataContext = createContext();
 
-export const AppDataProvider = ({ children }) => {
+/**
+ * @typedef {Object} AppDataContextType
+ * @property {Array} blogs - Blog posts data
+ * @property {Array} projects - Projects data
+ * @property {Object|null} siteConfig - Site configuration
+ * @property {Array} allProjectImages - All project images
+ * @property {boolean} loading - Loading state
+ * @property {string} selectedLanguage - Selected language
+ * @property {Function} setSelectedLanguage - Function to set selected language
+ * @property {Function} addComment - Function to add a comment
+ * @property {Function} sendMessage - Function to send a message
+ * @property {Function} refreshData - Function to refresh data
+ */
+
+export const AppDataProvider = ({ children, initialData = {} }) => {
   const supabase = createClient();
-  const [blogs, setBlogs] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [siteConfig, setSiteConfig] = useState(null);
-  const [allProjectImages, setAllProjectImages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { locale } = useParams();
+
+  // Initialize state with server-provided data to prevent hydration mismatch
+  const [blogs, setBlogs] = useState(initialData.blogs || []);
+  const [projects, setProjects] = useState(initialData.projects || []);
+  const [siteConfig, setSiteConfig] = useState(initialData.siteConfig || null);
+  const [allProjectImages, setAllProjectImages] = useState(initialData.allProjectImages || []);
+  const [loading, setLoading] = useState(!initialData.blogs); // Only loading if no initial data
+
+  const [selectedLanguage, setSelectedLanguage] = useState(() => {
+    if (typeof window === "undefined") return "fr";
+    try {
+      return localStorage.getItem("admin_selected_language") || "fr";
+    } catch (_e) {
+      return "fr";
+    }
+  });
 
   // 1. Fetching Function l-ga3 l-tables
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     console.log("fetchData called at", new Date().toISOString());
     setLoading(true);
 
@@ -24,15 +58,18 @@ export const AppDataProvider = ({ children }) => {
 
     try {
       console.time("fetchBlogs");
-      const blogsRes = await supabase
-        .from("blog_posts")
-        .select("*, comments(*)")
-        .order("created_at", { ascending: false });
-      blogsData = blogsRes.data || [];
+      const blogsRes = await fetch(
+        `/api/blog-posts?locale=${locale || ""}&limit=1000`,
+      );
+      const data = await blogsRes.json();
+      blogsData = data.blogs || [];
       console.timeEnd("fetchBlogs");
       console.log(`Fetched ${blogsData.length} blog posts`);
       if (blogsData.length > 0) {
-        const totalComments = blogsData.reduce((sum, post) => sum + (post.comments?.length || 0), 0);
+        const totalComments = blogsData.reduce(
+          (sum, post) => sum + (post.comments?.length || 0),
+          0,
+        );
         console.log(`Total comments across all posts: ${totalComments}`);
       }
     } catch (error) {
@@ -45,11 +82,42 @@ export const AppDataProvider = ({ children }) => {
     }
 
     try {
-      const projectsRes = await supabase
+      // Fetch projects
+      const { data: projectsList, error: projectsError } = await supabase
         .from("projects")
         .select("*")
         .order("created_at", { ascending: false });
-      projectsData = projectsRes.data || [];
+
+      if (projectsError) throw projectsError;
+
+      projectsData = projectsList;
+
+      // If locale is specified, fetch and merge translations
+      if (locale) {
+        const { data: translationsData, error: translationsError } = await supabase
+          .from("project_translations")
+          .select("project_id, title, excerpt, content, lang")
+          .eq("lang", locale);
+
+        if (!translationsError && translationsData) {
+          // Create a map of project_id -> translation
+          const translationsMap = {};
+          translationsData.forEach((translation) => {
+            translationsMap[translation.project_id] = translation;
+          });
+
+          // Merge translations into projects
+          projectsData = projectsList.map((project) => {
+            const translation = translationsMap[project.id];
+            return {
+              ...project,
+              title: translation?.title || project.title,
+              description: translation?.excerpt || project.excerpt,
+              content: translation?.content || project.content,
+            };
+          });
+        }
+      }
     } catch (error) {
       console.error("Error fetching projects:", error);
       console.error("Error details:", {
@@ -100,11 +168,20 @@ export const AppDataProvider = ({ children }) => {
     );
 
     setLoading(false);
-  };
+  }, [locale, supabase]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem("admin_selected_language", selectedLanguage);
+    } catch (_e) {
+      // ignore
+    }
+  }, [selectedLanguage]);
 
   // 2. Add Comment (Table: comments)
   const addComment = async (commentData) => {
@@ -153,19 +230,33 @@ export const AppDataProvider = ({ children }) => {
     }
   };
 
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    blogs,
+    projects,
+    siteConfig,
+    allProjectImages,
+    loading,
+    selectedLanguage,
+    setSelectedLanguage,
+    addComment,
+    sendMessage,
+    refreshData: fetchData,
+  }), [
+    blogs,
+    projects,
+    siteConfig,
+    allProjectImages,
+    loading,
+    selectedLanguage,
+    setSelectedLanguage,
+    addComment,
+    sendMessage,
+    fetchData,
+  ]);
+
   return (
-    <AppDataContext.Provider
-      value={{
-        blogs,
-        projects,
-        siteConfig,
-        allProjectImages,
-        loading,
-        addComment,
-        sendMessage,
-        refreshData: fetchData,
-      }}
-    >
+    <AppDataContext.Provider value={contextValue}>
       {children}
     </AppDataContext.Provider>
   );

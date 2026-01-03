@@ -1,9 +1,9 @@
 "use client";
+import { ChevronDown, ChevronUp, GripVertical, Plus, X } from "lucide-react";
 import { useState } from "react";
-import { Plus, X, ChevronUp, ChevronDown, GripVertical } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function GoalsManager({
   goals = [],

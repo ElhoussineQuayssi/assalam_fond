@@ -95,7 +95,7 @@ export const copySlugToClipboard = async (slug) => {
   try {
     await navigator.clipboard.writeText(slug);
     return { success: true, error: null };
-  } catch (error) {
+  } catch (_error) {
     return { success: false, error: "Failed to copy to clipboard" };
   }
 };
@@ -114,7 +114,7 @@ export const extractSlugFromUrl = (url) => {
       .split("/")
       .filter((segment) => segment.length > 0);
     return segments[segments.length - 1] || "";
-  } catch (error) {
+  } catch (_error) {
     // If URL parsing fails, treat as a path
     const segments = url.split("/").filter((segment) => segment.length > 0);
     return segments[segments.length - 1] || "";

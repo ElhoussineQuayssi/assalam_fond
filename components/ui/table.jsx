@@ -1,5 +1,3 @@
-import { Button } from "./button";
-
 const Table = ({ columns, data, className = "", rowRefs = null }) => {
   return (
     <div className={`overflow-x-auto ${className}`}>

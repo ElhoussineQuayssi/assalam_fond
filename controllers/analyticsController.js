@@ -103,7 +103,7 @@ export const getAnalyticsOverview = async (period = "30d") => {
     const totalBlogPosts = blogPostsResult.count || 0;
     const totalComments = commentsResult.count || 0;
     const totalMessages = messagesResult.count || 0;
-    const totalAdmins = adminsResult.count || 0;
+    const _totalAdmins = adminsResult.count || 0;
 
     const currentPeriodProjects = await supabase
       .from("projects")
@@ -233,7 +233,10 @@ export const getAnalyticsCategories = async (period = "30d") => {
 };
 
 // Get chart data for visualizations
-export const getAnalyticsCharts = async (period = "30d", chartType = "all") => {
+export const getAnalyticsCharts = async (
+  period = "30d",
+  _chartType = "all",
+) => {
   try {
     const { startDate, endDate, label } = getDateRange(period);
 

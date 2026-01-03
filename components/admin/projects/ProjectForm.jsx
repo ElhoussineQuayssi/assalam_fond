@@ -1,9 +1,12 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { useGSAP } from "@gsap/react";
+import { Loader2, Plus, Upload, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -11,575 +14,970 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import GalleryImageManager from "../../Blocks/GalleryImageManager";
+import MultiLanguageContentBlockManager from "../../Blocks/MultiLanguageContentBlockManager";
 
-import MultiSelect from "@/components/ui/MultiSelect";
-import GoalsManager from "@/components/ui/GoalsManager";
-import SlugInput from "@/components/ui/SlugInput";
-import ContentBlockEditor from "@/components/Blocks/ContentBlockEditor";
-import GalleryImageManagerLocal from "@/components/Blocks/GalleryImageManagerLocal";
-import MultiLanguageTabs from "@/components/admin/MultiLanguageTabs";
-import { generateSlug } from "@/utils/slugGenerator";
-
-if (typeof window !== "undefined") {
-  import("gsap");
-}
+// Translation labels for form fields
+const FIELD_LABELS = {
+  fr: {
+    title: "Titre",
+    excerpt: "Extrait",
+    peopleHelped: "Personnes Aidées",
+    projectContent: "Contenu du Projet",
+    projectDetails: "Détails du Projet",
+    slug: "Slug",
+    status: "Statut",
+    startDate: "Date de Début",
+    location: "Lieu",
+    categories: "Catégories",
+    goals: "Objectifs",
+    projectImage: "Image du Projet",
+  },
+  en: {
+    title: "Title",
+    excerpt: "Excerpt",
+    peopleHelped: "People Helped",
+    projectContent: "Project Content",
+    projectDetails: "Project Details",
+    slug: "Slug",
+    status: "Status",
+    startDate: "Start Date",
+    location: "Location",
+    categories: "Categories",
+    goals: "Goals",
+    projectImage: "Project Image",
+  },
+  ar: {
+    title: "العنوان",
+    excerpt: "الملخص",
+    peopleHelped: "الأشخاص المساعدون",
+    projectContent: "محتوى المشروع",
+    projectDetails: "تفاصيل المشروع",
+    slug: "المعرف",
+    status: "الحالة",
+    startDate: "تاريخ البدء",
+    location: "الموقع",
+    categories: "الفئات",
+    goals: "الأهداف",
+    projectImage: "صورة المشروع",
+  },
+};
 
 export default function ProjectForm({
   project = null,
-  formData = {},
-  validationErrors = {},
   onSubmit,
   onCancel,
   isDarkMode = false,
   existingProjects = [],
 }) {
-  // Initialize form data with multilingual structure
-  const [localFormData, setLocalFormData] = useState(() => {
-    // If editing existing project, transform data to multilingual structure
+  console.log("ProjectForm rendering", { project, onSubmit, onCancel });
+  const [currentLanguage, setCurrentLanguage] = useState("fr");
+
+  // Multilingual translations state - holds all languages
+  const [translations, setTranslations] = useState({
+    fr: { title: "", excerpt: "", people_helped: "", content: [], slug: "" },
+    en: { title: "", excerpt: "", people_helped: "", content: [], slug: "" },
+    ar: { title: "", excerpt: "", people_helped: "", content: [], slug: "" },
+  });
+
+  // Shared project fields (not language-specific)
+  const [sharedData, setSharedData] = useState({
+    slug: "",
+    status: "draft",
+    start_date: "",
+    location: "",
+    categories: [],
+    goals: [],
+    image: "",
+    gallery_images: [],
+  });
+
+  const [newCategory, setNewCategory] = useState("");
+  const [newGoal, setNewGoal] = useState("");
+  const [errors, setErrors] = useState({});
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Initialize translations and shared data when project changes
+  useEffect(() => {
     if (project) {
-      return {
-        // Shared fields
+      // Set shared data (non-language-specific fields)
+      setSharedData({
         slug: project.slug || "",
-        categories: project.categories || [],
         status: project.status || "draft",
         start_date: project.start_date || "",
         location: project.location || "",
+        categories: project.categories || [],
         goals: project.goals || [],
         image: project.image || "",
         gallery_images: project.gallery_images || [],
+      });
 
-        // Multilingual fields
-        title: {
-          fr: project.title || "",
-          en: project.title_en || "",
-          ar: project.title_ar || "",
+      // Set translations data (language-specific fields)
+      const projectTranslations = project.translations || {};
+      setTranslations({
+        fr: {
+          title: projectTranslations.fr?.title || project.title || "",
+          excerpt: projectTranslations.fr?.excerpt || project.excerpt || "",
+          people_helped:
+            projectTranslations.fr?.people_helped ||
+            project.people_helped ||
+            "",
+          content: Array.isArray(projectTranslations.fr?.content)
+            ? projectTranslations.fr.content
+            : Array.isArray(project.content)
+              ? project.content
+              : [],
+          slug: projectTranslations.fr?.slug || project.slug || "",
         },
-        excerpt: {
-          fr: project.excerpt || "",
-          en: project.excerpt_en || "",
-          ar: project.excerpt_ar || "",
+        en: {
+          title: projectTranslations.en?.title || "",
+          excerpt: projectTranslations.en?.excerpt || "",
+          people_helped: projectTranslations.en?.people_helped || "",
+          content: Array.isArray(projectTranslations.en?.content)
+            ? projectTranslations.en.content
+            : [],
+          slug: projectTranslations.en?.slug || "",
         },
-        content: {
-          fr: project.content || [],
-          en: project.content_en || [],
-          ar: project.content_ar || [],
+        ar: {
+          title: projectTranslations.ar?.title || "",
+          excerpt: projectTranslations.ar?.excerpt || "",
+          people_helped: projectTranslations.ar?.people_helped || "",
+          content: Array.isArray(projectTranslations.ar?.content)
+            ? projectTranslations.ar.content
+            : [],
+          slug: projectTranslations.ar?.slug || "",
         },
-        people_helped: {
-          fr: project.people_helped || "",
-          en: project.people_helped_en || "",
-          ar: project.people_helped_ar || "",
+      });
+    } else {
+      // New project - initialize empty data
+      setSharedData({
+        slug: "",
+        status: "draft",
+        start_date: "",
+        location: "",
+        categories: [],
+        goals: [],
+        image: "",
+        gallery_images: [],
+      });
+
+      setTranslations({
+        fr: {
+          title: "",
+          excerpt: "",
+          people_helped: "",
+          content: [],
+          slug: "",
         },
-      };
+        en: {
+          title: "",
+          excerpt: "",
+          people_helped: "",
+          content: [],
+          slug: "",
+        },
+        ar: {
+          title: "",
+          excerpt: "",
+          people_helped: "",
+          content: [],
+          slug: "",
+        },
+      });
+    }
+    setErrors({});
+  }, [project]);
+
+  // Auto-generate slug from French title (only for new projects)
+  useEffect(() => {
+    if (translations.fr.title && !project && currentLanguage === "fr") {
+      const slug = translations.fr.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .trim();
+      setSharedData((prev) => ({ ...prev, slug }));
+      setTranslations((prev) => ({
+        ...prev,
+        fr: { ...prev.fr, slug },
+      }));
+    }
+  }, [translations.fr.title, project, currentLanguage]);
+
+  // DEBUGGING: Check data flow and field population
+  useEffect(() => {
+    console.log("🚨 ProjectForm Debug Start 🚨");
+
+    // Check if project object exists
+    console.log("Current Project:", project);
+
+    // Check if translations exist
+    console.log("Translations object:", project?.translations);
+
+    // Check current language
+    console.log("Current language:", currentLanguage);
+
+    // Check the data being used to populate the form
+    const langData = project?.translations?.[currentLanguage];
+    console.log(`Data for ${currentLanguage}:`, langData);
+
+    // Optional: check each expected field
+    if (langData) {
+      console.log("Title:", langData.title);
+      console.log("Excerpt:", langData.excerpt);
+      console.log("People Helped:", langData.people_helped);
+      console.log("Content:", langData.content);
+    } else {
+      console.warn("⚠️ No translation data found for this language!");
     }
 
-    // For new projects, initialize with empty multilingual structure
-    return {
-      // Shared fields
-      slug: "",
-      categories: [],
-      status: "draft",
-      start_date: "",
-      location: "",
-      goals: [],
-      image: "",
-      gallery_images: [],
+    console.log("🚨 ProjectForm Debug End 🚨");
+  }, [project, currentLanguage]);
 
-      // Multilingual fields
-      title: { fr: "", en: "", ar: "" },
-      excerpt: { fr: "", en: "", ar: "" },
-      content: { fr: [], en: [], ar: [] },
-      people_helped: { fr: "", en: "", ar: "" },
-    };
-  });
-
-  const [localValidationErrors, setLocalValidationErrors] =
-    useState(validationErrors);
-  const [activeLanguage, setActiveLanguage] = useState("fr");
-  const formRef = useRef();
-
-  // Determine which languages are completed
-  const completedLanguages = ["fr", "en", "ar"].filter((lang) => {
-    const title = localFormData.title[lang];
-    const excerpt = localFormData.excerpt[lang];
-    return title && title.trim() !== "" && excerpt && excerpt.trim() !== "";
-  });
-
-  // Auto-generate slug when French title changes
-  const handleTitleChange = (language, title) => {
-    setLocalFormData((prev) => ({
+  // Handle language-specific field changes
+  const handleTranslationChange = (field, value) => {
+    setTranslations((prev) => ({
       ...prev,
-      title: { ...prev.title, [language]: title },
-      slug:
-        language === "fr" &&
-        (!prev.slug ||
-          prev.slug ===
-            generateSlug(
-              prev.title.fr,
-              existingProjects.map((p) => p.slug),
-            ))
-          ? generateSlug(
-              title,
-              existingProjects.map((p) => p.slug),
-            )
-          : prev.slug,
+      [currentLanguage]: {
+        ...prev[currentLanguage],
+        [field]: value,
+      },
     }));
+  };
 
-    // Clear validation error for title when user starts typing
-    if (localValidationErrors.title && localValidationErrors.title[language]) {
-      setLocalValidationErrors((prev) => ({
-        ...prev,
-        title: { ...prev.title, [language]: null },
-      }));
+  // Handle shared (non-language-specific) field changes
+  const handleSharedChange = (field, value) => {
+    setSharedData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // Handle content blocks change (multilingual)
+  const handleContentChange = (newContent) => {
+    setTranslations((prev) => ({
+      ...prev,
+      [currentLanguage]: {
+        ...prev[currentLanguage],
+        content: newContent,
+      },
+    }));
+  };
+
+  const addCategory = () => {
+    if (
+      newCategory.trim() &&
+      !(sharedData.categories || []).includes(newCategory.trim())
+    ) {
+      handleSharedChange("categories", [
+        ...(sharedData.categories || []),
+        newCategory.trim(),
+      ]);
+      setNewCategory("");
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const removeCategory = (category) => {
+    handleSharedChange(
+      "categories",
+      (sharedData.categories || []).filter((c) => c !== category),
+    );
+  };
 
-    // Validate all required fields
-    const errors = {};
-
-    // Validate French fields (required)
-    if (!localFormData.title.fr || localFormData.title.fr.trim() === "") {
-      errors.title = { ...errors.title, fr: "French title is required" };
+  const addGoal = () => {
+    if (newGoal.trim() && !(sharedData.goals || []).includes(newGoal.trim())) {
+      handleSharedChange("goals", [
+        ...(sharedData.goals || []),
+        newGoal.trim(),
+      ]);
+      setNewGoal("");
     }
-    if (!localFormData.excerpt.fr || localFormData.excerpt.fr.trim() === "") {
-      errors.excerpt = { ...errors.excerpt, fr: "French excerpt is required" };
-    }
+  };
 
-    // Validate English fields
-    if (localFormData.title.en && localFormData.title.en.trim() !== "") {
-      if (!localFormData.excerpt.en || localFormData.excerpt.en.trim() === "") {
-        errors.excerpt = {
-          ...errors.excerpt,
-          en: "English excerpt is required when English title is provided",
-        };
+  const removeGoal = (goal) => {
+    handleSharedChange(
+      "goals",
+      (sharedData.goals || []).filter((g) => g !== goal),
+    );
+  };
+
+  // Image upload functions
+  const uploadImageToSupabase = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("bucket", "projects");
+
+      const response = await fetch("/api/upload/project-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Upload failed");
       }
-    }
 
-    // Validate Arabic fields
-    if (localFormData.title.ar && localFormData.title.ar.trim() !== "") {
-      if (!localFormData.excerpt.ar || localFormData.excerpt.ar.trim() === "") {
-        errors.excerpt = {
-          ...errors.excerpt,
-          ar: "Arabic excerpt is required when Arabic title is provided",
-        };
-      }
+      const result = await response.json();
+      return result.url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw new Error(`Failed to upload image: ${error.message}`);
     }
+  };
 
-    // Validate shared fields
-    if (!localFormData.categories || localFormData.categories.length === 0) {
-      errors.categories = "At least one category is required";
-    }
-    if (!localFormData.goals || localFormData.goals.length === 0) {
-      errors.goals = "At least one goal is required";
-    }
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    if (Object.keys(errors).length > 0) {
-      setLocalValidationErrors(errors);
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file");
       return;
     }
 
-    setLocalValidationErrors({});
-    onSubmit(e, localFormData);
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size must be less than 5MB");
+      return;
+    }
+
+    setUploadingImage(true);
+
+    try {
+      // Create preview
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+
+      // Upload to Supabase
+      const imageUrl = await uploadImageToSupabase(file);
+
+      // Update shared data
+      handleSharedChange("image", imageUrl);
+
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Upload failed:", error);
+      toast.error(error.message || "Failed to upload image");
+      setImagePreview("");
+    } finally {
+      setUploadingImage(false);
+    }
+
+    // Clear the input
+    event.target.value = "";
   };
 
-  const handleInputChange = (field, value) => {
-    setLocalFormData((prev) => ({ ...prev, [field]: value }));
+  const removeImage = () => {
+    handleSharedChange("image", "");
+    setImagePreview("");
+    toast.success("Image removed");
+  };
 
-    // Clear validation error for this field when user starts typing
-    if (localValidationErrors[field]) {
-      setLocalValidationErrors((prev) => ({ ...prev, [field]: null }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      // Merge translations and shared data into the expected structure
+      const formData = {
+        ...sharedData,
+        translations,
+      };
+      await onSubmit(e, formData, currentLanguage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleArrayChange = (field, value) => {
-    setLocalFormData((prev) => ({ ...prev, [field]: value }));
+  // DEBUGGING: Visual Field Inspector Component
+  const DebugFieldInspector = () => {
+    // Only show in development
+    if (process.env.NODE_ENV === "production") return null;
 
-    // Clear validation error for this field when user makes changes
-    if (localValidationErrors[field]) {
-      setLocalValidationErrors((prev) => ({ ...prev, [field]: null }));
+    const currentLangData = translations[currentLanguage] || {};
+
+    // Check field status
+    const fieldStatus = {
+      title: {
+        value: currentLangData.title || "",
+        required: currentLanguage === "fr",
+        populated: !!(currentLangData.title || "").trim(),
+        label: "Title",
+      },
+      excerpt: {
+        value: currentLangData.excerpt || "",
+        required: currentLanguage === "fr",
+        populated: !!(currentLangData.excerpt || "").trim(),
+        label: "Excerpt",
+      },
+      people_helped: {
+        value: currentLangData.people_helped || "",
+        required: false,
+        populated: !!(currentLangData.people_helped || "").trim(),
+        label: "People Helped",
+      },
+      content: {
+        value: currentLangData.content || [],
+        required: false,
+        populated:
+          Array.isArray(currentLangData.content) &&
+          currentLangData.content.length > 0,
+        label: "Content Blocks",
+      },
+    };
+
+    // French-only fields
+    if (currentLanguage === "fr") {
+      fieldStatus.slug = {
+        value: sharedData.slug || "",
+        required: true,
+        populated: !!(sharedData.slug || "").trim(),
+        label: "Slug",
+      };
+      fieldStatus.categories = {
+        value: sharedData.categories || [],
+        required: true,
+        populated:
+          Array.isArray(sharedData.categories) &&
+          sharedData.categories.length > 0,
+        label: "Categories",
+      };
+      fieldStatus.goals = {
+        value: sharedData.goals || [],
+        required: true,
+        populated:
+          Array.isArray(sharedData.goals) && sharedData.goals.length > 0,
+        label: "Goals",
+      };
+      fieldStatus.image = {
+        value: sharedData.image || "",
+        required: false,
+        populated: !!(sharedData.image || "").trim(),
+        label: "Project Image",
+      };
     }
-  };
 
-  const handleMultilingualChange = (field, language, value) => {
-    setLocalFormData((prev) => ({
-      ...prev,
-      [field]: { ...prev[field], [language]: value },
-    }));
+    const totalFields = Object.keys(fieldStatus).length;
+    const populatedFields = Object.values(fieldStatus).filter(
+      (f) => f.populated,
+    ).length;
+    const requiredFields = Object.values(fieldStatus).filter((f) => f.required);
+    const missingRequired = requiredFields.filter((f) => !f.populated);
 
-    // Clear validation error for this field and language
-    if (
-      localValidationErrors[field] &&
-      localValidationErrors[field][language]
-    ) {
-      setLocalValidationErrors((prev) => ({
-        ...prev,
-        [field]: { ...prev[field], [language]: null },
-      }));
-    }
-  };
-
-  const handleContentChange = (language, contentBlocks) => {
-    setLocalFormData((prev) => ({
-      ...prev,
-      content: { ...prev.content, [language]: contentBlocks },
-    }));
+    return (
+      <Card className="mb-4 border-orange-200 bg-orange-50 dark:bg-orange-950/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm text-orange-800 dark:text-orange-200 flex items-center gap-2">
+            🐛 Debug Inspector - {currentLanguage.toUpperCase()} Fields
+            <span className="text-xs bg-orange-200 dark:bg-orange-800 px-2 py-1 rounded">
+              {populatedFields}/{totalFields} populated
+            </span>
+            {missingRequired.length > 0 && (
+              <span className="text-xs bg-red-200 dark:bg-red-800 px-2 py-1 rounded text-red-800 dark:text-red-200">
+                {missingRequired.length} required missing
+              </span>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+            {Object.entries(fieldStatus).map(([key, status]) => (
+              <div
+                key={key}
+                className={`p-2 rounded border-2 ${
+                  status.required && !status.populated
+                    ? "border-red-400 bg-red-50 dark:bg-red-950/20"
+                    : !status.required && !status.populated
+                      ? "border-yellow-400 bg-yellow-50 dark:bg-yellow-950/20"
+                      : "border-green-400 bg-green-50 dark:bg-green-950/20"
+                }`}
+              >
+                <div className="font-medium">{status.label}</div>
+                <div
+                  className={`${
+                    status.required && !status.populated
+                      ? "text-red-700 dark:text-red-300"
+                      : !status.required && !status.populated
+                        ? "text-yellow-700 dark:text-yellow-300"
+                        : "text-green-700 dark:text-green-300"
+                  }`}
+                >
+                  {status.required && !status.populated && "❌ Required"}
+                  {!status.required && !status.populated && "⚠️ Empty"}
+                  {status.populated && "✅ Populated"}
+                </div>
+              </div>
+            ))}
+          </div>
+          {!project?.translations?.[currentLanguage] && (
+            <div className="mt-2 p-2 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded text-red-800 dark:text-red-200 text-xs">
+              ⚠️ No translation data found for {currentLanguage}!
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-          {project ? "Edit Project" : "Add New Project"}
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-400">
+          {project ? "Edit Project" : "Create New Project"}
         </h2>
         <Button variant="outline" onClick={onCancel}>
           Cancel
         </Button>
       </div>
 
-      {/* Validation Summary */}
-      {Object.keys(localValidationErrors).length > 0 && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-          <h3 className="text-sm font-medium text-red-800 mb-2">
-            Please fix the following errors:
-          </h3>
-          <ul className="text-sm text-red-700 list-disc list-inside space-y-1">
-            {Object.entries(localValidationErrors).map(([field, error]) => (
-              <li key={field}>
-                {typeof error === "string"
-                  ? error
-                  : Object.entries(error)
-                      .map(([lang, msg]) =>
-                        msg ? `${lang.toUpperCase()}: ${msg}` : null,
-                      )
-                      .filter(Boolean)
-                      .join(", ")}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* DEBUGGING: Visual Field Inspector */}
+        <DebugFieldInspector />
 
-      <Card
-        ref={formRef}
-        className="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-slate-800 dark:border-slate-600"
-      >
-        <CardContent className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Multilingual Content Tabs */}
-            <MultiLanguageTabs
-              currentLanguage={activeLanguage}
-              onLanguageChange={setActiveLanguage}
-              validationErrors={localValidationErrors}
-              completedLanguages={completedLanguages}
-              isDarkMode={isDarkMode}
-            >
-              {(language, context) => (
-                <div className="space-y-6">
-                  {/* Language-specific fields */}
+        {/* Language Selector */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-4">
+              <Label className="text-sm font-medium">Language:</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={currentLanguage === "fr" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentLanguage("fr")}
+                  className="flex items-center gap-2"
+                >
+                  🇫🇷 Français
+                </Button>
+                <Button
+                  type="button"
+                  variant={currentLanguage === "en" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentLanguage("en")}
+                  className="flex items-center gap-2"
+                >
+                  🇺🇸 English
+                </Button>
+                <Button
+                  type="button"
+                  variant={currentLanguage === "ar" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentLanguage("ar")}
+                  className="flex items-center gap-2"
+                >
+                  🇲🇦 العربية
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Current Language Context */}
+        {(() => {
+          const isRTL = currentLanguage === "ar";
+          const _context = {
+            isRTL,
+            languageName:
+              currentLanguage === "fr"
+                ? "Français"
+                : currentLanguage === "en"
+                  ? "English"
+                  : "العربية",
+            languageCode: currentLanguage,
+          };
+
+          return (
+            <>
+              {/* Multilingual Content Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {FIELD_LABELS[currentLanguage].projectContent}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                      {context.languageName} Content
-                    </h3>
-
                     <div>
-                      <label
-                        htmlFor={`project-title-${language}`}
-                        className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                      >
-                        Title ({context.languageCode.toUpperCase()}) *
-                      </label>
+                      <Label htmlFor={`title-${currentLanguage}`}>
+                        {FIELD_LABELS[currentLanguage].title} *
+                      </Label>
                       <Input
-                        id={`project-title-${language}`}
-                        value={localFormData.title[language] || ""}
+                        id={`title-${currentLanguage}`}
+                        value={translations[currentLanguage]?.title || ""}
                         onChange={(e) =>
-                          handleTitleChange(language, e.target.value)
+                          handleTranslationChange("title", e.target.value)
                         }
-                        required={language === "fr"}
-                        className={`dark:bg-slate-700 dark:border-slate-600 dark:text-white ${
-                          localValidationErrors.title &&
-                          localValidationErrors.title[language]
-                            ? "border-red-500"
-                            : ""
-                        }`}
-                        dir={context.isRTL ? "rtl" : "ltr"}
+                        placeholder={
+                          currentLanguage === "fr"
+                            ? "Entrez le titre du projet"
+                            : currentLanguage === "en"
+                              ? "Enter project title"
+                              : "أدخل عنوان المشروع"
+                        }
+                        required={currentLanguage === "fr"}
+                        dir={isRTL ? "rtl" : "ltr"}
                       />
-                      {localValidationErrors.title &&
-                        localValidationErrors.title[language] && (
-                          <p className="text-red-500 text-xs mt-1">
-                            {localValidationErrors.title[language]}
-                          </p>
-                        )}
+                      {errors.title && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.title}
+                        </p>
+                      )}
                     </div>
 
                     <div>
-                      <label
-                        htmlFor={`project-excerpt-${language}`}
-                        className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                      >
-                        Excerpt ({context.languageCode.toUpperCase()})
-                      </label>
-                      <textarea
-                        id={`project-excerpt-${language}`}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white ${
-                          localValidationErrors.excerpt &&
-                          localValidationErrors.excerpt[language]
-                            ? "border-red-500"
-                            : ""
-                        }`}
+                      <Label htmlFor={`excerpt-${currentLanguage}`}>
+                        {FIELD_LABELS[currentLanguage].excerpt} *
+                      </Label>
+                      <Textarea
+                        id={`excerpt-${currentLanguage}`}
+                        value={translations[currentLanguage]?.excerpt || ""}
+                        onChange={(e) =>
+                          handleTranslationChange("excerpt", e.target.value)
+                        }
+                        placeholder={
+                          currentLanguage === "fr"
+                            ? "Brève description du projet"
+                            : currentLanguage === "en"
+                              ? "Brief description of the project"
+                              : "وصف مختصر للمشروع"
+                        }
                         rows={3}
-                        value={localFormData.excerpt[language] || ""}
-                        onChange={(e) =>
-                          handleMultilingualChange(
-                            "excerpt",
-                            language,
-                            e.target.value,
-                          )
-                        }
-                        placeholder={`Brief description in ${context.languageName}...`}
-                        dir={context.isRTL ? "rtl" : "ltr"}
+                        required={currentLanguage === "fr"}
+                        dir={isRTL ? "rtl" : "ltr"}
                       />
-                      {localValidationErrors.excerpt &&
-                        localValidationErrors.excerpt[language] && (
-                          <p className="text-red-500 text-xs mt-1">
-                            {localValidationErrors.excerpt[language]}
-                          </p>
-                        )}
+                      {errors.excerpt && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.excerpt}
+                        </p>
+                      )}
                     </div>
 
                     <div>
-                      <label
-                        htmlFor={`project-people-helped-${language}`}
-                        className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                      >
-                        People Helped ({context.languageCode.toUpperCase()})
-                      </label>
+                      <Label htmlFor={`people-helped-${currentLanguage}`}>
+                        {FIELD_LABELS[currentLanguage].peopleHelped}
+                      </Label>
                       <Input
-                        id={`project-people-helped-${language}`}
-                        value={localFormData.people_helped[language] || ""}
+                        id={`people-helped-${currentLanguage}`}
+                        value={
+                          translations[currentLanguage]?.people_helped || ""
+                        }
                         onChange={(e) =>
-                          handleMultilingualChange(
+                          handleTranslationChange(
                             "people_helped",
-                            language,
                             e.target.value,
                           )
                         }
-                        placeholder="e.g., 500 personnes / 500 people / 500 شخص"
-                        className={`dark:bg-slate-700 dark:border-slate-600 dark:text-white ${
-                          localValidationErrors.people_helped &&
-                          localValidationErrors.people_helped[language]
-                            ? "border-red-500"
-                            : ""
-                        }`}
-                        dir={context.isRTL ? "rtl" : "ltr"}
-                      />
-                      {localValidationErrors.people_helped &&
-                        localValidationErrors.people_helped[language] && (
-                          <p className="text-red-500 text-xs mt-1">
-                            {localValidationErrors.people_helped[language]}
-                          </p>
-                        )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                        Content Blocks ({context.languageCode.toUpperCase()})
-                      </label>
-                      <p
-                        className={`text-sm ${isDarkMode ? "text-slate-400" : "text-gray-600"} mb-2`}
-                      >
-                        Create structured content blocks to showcase your
-                        project effectively.
-                      </p>
-                      <ContentBlockEditor
-                        content={localFormData.content[language] || []}
-                        onChange={(contentBlocks) =>
-                          handleContentChange(language, contentBlocks)
+                        placeholder={
+                          currentLanguage === "fr"
+                            ? "Nombre ou description des personnes aidées"
+                            : currentLanguage === "en"
+                              ? "Number or description of people helped"
+                              : "عدد أو وصف الأشخاص المساعدين"
                         }
-                        isDarkMode={isDarkMode}
-                        projectId={project?.id}
-                        language={language}
+                        dir={isRTL ? "rtl" : "ltr"}
                       />
+                      {errors.people_helped && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.people_helped}
+                        </p>
+                      )}
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
+
+              {/* Project Content Blocks - Available in all languages */}
+              <MultiLanguageContentBlockManager
+                content={{
+                  fr: translations.fr.content,
+                  en: translations.en.content,
+                  ar: translations.ar.content,
+                }}
+                onChange={handleContentChange}
+                isDarkMode={isDarkMode}
+                projectId={project?.id}
+              />
+
+              {/* Project Details Section - Only show for French */}
+              {currentLanguage === "fr" && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{FIELD_LABELS.fr.projectDetails}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="slug">{FIELD_LABELS.fr.slug} *</Label>
+                        <Input
+                          id="slug"
+                          value={sharedData.slug}
+                          onChange={(e) =>
+                            handleSharedChange("slug", e.target.value)
+                          }
+                          placeholder="identifiant-url"
+                          required
+                        />
+                        {errors.slug && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {errors.slug}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <Label htmlFor="status">{FIELD_LABELS.fr.status}</Label>
+                        <Select
+                          value={sharedData.status || "draft"}
+                          onValueChange={(value) =>
+                            handleSharedChange("status", value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="draft">Brouillon</SelectItem>
+                            <SelectItem value="published">Publié</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="start_date">
+                          {FIELD_LABELS.fr.startDate}
+                        </Label>
+                        <Input
+                          id="start_date"
+                          type="month"
+                          value={sharedData.start_date || ""}
+                          onChange={(e) =>
+                            handleSharedChange("start_date", e.target.value)
+                          }
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="location">
+                          {FIELD_LABELS.fr.location}
+                        </Label>
+                        <Input
+                          id="location"
+                          value={sharedData.location || ""}
+                          onChange={(e) =>
+                            handleSharedChange("location", e.target.value)
+                          }
+                          placeholder="Lieu du projet"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Categories */}
+                    <div>
+                      <Label>{FIELD_LABELS.fr.categories} *</Label>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {(sharedData.categories || []).map((category) => (
+                          <Badge
+                            key={category}
+                            variant="secondary"
+                            className="flex items-center gap-1"
+                          >
+                            {category}
+                            <X
+                              className="h-3 w-3 cursor-pointer"
+                              onClick={() => removeCategory(category)}
+                            />
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input
+                          value={newCategory}
+                          onChange={(e) => setNewCategory(e.target.value)}
+                          placeholder="Ajouter une catégorie"
+                          onKeyPress={(e) =>
+                            e.key === "Enter" &&
+                            (e.preventDefault(), addCategory())
+                          }
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={addCategory}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      {errors.categories && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.categories}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Goals */}
+                    <div>
+                      <Label>{FIELD_LABELS.fr.goals} *</Label>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {(sharedData.goals || []).map((goal) => (
+                          <Badge
+                            key={goal}
+                            variant="secondary"
+                            className="flex items-center gap-1"
+                          >
+                            {goal}
+                            <X
+                              className="h-3 w-3 cursor-pointer"
+                              onClick={() => removeGoal(goal)}
+                            />
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input
+                          value={newGoal}
+                          onChange={(e) => setNewGoal(e.target.value)}
+                          placeholder="Ajouter un objectif"
+                          onKeyPress={(e) =>
+                            e.key === "Enter" && (e.preventDefault(), addGoal())
+                          }
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={addGoal}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      {errors.goals && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.goals}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Project Image */}
+                    <div>
+                      <Label>{FIELD_LABELS.fr.projectImage}</Label>
+                      <div className="mt-2 space-y-4">
+                        {/* Current Image Display */}
+                        {(project?.image || imagePreview) && (
+                          <div className="relative inline-block">
+                            <img
+                              src={imagePreview || project.image}
+                              alt="Image du projet"
+                              className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                              onError={(e) => {
+                                e.target.src = "/placeholder-image.jpg";
+                              }}
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full"
+                              onClick={removeImage}
+                              disabled={uploadingImage}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Upload Button */}
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1">
+                            <input
+                              type="file"
+                              id="project-image"
+                              accept="image/*"
+                              onChange={handleImageUpload}
+                              className="hidden"
+                              disabled={uploadingImage}
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={() =>
+                                document.getElementById("project-image").click()
+                              }
+                              disabled={uploadingImage}
+                              className="w-full sm:w-auto"
+                            >
+                              {uploadingImage ? (
+                                <>
+                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                  Téléchargement...
+                                </>
+                              ) : (
+                                <>
+                                  <Upload className="h-4 w-4 mr-2" />
+                                  {project?.image
+                                    ? "Changer l'image"
+                                    : "Télécharger une image"}
+                                </>
+                              )}
+                            </Button>
+                          </div>
+
+                          {/* Image URL Display (for debugging) */}
+                          {project?.image && (
+                            <div className="flex-1 text-xs text-gray-500 break-all">
+                              URL: {project.image}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Upload Instructions */}
+                        <div className="text-xs text-gray-500">
+                          <p>Formats supportés : JPG, PNG, GIF, WebP</p>
+                          <p>Taille maximale : 5 Mo</p>
+                          <p>
+                            Les images seront téléchargées dans le bucket
+                            'projects' de Supabase
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Project Gallery */}
+                    <div className="mt-6">
+                      <GalleryImageManager
+                        projectId={project?.id}
+                        isDarkMode={isDarkMode}
+                        images={sharedData.gallery_images || []}
+                        onImagesChange={(newImages) =>
+                          handleSharedChange("gallery_images", newImages)
+                        }
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               )}
-            </MultiLanguageTabs>
-
-            {/* Shared Fields (outside tabs) */}
-            <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                Shared Fields
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label
-                    htmlFor="project-slug"
-                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                  >
-                    Slug
-                  </label>
-                  <SlugInput
-                    title={localFormData.title.fr}
-                    value={localFormData.slug}
-                    onChange={(slug) => handleInputChange("slug", slug)}
-                    existingSlugs={existingProjects.map((p) => p.slug)}
-                    isDarkMode={isDarkMode}
-                    showPreview={true}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="project-status"
-                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                  >
-                    Status
-                  </label>
-                  <Select
-                    value={localFormData.status}
-                    onValueChange={(value) =>
-                      handleInputChange("status", value)
-                    }
-                  >
-                    <SelectTrigger className="dark:bg-slate-700 dark:border-slate-600 dark:text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="published">Published</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <div>
-                  <label
-                    htmlFor="project-start-date"
-                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                  >
-                    Start Date
-                  </label>
-                  <Input
-                    id="project-start-date"
-                    type="month"
-                    value={localFormData.start_date}
-                    onChange={(e) =>
-                      handleInputChange("start_date", e.target.value)
-                    }
-                    className="dark:bg-slate-700 dark:border-slate-600 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="project-location"
-                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                  >
-                    Location
-                  </label>
-                  <Input
-                    id="project-location"
-                    value={localFormData.location}
-                    onChange={(e) =>
-                      handleInputChange("location", e.target.value)
-                    }
-                    placeholder="Casablanca, Morocco"
-                    className="dark:bg-slate-700 dark:border-slate-600 dark:text-white"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                    Categories
-                  </label>
-                  <MultiSelect
-                    value={localFormData.categories}
-                    onChange={(categories) =>
-                      handleArrayChange("categories", categories)
-                    }
-                    isDarkMode={isDarkMode}
-                    maxSelected={5}
-                    allowCustom={true}
-                    placeholder="Select or add categories..."
-                    error={localValidationErrors.categories}
-                  />
-                  {localValidationErrors.categories && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {localValidationErrors.categories}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                    Project Goals
-                  </label>
-                  <GoalsManager
-                    goals={localFormData.goals}
-                    onChange={(goals) => handleArrayChange("goals", goals)}
-                    isDarkMode={isDarkMode}
-                    maxGoals={10}
-                    minGoals={1}
-                    placeholder="Enter a project goal..."
-                    error={localValidationErrors.goals}
-                  />
-                  {localValidationErrors.goals && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {localValidationErrors.goals}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <label
-                  htmlFor="project-image"
-                  className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                >
-                  Main Image URL
-                </label>
-                <Input
-                  id="project-image"
-                  value={localFormData.image}
-                  onChange={(e) => handleInputChange("image", e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="dark:bg-slate-700 dark:border-slate-600 dark:text-white"
-                />
-              </div>
-
-              {/* Project Gallery Image Manager */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                  Project Gallery Images
-                </label>
-                <GalleryImageManagerLocal
-                  projectId={project?.id}
-                  isDarkMode={isDarkMode}
-                  className=""
-                  images={localFormData.gallery_images}
-                  onImagesChange={(images) => {
-                    handleArrayChange("gallery_images", images);
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-2 pt-6 border-t border-gray-200 dark:border-gray-600">
-              <Button type="button" variant="outline" onClick={onCancel}>
-                Cancel
-              </Button>
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                {project ? "Update Project" : "Create Project"}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </>
+          );
+        })()}
+        {/* Submit Button */}
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                {project ? "Updating..." : "Creating..."}
+              </>
+            ) : project ? (
+              "Update Project"
+            ) : (
+              "Create Project"
+            )}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

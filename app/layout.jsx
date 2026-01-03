@@ -1,9 +1,8 @@
-import { Cairo, Readex_Pro, Inter, Plus_Jakarta_Sans } from "next/font/google";
-import { notFound } from "next/navigation";
-import { routing } from "../i18n/routing";
+import { Cairo, Inter, Plus_Jakarta_Sans, Readex_Pro } from "next/font/google";
 import "./globals.css";
-import { AppDataProvider } from "../components/AppDataContext";
 import { Toaster } from "sonner";
+import { AppDataProvider } from "../components/AppDataContext";
+import { getInitialAppData } from "../utils/initialData";
 
 const cairo = Cairo({ subsets: ["arabic", "latin"], variable: "--font-cairo" });
 const readexPro = Readex_Pro({
@@ -25,12 +24,15 @@ export const metadata = {
 export default async function RootLayout({ children, params }) {
   const { locale } = await params;
 
+  // Fetch initial data on the server side
+  const initialData = await getInitialAppData(locale);
+
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body
         className={`${cairo.variable} ${readexPro.variable} ${inter.variable} ${plusJakartaSans.variable} font-readex-pro`}
       >
-        <AppDataProvider>
+        <AppDataProvider initialData={initialData}>
           {children}
           <Toaster />
         </AppDataProvider>

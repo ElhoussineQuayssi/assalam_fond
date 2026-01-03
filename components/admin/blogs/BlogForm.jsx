@@ -1,8 +1,9 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { useGSAP } from "@gsap/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import MultiLanguageTabs from "@/components/admin/MultiLanguageTabs";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -11,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import MultiLanguageTabs from "@/components/admin/MultiLanguageTabs";
 
 if (typeof window !== "undefined") {
   import("gsap");
@@ -26,36 +26,6 @@ export default function BlogForm({
 }) {
   // Initialize form data with multilingual structure
   const [localFormData, setLocalFormData] = useState(() => {
-    // If editing existing blog, transform data to multilingual structure
-    if (blog) {
-      return {
-        // Shared fields
-        slug: blog.slug || "",
-        category: blog.category || "",
-        status: blog.status || "draft",
-        published_at: blog.published_at || "",
-        tags: blog.tags || "",
-        image: blog.image || "",
-
-        // Multilingual fields
-        title: {
-          fr: blog.title || "",
-          en: blog.title_en || "",
-          ar: blog.title_ar || "",
-        },
-        excerpt: {
-          fr: blog.excerpt || "",
-          en: blog.excerpt_en || "",
-          ar: blog.excerpt_ar || "",
-        },
-        content: {
-          fr: blog.content || "",
-          en: blog.content_en || "",
-          ar: blog.content_ar || "",
-        },
-      };
-    }
-
     // For new blogs, initialize with empty multilingual structure
     return {
       // Shared fields
@@ -75,57 +45,26 @@ export default function BlogForm({
 
   const [localValidationErrors, setLocalValidationErrors] = useState({});
   const [activeLanguage, setActiveLanguage] = useState("fr");
-  const [isLoading, setIsLoading] = useState(false);
+  const [_isLoading, _setIsLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
   const formRef = useRef();
 
-  // Load blog data with translations when editing
+  // Update local form data when formData prop changes
   useEffect(() => {
-    const loadBlogData = async () => {
-      if (blog && blog.id) {
-        setIsLoading(true);
-        try {
-          const response = await fetch(
-            `/api/blog-posts/${blog.id}/translations`,
-          );
-          if (!response.ok) {
-            throw new Error("Failed to load blog data");
-          }
-          const multilingualData = await response.json();
-          setLocalFormData(multilingualData);
-        } catch (error) {
-          console.error("Error loading blog with translations:", error);
-          // Fallback to basic blog data
-          setLocalFormData({
-            slug: blog.slug || "",
-            category: blog.category || "",
-            status: blog.status || "draft",
-            published_at: blog.published_at || "",
-            tags: blog.tags || "",
-            image: blog.image || "",
-            title: {
-              fr: blog.title || "",
-              en: blog.title_en || "",
-              ar: blog.title_ar || "",
-            },
-            excerpt: {
-              fr: blog.excerpt || "",
-              en: blog.excerpt_en || "",
-              ar: blog.excerpt_ar || "",
-            },
-            content: {
-              fr: blog.content || "",
-              en: blog.content_en || "",
-              ar: blog.content_ar || "",
-            },
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadBlogData();
-  }, [blog]);
+    console.log("BlogForm: formData prop changed:", formData);
+    console.log("BlogForm: category from formData:", formData?.category);
+    if (formData && Object.keys(formData).length > 0) {
+      setLocalFormData((prev) => ({
+        ...prev,
+        ...formData,
+      }));
+      console.log(
+        "BlogForm: localFormData updated with category:",
+        formData.category,
+      );
+    }
+  }, [formData]);
 
   // Determine which languages are completed
   const completedLanguages = ["fr", "en", "ar"].filter((lang) => {
@@ -155,7 +94,7 @@ export default function BlogForm({
     }));
 
     // Clear validation error for title when user starts typing
-    if (localValidationErrors.title && localValidationErrors.title[language]) {
+    if (localValidationErrors.title?.[language]) {
       setLocalValidationErrors((prev) => ({
         ...prev,
         title: { ...prev.title, [language]: null },
@@ -226,14 +165,17 @@ export default function BlogForm({
     onSubmit(e, localFormData);
   };
 
-  const handleInputChange = (field, value) => {
-    setLocalFormData((prev) => ({ ...prev, [field]: value }));
+  const handleInputChange = useCallback(
+    (field, value) => {
+      setLocalFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Clear validation error for this field when user starts typing
-    if (localValidationErrors[field]) {
-      setLocalValidationErrors((prev) => ({ ...prev, [field]: null }));
-    }
-  };
+      // Clear validation error for this field when user starts typing
+      if (localValidationErrors[field]) {
+        setLocalValidationErrors((prev) => ({ ...prev, [field]: null }));
+      }
+    },
+    [localValidationErrors],
+  );
 
   const handleMultilingualChange = (field, language, value) => {
     setLocalFormData((prev) => ({
@@ -242,10 +184,7 @@ export default function BlogForm({
     }));
 
     // Clear validation error for this field and language
-    if (
-      localValidationErrors[field] &&
-      localValidationErrors[field][language]
-    ) {
+    if (localValidationErrors[field]?.[language]) {
       setLocalValidationErrors((prev) => ({
         ...prev,
         [field]: { ...prev[field], [language]: null },
@@ -253,7 +192,7 @@ export default function BlogForm({
     }
   };
 
-  const handleStatusChange = (status) => {
+  const handleStatusChange = useCallback((status) => {
     setLocalFormData((prev) => ({
       ...prev,
       status,
@@ -262,6 +201,86 @@ export default function BlogForm({
           ? new Date().toISOString().split("T")[0]
           : prev.published_at,
     }));
+  }, []);
+
+  const _handleCategoryChange = useCallback(
+    (value) => {
+      handleInputChange("category", value);
+    },
+    [handleInputChange],
+  );
+
+  // Image upload functions
+  const uploadBlogImageToSupabase = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("bucket", "blogs");
+
+      const response = await fetch("/api/upload/project-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Upload failed");
+      }
+
+      const result = await response.json();
+      return result.url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw new Error(`Failed to upload image: ${error.message}`);
+    }
+  };
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size must be less than 5MB");
+      return;
+    }
+
+    setUploadingImage(true);
+
+    try {
+      // Create preview
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+
+      // Upload to Supabase
+      const imageUrl = await uploadBlogImageToSupabase(file);
+
+      // Update form data
+      handleInputChange("image", imageUrl);
+
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Upload failed:", error);
+      toast.error(error.message || "Failed to upload image");
+      setImagePreview("");
+    } finally {
+      setUploadingImage(false);
+    }
+
+    // Clear the input
+    event.target.value = "";
+  };
+
+  const removeImage = () => {
+    handleInputChange("image", "");
+    setImagePreview("");
+    toast.success("Image removed");
   };
 
   return (
@@ -286,12 +305,14 @@ export default function BlogForm({
               <li key={field}>
                 {typeof error === "string"
                   ? error
-                  : Object.entries(error)
-                      .map(([lang, msg]) =>
-                        msg ? `${lang.toUpperCase()}: ${msg}` : null,
-                      )
-                      .filter(Boolean)
-                      .join(", ")}
+                  : error && typeof error === "object"
+                    ? Object.entries(error)
+                        .map(([lang, msg]) =>
+                          msg ? `${lang.toUpperCase()}: ${msg}` : null,
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : ""}
               </li>
             ))}
           </ul>
@@ -340,19 +361,17 @@ export default function BlogForm({
                         }
                         required={language === "fr"}
                         className={`dark:bg-slate-700 dark:border-slate-600 dark:text-white ${
-                          localValidationErrors.title &&
-                          localValidationErrors.title[language]
+                          localValidationErrors.title?.[language]
                             ? "border-red-500"
                             : ""
                         }`}
                         dir={context.isRTL ? "rtl" : "ltr"}
                       />
-                      {localValidationErrors.title &&
-                        localValidationErrors.title[language] && (
-                          <p className="text-red-500 text-xs mt-1">
-                            {localValidationErrors.title[language]}
-                          </p>
-                        )}
+                      {localValidationErrors.title?.[language] && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {localValidationErrors.title[language]}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -369,8 +388,7 @@ export default function BlogForm({
                       <textarea
                         id={`blog-excerpt-${language}`}
                         className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white ${
-                          localValidationErrors.excerpt &&
-                          localValidationErrors.excerpt[language]
+                          localValidationErrors.excerpt?.[language]
                             ? "border-red-500"
                             : ""
                         }`}
@@ -392,12 +410,11 @@ export default function BlogForm({
                         }
                         dir={context.isRTL ? "rtl" : "ltr"}
                       />
-                      {localValidationErrors.excerpt &&
-                        localValidationErrors.excerpt[language] && (
-                          <p className="text-red-500 text-xs mt-1">
-                            {localValidationErrors.excerpt[language]}
-                          </p>
-                        )}
+                      {localValidationErrors.excerpt?.[language] && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {localValidationErrors.excerpt[language]}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -414,8 +431,7 @@ export default function BlogForm({
                       <textarea
                         id={`blog-content-${language}`}
                         className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white ${
-                          localValidationErrors.content &&
-                          localValidationErrors.content[language]
+                          localValidationErrors.content?.[language]
                             ? "border-red-500"
                             : ""
                         }`}
@@ -437,12 +453,11 @@ export default function BlogForm({
                         }
                         dir={context.isRTL ? "rtl" : "ltr"}
                       />
-                      {localValidationErrors.content &&
-                        localValidationErrors.content[language] && (
-                          <p className="text-red-500 text-xs mt-1">
-                            {localValidationErrors.content[language]}
-                          </p>
-                        )}
+                      {localValidationErrors.content?.[language] && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {localValidationErrors.content[language]}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -642,29 +657,92 @@ export default function BlogForm({
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="blog-image"
-                    className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     {activeLanguage === "fr"
-                      ? "URL de l'image"
+                      ? "Image du blog"
                       : activeLanguage === "en"
-                        ? "Image URL"
-                        : "رابط الصورة"}
+                        ? "Blog Image"
+                        : "صورة المدونة"}
                   </label>
-                  <Input
-                    id="blog-image"
-                    value={localFormData.image}
-                    onChange={(e) => handleInputChange("image", e.target.value)}
-                    placeholder={
-                      activeLanguage === "fr"
-                        ? "https://example.com/image.jpg"
-                        : activeLanguage === "en"
-                          ? "https://example.com/image.jpg"
-                          : "https://example.com/image.jpg"
-                    }
-                    className="dark:bg-slate-700 dark:border-slate-600 dark:text-white"
-                  />
+                  <div className="mt-2 space-y-4">
+                    {/* Current Image Display */}
+                    {(blog?.image || imagePreview) && (
+                      <div className="relative inline-block">
+                        <img
+                          src={imagePreview || blog.image}
+                          alt="Image du blog"
+                          className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                          onError={(e) => {
+                            e.target.src = "/placeholder-image.jpg";
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full"
+                          onClick={removeImage}
+                          disabled={uploadingImage}
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Upload Button */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1">
+                        <input
+                          type="file"
+                          id="blog-image-upload"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          disabled={uploadingImage}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() =>
+                            document.getElementById("blog-image-upload").click()
+                          }
+                          disabled={uploadingImage}
+                          className="w-full sm:w-auto"
+                        >
+                          {uploadingImage ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2"></div>
+                              Téléchargement...
+                            </>
+                          ) : (
+                            <>
+                              📤{" "}
+                              {blog?.image
+                                ? "Changer l'image"
+                                : "Télécharger une image"}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+
+                      {/* Image URL Display (for debugging) */}
+                      {blog?.image && (
+                        <div className="flex-1 text-xs text-gray-500 break-all">
+                          URL: {blog.image}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Upload Instructions */}
+                    <div className="text-xs text-gray-500">
+                      <p>Formats supportés : JPG, PNG, GIF, WebP</p>
+                      <p>Taille maximale : 5 Mo</p>
+                      <p>
+                        Les images seront automatiquement converties en WebP
+                      </p>
+                      <p>Stockage dans le bucket 'blogs' de Supabase</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,9 +1,8 @@
 "use client";
-import { useState } from "react";
+import { BarChart3, Plus, Trash2, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Trash2, BarChart3, TrendingUp } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const StatsBlockEditor = ({ content = {}, onChange, isDarkMode = false }) => {
   // Ensure stats array is properly handled

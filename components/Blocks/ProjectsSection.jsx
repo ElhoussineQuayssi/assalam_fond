@@ -1,19 +1,11 @@
-import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
-import Container from "@/components/Container/Container.jsx";
-import {
-  BookOpen,
-  ShieldCheck,
-  Zap,
-  GraduationCap,
-  Users,
-  Briefcase,
-} from "lucide-react";
-import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { BookOpen, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
 import { useAppData } from "@/components/AppDataContext";
+import Container from "@/components/Container/Container.jsx";
 import MarqueeText from "@/components/MarqueeText";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,7 +17,7 @@ const categoryIcons = {
   default: BookOpen,
 };
 
-const categoryColors = {
+const _categoryColors = {
   Education: "bg-blue-50 text-blue-600 border-blue-200",
   Social: "bg-green-50 text-green-600 border-green-200",
   Economic: "bg-orange-50 text-orange-600 border-orange-200",
@@ -136,9 +128,9 @@ export default function ProjectsSection() {
               <p className="text-slate-500">No projects available.</p>
             </div>
           ) : (
-            projects.map((project, index) => {
+            projects.slice(0, 6).map((project, _index) => {
               const category = project.category || "Education";
-              const IconComponent =
+              const _IconComponent =
                 categoryIcons[category] || categoryIcons.default;
               return (
                 <Link

@@ -1,25 +1,35 @@
 "use client";
+import { Eye, EyeOff, Type } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, Type } from "lucide-react";
 
-const TextBlockEditor = ({ content, onChange, isDarkMode = false }) => {
+const TextBlockEditor = ({
+  content,
+  onChange,
+  isDarkMode = false,
+  currentLanguage = "fr",
+}) => {
   const [showPreview, setShowPreview] = useState(false);
 
   const handleHeadingChange = (e) => {
+    const newHeading = {
+      ...content.heading,
+      [currentLanguage]: e.target.value,
+    };
     onChange({
       ...content,
-      heading: e.target.value,
+      heading: newHeading,
     });
   };
 
   const handleTextChange = (e) => {
+    const newText = { ...content.text, [currentLanguage]: e.target.value };
     onChange({
       ...content,
-      text: e.target.value,
+      text: newText,
     });
   };
 
@@ -44,14 +54,14 @@ const TextBlockEditor = ({ content, onChange, isDarkMode = false }) => {
               Heading
             </label>
             <Input
-              value={content.heading || ""}
+              value={content.heading?.[currentLanguage] || ""}
               onChange={handleHeadingChange}
               placeholder="Enter section heading..."
               className={`${isDarkMode ? "bg-slate-800 border-slate-600 text-white" : "bg-white border-gray-300"} ${
-                !content.heading ? "border-yellow-300" : ""
+                !content.heading?.[currentLanguage] ? "border-yellow-300" : ""
               }`}
             />
-            {!content.heading && (
+            {!content.heading?.[currentLanguage] && (
               <p className="text-xs text-yellow-600 mt-1">
                 Heading is recommended
               </p>
@@ -80,15 +90,15 @@ const TextBlockEditor = ({ content, onChange, isDarkMode = false }) => {
               </Button>
             </div>
             <Textarea
-              value={content.text || ""}
+              value={content.text?.[currentLanguage] || ""}
               onChange={handleTextChange}
               placeholder="Enter your text content here..."
               rows={6}
               className={`${isDarkMode ? "bg-slate-800 border-slate-600 text-white" : "bg-white border-gray-300"} ${
-                !content.text ? "border-yellow-300" : ""
+                !content.text?.[currentLanguage] ? "border-yellow-300" : ""
               }`}
             />
-            {!content.text && (
+            {!content.text?.[currentLanguage] && (
               <p className="text-xs text-yellow-600 mt-1">
                 Content is required
               </p>
@@ -105,14 +115,14 @@ const TextBlockEditor = ({ content, onChange, isDarkMode = false }) => {
               }`}
             >
               <div className="space-y-3">
-                {content.heading && (
+                {content.heading?.[currentLanguage] && (
                   <h2 className="text-lg font-bold text-slate-800 dark:text-white border-l-4 border-blue-500 pl-4">
-                    {content.heading}
+                    {content.heading[currentLanguage]}
                   </h2>
                 )}
-                {content.text ? (
+                {content.text?.[currentLanguage] ? (
                   <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {content.text}
+                    {content.text[currentLanguage]}
                   </p>
                 ) : (
                   <p className="text-sm text-gray-400 italic">

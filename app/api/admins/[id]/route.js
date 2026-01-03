@@ -1,11 +1,18 @@
+import { NextResponse } from "next/server";
 import {
+  deleteAdmin,
   getAdminById,
   updateAdmin,
-  deleteAdmin,
 } from "@/controllers/adminsController";
-import { NextResponse } from "next/server";
+import { requireAdminAuth } from "@/lib/auth";
 
 export async function GET(request, { params }) {
+  // Require super_admin for viewing individual admin details
+  const auth = await requireAdminAuth(request, "super_admin");
+  if (auth.error) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     const { id } = await params;
     const data = await getAdminById(id);
@@ -17,6 +24,12 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  // Require super_admin for updating admin details
+  const auth = await requireAdminAuth(request, "super_admin");
+  if (auth.error) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     const { id } = await params;
     const body = await request.json();
@@ -29,6 +42,12 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
+  // Require super_admin for deleting admins
+  const auth = await requireAdminAuth(request, "super_admin");
+  if (auth.error) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     const { id } = await params;
     await deleteAdmin(id);

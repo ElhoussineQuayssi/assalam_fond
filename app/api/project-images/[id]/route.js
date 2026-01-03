@@ -1,11 +1,11 @@
+import { NextResponse } from "next/server";
 import {
+  deleteProjectImage,
   getProjectImageById,
   updateProjectImage,
-  deleteProjectImage,
 } from "@/controllers/projectImagesController";
-import { NextResponse } from "next/server";
 
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
   try {
     const { id } = await params;
     const data = await getProjectImageById(id);
@@ -28,7 +28,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(_request, { params }) {
   try {
     const { id } = await params;
     const result = await deleteProjectImage(id);

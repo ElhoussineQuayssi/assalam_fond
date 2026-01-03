@@ -1,10 +1,10 @@
 "use client";
+import { ChevronDown, ChevronUp, Plus, Settings, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Trash2, Settings, ChevronDown, ChevronUp } from "lucide-react";
 
 const ServicesBlockEditor = ({
   content = {},
@@ -15,7 +15,7 @@ const ServicesBlockEditor = ({
   const safeCategories = Array.isArray(content.categories)
     ? content.categories
     : [];
-  const safeServices = Array.isArray(content.services) ? content.services : [];
+  const _safeServices = Array.isArray(content.services) ? content.services : [];
   const [expandedCategories, setExpandedCategories] = useState(new Set());
 
   const handleHeadingChange = (e) => {

@@ -123,8 +123,9 @@ const validateContentBlock = (block) => {
 };
 
 // Comprehensive project data validation
-export const validateProjectData = (data) => {
+export const validateProjectData = (data, options = {}) => {
   const errors = [];
+  const { allowIncompleteContent = false } = options;
 
   if (!data) {
     errors.push("Project data is required");
@@ -175,8 +176,8 @@ export const validateProjectData = (data) => {
     errors.push("Status must be one of: draft, published, archived");
   }
 
-  // Content blocks validation
-  if (data.content) {
+  // Content blocks validation - skip if allowIncompleteContent is true
+  if (!allowIncompleteContent && data.content) {
     if (!Array.isArray(data.content)) {
       errors.push("Content must be an array");
     } else {
@@ -193,14 +194,53 @@ export const validateProjectData = (data) => {
   return errors;
 };
 
-export const getAllProjects = async () => {
-  const { data, error } = await supabase
+export const getAllProjects = async (filters = {}) => {
+  const { locale } = filters;
+
+  // First get all projects
+  const { data: projectsData, error: projectsError, count } = await supabase
     .from("projects")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("created_at", { ascending: false });
 
-  if (error) throw error;
-  return data;
+  if (projectsError) throw projectsError;
+
+  let projects = projectsData;
+
+  // If locale is specified, fetch and merge translations
+  if (locale) {
+    // Get translations for all projects in this locale
+    const { data: translationsData, error: translationsError } = await supabase
+      .from("project_translations")
+      .select("project_id, title, excerpt, content, lang")
+      .eq("lang", locale);
+
+    if (translationsError) {
+      console.warn("Error fetching translations:", translationsError);
+    } else {
+      // Create a map of project_id -> translation
+      const translationsMap = {};
+      translationsData.forEach((translation) => {
+        translationsMap[translation.project_id] = translation;
+      });
+
+      // Merge translations into projects
+      projects = projectsData.map((project) => {
+        const translation = translationsMap[project.id];
+        return {
+          ...project,
+          title: translation?.title || project.title,
+          description: translation?.excerpt || project.excerpt,
+          content: translation?.content || project.content,
+        };
+      });
+    }
+  }
+
+  return {
+    projects,
+    total: count,
+  };
 };
 
 export const createProject = async (projectData) => {

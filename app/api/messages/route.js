@@ -1,8 +1,8 @@
-import {
-  getAllMessages,
-  createMessage,
-} from "@/controllers/messagesController";
 import { NextResponse } from "next/server";
+import {
+  createMessage,
+  getAllMessages,
+} from "@/controllers/messagesController";
 
 export async function GET() {
   try {

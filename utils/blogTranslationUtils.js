@@ -89,7 +89,7 @@ export const saveBlogWithTranslations = async (formData, blogId = null) => {
       }));
 
       const { error: translationError } = await supabase
-        .from("blog_translations")
+        .from("blogs_translation")
         .upsert(translationData, { onConflict: ["blog_id", "lang"] });
 
       if (translationError) throw translationError;
@@ -120,7 +120,7 @@ export const loadBlogWithTranslations = async (blogId) => {
 
     // Get translations
     const { data: translations, error: translationError } = await supabase
-      .from("blog_translations")
+      .from("blogs_translation")
       .select("*")
       .eq("blog_id", blogId);
 

@@ -1,6 +1,6 @@
 "use client";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Table } from "@/components/ui/table";
 
 export default function BlogList({
   blogs = [],
@@ -32,7 +31,7 @@ export default function BlogList({
   onEdit,
   onDelete,
 }) {
-  const [tableRowsRef, setTableRowsRef] = useState([]);
+  const [_tableRowsRef, _setTableRowsRef] = useState([]);
 
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -177,12 +176,12 @@ export default function BlogList({
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                           {blog.title.length > 25
-                            ? blog.title.substring(0, 25) + "..."
+                            ? `${blog.title.substring(0, 25)}...`
                             : blog.title}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
                           {blog.slug.length > 25
-                            ? blog.slug.substring(0, 25) + "..."
+                            ? `${blog.slug.substring(0, 25)}...`
                             : blog.slug}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
@@ -245,7 +244,7 @@ export default function BlogList({
                     <Select
                       value={pageSize.toString()}
                       onValueChange={(value) =>
-                        onPageSizeChange(parseInt(value))
+                        onPageSizeChange(parseInt(value, 10))
                       }
                     >
                       <SelectTrigger className="w-20">

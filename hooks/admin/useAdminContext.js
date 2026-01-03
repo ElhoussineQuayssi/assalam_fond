@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AdminContext = createContext();
 
@@ -36,7 +36,7 @@ export function AdminProvider({ children }) {
   // Auto-fetch admins on component mount
   useEffect(() => {
     fetchAdmins();
-  }, []);
+  }, [fetchAdmins]);
 
   // Handle form submission
   const handleSubmit = async (e, data) => {

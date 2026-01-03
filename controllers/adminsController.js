@@ -1,5 +1,5 @@
-import { createClient, createAdminClient } from "@/utils/supabase/client";
-import crypto from "crypto";
+import crypto from "node:crypto";
+import { createAdminClient, createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 const supabaseAdmin = createAdminClient();

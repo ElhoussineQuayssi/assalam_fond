@@ -1,28 +1,26 @@
-import { useTranslations } from "next-intl";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Container from "@/components/Container/Container.jsx";
-import { useEffect, useRef, useState } from "react";
+"use client";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useAppData } from "@/components/AppDataContext";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+import { useAppData } from "@/components/AppDataContext";
+import Container from "@/components/Container/Container.jsx";
 import MarqueeText from "@/components/MarqueeText";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function BlogsSection() {
   const t = useTranslations("Home.blogs");
   const { blogs, loading } = useAppData();
+  const { locale } = useParams();
   const sectionRef = useRef();
   const [visibleBlogs, setVisibleBlogs] = useState(3);
   const [newlyLoaded, setNewlyLoaded] = useState(new Set());
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     if (!loading && blogs.length > 0) {
@@ -62,28 +60,44 @@ export default function BlogsSection() {
         },
       );
     }
-  }, [visibleBlogs]);
+  }, [newlyLoaded.size]);
 
-  const showMore = () => {
-    const newVisible = Math.min(visibleBlogs + 3, blogs.length);
-    const newIds = Array.from(
-      { length: newVisible - visibleBlogs },
-      (_, i) => visibleBlogs + i,
+  // Infinite scroll effect
+  useEffect(() => {
+    if (visibleBlogs >= blogs.length || loading || isLoadingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore && !loading) {
+          setIsLoadingMore(true);
+          // Add a small delay to simulate loading
+          setTimeout(() => {
+            const newVisible = Math.min(visibleBlogs + 3, blogs.length);
+            const newIds = Array.from(
+              { length: newVisible - visibleBlogs },
+              (_, i) => visibleBlogs + i,
+            );
+            setNewlyLoaded(new Set([...newlyLoaded, ...newIds]));
+            setVisibleBlogs(newVisible);
+            setIsLoadingMore(false);
+          }, 500);
+        }
+      },
+      { threshold: 0.1 }
     );
-    setNewlyLoaded(new Set([...newlyLoaded, ...newIds]));
-    setVisibleBlogs(newVisible);
-  };
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [visibleBlogs, blogs.length, loading, isLoadingMore, newlyLoaded]);
 
   return (
     <section ref={sectionRef} className="py-20">
       <Container>
-        <div className="flex justify-between items-center mb-10">
+        <div className="mb-10">
           <h2 className="text-3xl font-black text-slate-900">{t("title")}</h2>
-          {visibleBlogs < blogs.length && !loading && (
-            <Button variant="outline" onClick={showMore}>
-              {t("show_more")}
-            </Button>
-          )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {loading ? (
@@ -96,29 +110,61 @@ export default function BlogsSection() {
               <p className="text-slate-500">No blogs available.</p>
             </div>
           ) : (
-            blogs.slice(0, visibleBlogs).map((blog, index) => (
-              <Link key={blog.id} href={`/blogs/${blog.id}`}>
-                <Card
-                  className={`overflow-hidden group blog-card cursor-pointer ${newlyLoaded.has(index) ? "new-blog" : ""}`}
-                >
-                  <div className="aspect-video bg-slate-200 group-hover:scale-105 transition-transform" />
-                  <CardHeader className="p-4">
-                    <span className="text-blue-500 text-xs font-medium">
-                      {new Date(blog.created_at).toLocaleDateString()}
-                    </span>
-                    <MarqueeText
-                      text={blog.title}
-                      className="text-lg mt-2 font-semibold"
-                    />
-                    <CardDescription className="line-clamp-2">
-                      {blog.content}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </Link>
-            ))
+            blogs.slice(0, visibleBlogs).map((blog, index) => {
+              const resolve = (field) => {
+                if (!field) return "";
+                if (typeof field === "string") return field;
+                // field is likely an object like { fr: "...", en: "..." }
+                return (
+                  (locale && field[locale]) ||
+                  field.fr ||
+                  field.en ||
+                  Object.values(field)[0] ||
+                  ""
+                );
+              };
+
+              const title = resolve(blog.title);
+              const excerpt = resolve(blog.excerpt || blog.content);
+
+              return (
+                <Link key={blog.id} href={`/blogs/${blog.id}`}>
+                  <Card
+                    className={`overflow-hidden group blog-card cursor-pointer ${newlyLoaded.has(index) ? "new-blog" : ""}`}
+                  >
+                    <div className="aspect-video bg-slate-200 group-hover:scale-105 transition-transform" />
+                    <CardHeader className="p-4">
+                      <span className="text-blue-500 text-xs font-medium">
+                        {new Date(blog.created_at).toLocaleDateString()}
+                      </span>
+                      <MarqueeText
+                        text={title}
+                        className="text-lg mt-2 font-semibold"
+                      />
+                      <CardDescription className="line-clamp-2">
+                        {excerpt}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              );
+            })
           )}
         </div>
+
+        {/* Infinite Scroll Sentinel */}
+        {visibleBlogs < blogs.length && !loading && (
+          <div ref={sentinelRef} className="flex justify-center py-8">
+            {isLoadingMore ? (
+              <div className="flex items-center gap-3 text-slate-500">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <span className="text-sm">Loading more blogs...</span>
+              </div>
+            ) : (
+              <div className="h-4"></div>
+            )}
+          </div>
+        )}
       </Container>
     </section>
   );

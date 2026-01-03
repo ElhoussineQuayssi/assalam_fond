@@ -1,10 +1,8 @@
 "use client";
-import { useState, useRef } from "react";
-import { useGSAP } from "@gsap/react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -12,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 if (typeof window !== "undefined") {
   import("gsap");
@@ -40,9 +39,16 @@ export default function CommentForm({
     onSubmit(e, localFormData);
   };
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = useCallback((field, value) => {
     setLocalFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  }, []);
+
+  const handleStatusChange = useCallback(
+    (value) => {
+      handleInputChange("status", value);
+    },
+    [handleInputChange],
+  );
 
   return (
     <div>
@@ -126,6 +132,7 @@ export default function CommentForm({
                   value={localFormData.post_id}
                   onChange={(e) => handleInputChange("post_id", e.target.value)}
                   placeholder="Blog post ID (optional)"
+                  disabled
                   className="dark:bg-slate-700 dark:border-slate-600 dark:text-white"
                 />
               </div>
@@ -138,7 +145,7 @@ export default function CommentForm({
                 </label>
                 <Select
                   value={localFormData.status}
-                  onValueChange={(value) => handleInputChange("status", value)}
+                  onValueChange={handleStatusChange}
                 >
                   <SelectTrigger className="dark:bg-slate-700 dark:border-slate-600 dark:text-white">
                     <SelectValue />

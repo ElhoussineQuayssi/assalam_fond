@@ -1,22 +1,25 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useEffect, useState, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRight, Calendar, Clock, Search } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useAppData } from "@/components/AppDataContext";
 import SharedHero from "@/components/Hero/SharedHero.jsx";
+import MarqueeText from "@/components/MarqueeText";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calendar, Clock, ArrowRight, Search } from "lucide-react";
-import Link from "next/link";
-import { useAppData } from "@/components/AppDataContext";
-import MarqueeText from "@/components/MarqueeText";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function BlogsPage() {
   const t = useTranslations("Blogs");
-  const { blogs, loading, allProjectImages } = useAppData();
+  const { blogs, allProjectImages } = useAppData();
+  const { locale } = useParams();
 
   // Memoize blog posts to prevent infinite re-renders
   const blogPosts = useMemo(() => {
@@ -40,6 +43,23 @@ export default function BlogsPage() {
   const [visiblePosts, setVisiblePosts] = useState(3);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const sentinelRef = useRef(null);
+
+  const resolveLocalized = useCallback(
+    (field) => {
+      if (!field) return "";
+      if (typeof field === "string") return field;
+      return (
+        (locale && field[locale]) ||
+        field.fr ||
+        field.en ||
+        Object.values(field)[0] ||
+        ""
+      );
+    },
+    [locale],
+  );
 
   // Initialize state when blogPosts or categories change
   useEffect(() => {
@@ -101,21 +121,52 @@ export default function BlogsPage() {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(
-        (post) =>
-          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
+      filtered = filtered.filter((post) => {
+        const title = resolveLocalized(post.title).toLowerCase();
+        const excerpt = resolveLocalized(post.excerpt).toLowerCase();
+        return (
+          title.includes(searchTerm.toLowerCase()) ||
+          excerpt.includes(searchTerm.toLowerCase())
+        );
+      });
     }
 
     setFilteredPosts(filtered);
     setVisiblePosts(3); // Reset visible posts when filtering
+    setIsLoadingMore(false); // Reset loading state when filtering
     console.timeEnd("filterPosts");
     console.log(`Filtered to ${filtered.length} posts`);
-  }, [selectedCategory, searchTerm, blogPosts, categories]);
+  }, [selectedCategory, searchTerm, blogPosts, categories, resolveLocalized]);
 
-  const featuredPost = blogPosts[0];
-  const regularPosts = filteredPosts.slice(1);
+  // Infinite scroll effect
+  useEffect(() => {
+    if (visiblePosts >= filteredPosts.length || isLoadingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore) {
+          setIsLoadingMore(true);
+          // Add a small delay to simulate loading
+          setTimeout(() => {
+            setVisiblePosts((prev) =>
+              Math.min(prev + 3, filteredPosts.length)
+            );
+            setIsLoadingMore(false);
+          }, 500);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [visiblePosts, filteredPosts.length, isLoadingMore]);
+
+  const _featuredPost = blogPosts[0];
+  const _regularPosts = filteredPosts.slice(1);
 
   // Show loading state if posts are not loaded yet
   if (blogPosts.length === 0) {
@@ -151,17 +202,18 @@ export default function BlogsPage() {
           <div className="lg:col-span-8 space-y-12" id="blog-posts">
             {/* Blog Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {filteredPosts.slice(0, visiblePosts).map((post, index) => (
+              {filteredPosts.slice(0, visiblePosts).map((post, _index) => (
                 <article
                   key={post.id}
                   className="blog-card group bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 hover:shadow-2xl transition-all duration-500"
                 >
                   {/* Image Container */}
                   <div className="relative h-56 overflow-hidden">
-                    <img
+                    <Image
                       src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      alt={resolveLocalized(post.title)}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
                       onError={(e) => {
                         e.target.style.display = "none";
                       }}
@@ -184,11 +236,11 @@ export default function BlogsPage() {
                       </span>
                     </div>
                     <MarqueeText
-                      text={post.title}
+                      text={resolveLocalized(post.title)}
                       className="text-xl font-bold mb-3 group-hover:text-blue-600 transition-colors"
                     />
                     <p className="text-slate-500 text-sm line-clamp-2 mb-6">
-                      {post.excerpt}
+                      {resolveLocalized(post.excerpt)}
                     </p>
                     <Link
                       href={`/blogs/${post.id}`}
@@ -201,21 +253,17 @@ export default function BlogsPage() {
               ))}
             </div>
 
-            {/* Load More */}
+            {/* Infinite Scroll Sentinel */}
             {visiblePosts < filteredPosts.length && (
-              <div className="text-center">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() =>
-                    setVisiblePosts((prev) =>
-                      Math.min(prev + 3, filteredPosts.length),
-                    )
-                  }
-                  className="rounded-full px-8"
-                >
-                  {t("load_more")}
-                </Button>
+              <div ref={sentinelRef} className="flex justify-center py-8">
+                {isLoadingMore ? (
+                  <div className="flex items-center gap-3 text-slate-500">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                    <span className="text-sm">Loading more posts...</span>
+                  </div>
+                ) : (
+                  <div className="h-4"></div>
+                )}
               </div>
             )}
           </div>
@@ -253,6 +301,7 @@ export default function BlogsPage() {
                 {categories.map((category) => (
                   <button
                     key={category}
+                    type="button"
                     onClick={() => setSelectedCategory(category)}
                     className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${
                       selectedCategory === category
@@ -275,10 +324,11 @@ export default function BlogsPage() {
                 {blogPosts.slice(0, 3).map((recentPost) => (
                   <div key={recentPost.id} className="flex gap-3">
                     <div className="w-12 h-12 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
-                      <img
+                      <Image
                         src={recentPost.image}
-                        alt={recentPost.title}
-                        className="w-full h-full object-cover"
+                        alt={resolveLocalized(recentPost.title)}
+                        fill
+                        className="object-cover"
                         onError={(e) => {
                           e.target.style.display = "none";
                         }}
@@ -286,7 +336,7 @@ export default function BlogsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h5 className="text-xs font-medium text-slate-900 line-clamp-2 mb-1">
-                        {recentPost.title}
+                        {resolveLocalized(recentPost.title)}
                       </h5>
                       <span className="text-[10px] text-slate-500 uppercase tracking-wider">
                         {recentPost.date}

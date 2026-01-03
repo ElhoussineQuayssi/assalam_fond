@@ -1,11 +1,11 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { RefreshCw, AlertCircle } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -65,7 +65,7 @@ export default function DashboardOverview({ isDarkMode = false }) {
   // Initial data fetch
   useEffect(() => {
     fetchMetrics();
-  }, []);
+  }, [fetchMetrics]);
 
   // Counter animation function
   const animateCounter = (element, target) => {
@@ -77,7 +77,7 @@ export default function DashboardOverview({ isDarkMode = false }) {
         duration: 2,
         ease: "power2.out",
         snap: { innerText: 1 },
-        onUpdate: function () {
+        onUpdate: () => {
           element.innerText = Math.floor(
             gsap.getProperty(element, "innerText"),
           );
@@ -246,16 +246,11 @@ export default function DashboardOverview({ isDarkMode = false }) {
               {metrics.counts.totalProjects}
             </p>
             <div className="h-8">
-              <svg viewBox="0 0 100 20" className="w-full h-full">
-                <path
-                  d="M0,10 L100,10"
-                  stroke={isDarkMode ? "#ffffff" : "#000000"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
+              <div
+                className={`w-full h-0.5 mt-2 ${isDarkMode ? "bg-white" : "bg-black"}`}
+              ></div>
               <p
-                className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs mt-3 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
               >
                 All projects in system
               </p>
@@ -288,16 +283,11 @@ export default function DashboardOverview({ isDarkMode = false }) {
               {metrics.counts.totalBlogPosts}
             </p>
             <div className="h-8">
-              <svg viewBox="0 0 100 20" className="w-full h-full">
-                <path
-                  d="M0,15 Q25,10 50,5 T100,10"
-                  stroke={isDarkMode ? "#ffffff" : "#000000"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
+              <div
+                className={`w-full h-0.5 mt-2 ${isDarkMode ? "bg-white" : "bg-black"}`}
+              ></div>
               <p
-                className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs mt-3 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
               >
                 Published blog posts
               </p>
@@ -330,16 +320,11 @@ export default function DashboardOverview({ isDarkMode = false }) {
               {metrics.counts.totalComments}
             </p>
             <div className="h-8">
-              <svg viewBox="0 0 100 20" className="w-full h-full">
-                <path
-                  d="M0,10 Q25,15 50,8 T100,12"
-                  stroke={isDarkMode ? "#ffffff" : "#000000"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
+              <div
+                className={`w-full h-0.5 mt-2 ${isDarkMode ? "bg-white" : "bg-black"}`}
+              ></div>
               <p
-                className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs mt-3 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
               >
                 Total comments
               </p>
@@ -372,16 +357,11 @@ export default function DashboardOverview({ isDarkMode = false }) {
               {metrics.counts.totalMessages}
             </p>
             <div className="h-8">
-              <svg viewBox="0 0 100 20" className="w-full h-full">
-                <path
-                  d="M0,5 L20,10 L40,15 L60,10 L80,5 L100,10"
-                  stroke={isDarkMode ? "#ffffff" : "#000000"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
+              <div
+                className={`w-full h-0.5 mt-2 ${isDarkMode ? "bg-white" : "bg-black"}`}
+              ></div>
               <p
-                className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs mt-3 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
               >
                 Contact messages
               </p>
@@ -414,16 +394,11 @@ export default function DashboardOverview({ isDarkMode = false }) {
               {metrics.counts.totalAdmins}
             </p>
             <div className="h-8">
-              <svg viewBox="0 0 100 20" className="w-full h-full">
-                <path
-                  d="M0,10 Q25,5 50,10 T100,10"
-                  stroke={isDarkMode ? "#ffffff" : "#000000"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
+              <div
+                className={`w-full h-0.5 mt-2 ${isDarkMode ? "bg-white" : "bg-black"}`}
+              ></div>
               <p
-                className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs mt-3 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
               >
                 System administrators
               </p>
@@ -456,16 +431,11 @@ export default function DashboardOverview({ isDarkMode = false }) {
               {metrics.counts.totalProjectImages}
             </p>
             <div className="h-8">
-              <svg viewBox="0 0 100 20" className="w-full h-full">
-                <path
-                  d="M0,15 Q25,5 50,15 Q75,25 100,15"
-                  stroke={isDarkMode ? "#ffffff" : "#000000"}
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
+              <div
+                className={`w-full h-0.5 mt-2 ${isDarkMode ? "bg-white" : "bg-black"}`}
+              ></div>
               <p
-                className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                className={`text-xs mt-3 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
               >
                 Gallery images
               </p>
@@ -510,7 +480,7 @@ export default function DashboardOverview({ isDarkMode = false }) {
                     },
                   };
                   const config =
-                    statusConfig[row.status] || statusConfig["Review"];
+                    statusConfig[row.status] || statusConfig.Review;
                   return (
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${config.bg} ${config.text}`}

@@ -1,12 +1,10 @@
 "use client";
-import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
-import ProjectList from "./ProjectList";
-import ProjectForm from "./ProjectForm";
-
+import { useEffect, useRef } from "react";
 import { useProjectData } from "@/hooks/admin/useProjectData";
+import ProjectForm from "./ProjectForm";
+import ProjectList from "./ProjectList";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -80,11 +78,9 @@ export default function ProjectManager({ isDarkMode = false }) {
               formRef.current,
               {
                 y: -50,
-                opacity: 0,
               },
               {
                 y: 0,
-                opacity: 1,
                 duration: 0.3,
                 ease: "power2.out",
               },
@@ -112,11 +108,9 @@ export default function ProjectManager({ isDarkMode = false }) {
               tableRef.current,
               {
                 y: -50,
-                opacity: 0,
               },
               {
                 y: 0,
-                opacity: 1,
                 duration: 0.3,
                 ease: "power2.out",
               },
@@ -129,8 +123,8 @@ export default function ProjectManager({ isDarkMode = false }) {
     }
   };
 
-  const handleSubmit = (e, formData) => {
-    handleProjectSubmit(e, formData);
+  const handleSubmit = async (e, formData, editingLanguage) => {
+    await handleProjectSubmit(e, formData, editingLanguage);
     // Note: closeProjectFormWithAnimation will be called by the success handler in useProjectData
   };
 
@@ -149,11 +143,9 @@ export default function ProjectManager({ isDarkMode = false }) {
           />
         </div>
       ) : (
-        <div ref={formRef}>
+        <div ref={formRef} style={{ opacity: 1 }}>
           <ProjectForm
             project={currentProject}
-            formData={projectFormData}
-            validationErrors={projectValidationErrors}
             onSubmit={handleSubmit}
             onCancel={closeProjectFormWithAnimation}
             isDarkMode={isDarkMode}

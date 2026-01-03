@@ -169,7 +169,7 @@ h6 {
 }
 
 [dir="rtl"] .text-left {
-  text-align: right !important;
+  text-align: right;
 }
 
 [dir="rtl"] .text-center {
@@ -249,7 +249,7 @@ h6 {
 
 /* Enhanced Table Row Hover */
 .dark-mode-table-row-hover:hover {
-  background-color: rgba(51, 65, 85, 0.5) !important;
+  background-color: rgba(51, 65, 85, 0.5);
   transform: translateX(-2px);
   transition: all 0.3s ease;
 }

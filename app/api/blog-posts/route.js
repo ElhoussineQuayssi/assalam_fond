@@ -1,19 +1,20 @@
-import {
-  getAllBlogPosts,
-  createBlogPost,
-} from "@/controllers/blogPostsController";
 import { NextResponse } from "next/server";
+import {
+  createBlogPost,
+  getAllBlogPosts,
+} from "@/controllers/blogPostsController";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "all";
     const category = searchParams.get("category") || "all";
     const sortBy = searchParams.get("sortBy") || "updated_at";
     const sortOrder = searchParams.get("sortOrder") || "desc";
+    const locale = searchParams.get("locale") || "";
 
     console.log("API GET /api/blog-posts called with params:", {
       page,
@@ -23,6 +24,7 @@ export async function GET(request) {
       category,
       sortBy,
       sortOrder,
+      locale,
     });
 
     const data = await getAllBlogPosts({
@@ -33,6 +35,7 @@ export async function GET(request) {
       category,
       sortBy,
       sortOrder,
+      locale,
     });
 
     console.log("API returning data:", data);

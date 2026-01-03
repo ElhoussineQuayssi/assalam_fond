@@ -1,5 +1,5 @@
-import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { buildConfig } from "payload";
 
 export default buildConfig({
   serverURL: "http://localhost:3000",

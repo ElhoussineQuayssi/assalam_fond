@@ -1,5 +1,5 @@
-import { getAnalyticsMetrics } from "@/controllers/analyticsController";
 import { NextResponse } from "next/server";
+import { getAnalyticsMetrics } from "@/controllers/analyticsController";
 
 // Standardized error response format
 const errorResponse = (message, status = 400, details = null) => {

@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { ChevronDown } from "lucide-react";
 import { useGSAP } from "@gsap/react";
+import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
+import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import { useLocale } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 
 const SharedHero = ({
   title,

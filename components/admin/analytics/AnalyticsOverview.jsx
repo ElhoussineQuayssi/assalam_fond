@@ -1,6 +1,6 @@
 "use client";
-import AnalyticsMetrics from "./AnalyticsMetrics";
 import AnalyticsCharts from "./AnalyticsCharts";
+import AnalyticsMetrics from "./AnalyticsMetrics";
 import AnalyticsSummary from "./AnalyticsSummary";
 
 export default function AnalyticsOverview({ isDarkMode = false }) {
