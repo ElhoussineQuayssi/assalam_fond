@@ -16,7 +16,11 @@ export default function ImpactCard({
   translatedTitle,
 }) {
   const cardRef = useRef(null);
-  const [displayValue, setDisplayValue] = useState("0");
+  const [isMounted, setIsMounted] = useState(false);
+  // Use a ref to track the value to avoid re-render issues
+  const valueRef = useRef(value);
+  valueRef.current = value;
+  const [displayValue, setDisplayValue] = useState("");
 
   const themes = {
     blue: "text-[#6495ED] border-blue-100 bg-blue-50",
@@ -24,10 +28,20 @@ export default function ImpactCard({
     red: "text-rose-500 border-rose-100 bg-rose-50",
   };
 
+  // Set mounted state on client-side only
+  useEffect(() => {
+    setIsMounted(true);
+    // Set the display value when mounted
+    setDisplayValue(valueRef.current || "");
+  }, []);
+
+  const numericValue = parseInt(value?.replace(/[^\\d]/g, ""), 10) || 0;
+
   useEffect(() => {
     const card = cardRef.current;
-    if (!card) return;
+    if (!card || !isMounted) return;
 
+    // Mouse tilt effects
     const handleMouseEnter = () => {
       gsap.set(card, { transformOrigin: "center center" });
     };
@@ -60,13 +74,13 @@ export default function ImpactCard({
     card.addEventListener("mousemove", handleMouseMove);
     card.addEventListener("mouseleave", handleMouseLeave);
 
-    // Counting animation on scroll
+    // Count animation on scroll (client-only)
+    const tl = gsap.timeline();
     ScrollTrigger.create({
       trigger: card,
       start: "top 85%",
       onEnter: () => {
-        const numericValue = parseInt(value.replace(/[^\d]/g, ""), 10);
-        gsap.fromTo(
+        tl.fromTo(
           { count: 0 },
           { count: numericValue },
           {
@@ -74,36 +88,31 @@ export default function ImpactCard({
             duration: 2,
             ease: "power2.out",
             onUpdate: function () {
+              const count = Math.floor(this.targets()[0].count);
               setDisplayValue(
-                Math.floor(this.targets()[0].count) +
-                  (value.includes("+") ? "+" : value.includes("%") ? "%" : ""),
+                count + (value.includes("+") ? "+" : value.includes("%") ? "%" : "")
               );
             },
           },
         );
 
-        // Icon bounce animation
-        const icon = card.querySelector(".icon-container");
-        gsap.fromTo(
-          icon,
-          { y: -10 },
-          {
-            y: 0,
-            duration: 0.6,
-            ease: "bounce.out",
-            delay: 0.2,
-            onComplete: () => {
-              // Continuous floating animation
-              gsap.to(icon, {
-                y: -5,
-                duration: 2,
-                ease: "power1.inOut",
-                yoyo: true,
-                repeat: -1,
-              });
-            },
+        // Icon animation
+        const iconEl = card.querySelector(".icon-container");
+        gsap.fromTo(iconEl, { y: -10 }, {
+          y: 0,
+          duration: 0.6,
+          ease: "bounce.out",
+          delay: 0.2,
+          onComplete: () => {
+            gsap.to(iconEl, {
+              y: -5,
+              duration: 2,
+              ease: "power1.inOut",
+              yoyo: true,
+              repeat: -1,
+            });
           },
-        );
+        });
       },
       once: true,
     });
@@ -113,8 +122,9 @@ export default function ImpactCard({
       card.removeEventListener("mousemove", handleMouseMove);
       card.removeEventListener("mouseleave", handleMouseLeave);
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      tl.kill();
     };
-  }, [value.includes, value.replace]);
+  }, [value, numericValue, isMounted]);
 
   return (
     <Card
@@ -122,17 +132,14 @@ export default function ImpactCard({
       className="reveal-card bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-muted/50 rounded-[2rem]"
     >
       <CardHeader className="pb-2">
-        <div
-          className={`icon-container w-12 h-12 rounded-xl flex items-center justify-center mb-2 shadow-md ${themes[type]}`}
-        >
+        <div className={`icon-container w-12 h-12 rounded-xl flex items-center justify-center mb-2 shadow-md ${themes[type]}`}>
           {icon}
         </div>
       </CardHeader>
       <CardContent>
-        <div
-          className={`text-4xl font-bold mb-1 ${themes[type].split(" ")[0]}`}
-        >
-          {displayValue}
+        <div className={`count-display text-4xl font-bold mb-1 ${themes[type].split(' ')[0]} transition-all duration-300`}>
+          {/* Show value immediately - use value prop directly to avoid hydration issues */}
+          {value || displayValue || "0"}
         </div>
         <CardTitle className="text-[11px] font-black uppercase tracking-widest text-slate-400">
           {translatedTitle || title}
